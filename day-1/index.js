@@ -13,18 +13,16 @@ for (const num of input) {
 }
 
 // Part 2
-(() => {
-	for (const num1 of input) {
-		for (const num2 of input) {
-			const found = input.find(
-				otherNum =>
-					![num1, num2].includes(otherNum) && num1 + num2 + otherNum === 2020
-			);
-			if (!found) continue;
+for (const num1 of input) {
+	for (const num2 of input) {
+		const found = input.find(
+			otherNum =>
+				![num1, num2].includes(otherNum) && num1 + num2 + otherNum === 2020
+		);
+		if (!found) continue;
 
-			const result = num1 * num2 * found;
-			console.log('Part 2:', result);
-			return;
-		}
+		const result = num1 * num2 * found;
+		console.log('Part 2:', result);
+		return;
 	}
-})();
+}

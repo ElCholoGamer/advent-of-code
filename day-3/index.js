@@ -15,7 +15,7 @@ let x = 0;
 
 // Loop until Y reaches end of input
 for (let y = 0; y < coords[0].length; y++) {
-	if (x >= coords.length) x -= coords.length;
+	if (x >= coords.length) x -= coords.length; // This wraps the X position around
 	if (coords[x][y] === '#') trees++;
 
 	x += 3;
@@ -38,7 +38,7 @@ const total = slopes.reduce((acc, slope) => {
 
 	// Loop until Y reaches end of input
 	for (let y = 0; y < coords[0].length; y += slope[1]) {
-		if (x >= coords.length) x -= coords.length;
+		if (x >= coords.length) x -= coords.length; // This wraps the X position around
 		if (coords[x][y] === '#') trees++;
 
 		x += slope[0];
