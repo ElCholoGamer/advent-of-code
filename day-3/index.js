@@ -11,16 +11,14 @@ input.forEach((row, y) => {
 });
 
 let trees = 0;
-let y = 0;
 let x = 0;
 
 // Loop until Y reaches end of input
-while (y < coords[0].length) {
+for (let y = 0; y < coords[0].length; y++) {
 	if (x >= coords.length) x -= coords.length;
 	if (coords[x][y] === '#') trees++;
 
 	x += 3;
-	y++;
 }
 
 console.log('Part 1:', trees);
@@ -36,17 +34,16 @@ const slopes = [
 
 const total = slopes.reduce((acc, slope) => {
 	let trees = 0;
-	let y = 0;
 	let x = 0;
 
 	// Loop until Y reaches end of input
-	while (y < coords[0].length) {
+	for (let y = 0; y < coords[0].length; y += slope[1]) {
 		if (x >= coords.length) x -= coords.length;
 		if (coords[x][y] === '#') trees++;
 
 		x += slope[0];
-		y += slope[1];
 	}
+
 	return acc * trees;
 }, 1);
 
