@@ -4,7 +4,6 @@ const input = require('./input.json');
 // Get coordinates
 const coords = [];
 input.forEach((row, y) => {
-	coords;
 	row.split('').forEach((letter, x) => {
 		if (!coords[x]) coords[x] = [];
 		coords[x][y] = letter;
