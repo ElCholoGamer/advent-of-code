@@ -2,7 +2,7 @@ const { readFileSync } = require('fs');
 const { resolve } = require('path');
 
 const input = readFileSync(resolve(__dirname, 'input.txt')).toString();
-const lines = input.split('\r\n');
+const lines = input.split('\n');
 
 // Part 1
 // Get coordinates

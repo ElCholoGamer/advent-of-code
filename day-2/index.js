@@ -6,7 +6,6 @@ const lines = input.split('\r\n');
 
 // Part 1
 const validCount = lines.reduce((acc, curr) => {
-	console.log('Current:', curr);
 	const [times, letter, password] = curr.split(/:? /);
 	const [min, max] = times.split('-');
 
