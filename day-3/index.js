@@ -1,9 +1,13 @@
-const input = require('./input.json');
+const { readFileSync } = require('fs');
+const { resolve } = require('path');
+
+const input = readFileSync(resolve(__dirname, 'input.txt')).toString();
+const lines = input.split('\r\n');
 
 // Part 1
 // Get coordinates
 const coords = [];
-input.forEach((row, y) => {
+lines.forEach((row, y) => {
 	row.split('').forEach((letter, x) => {
 		if (!coords[x]) coords[x] = [];
 		coords[x][y] = letter;

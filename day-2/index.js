@@ -1,7 +1,12 @@
-const input = require('./input.json');
+const { readFileSync } = require('fs');
+const { resolve } = require('path');
+
+const input = readFileSync(resolve(__dirname, 'input.txt')).toString();
+const lines = input.split('\r\n');
 
 // Part 1
-const validCount = input.reduce((acc, curr) => {
+const validCount = lines.reduce((acc, curr) => {
+	console.log('Current:', curr);
 	const [times, letter, password] = curr.split(/:? /);
 	const [min, max] = times.split('-');
 
@@ -12,7 +17,7 @@ const validCount = input.reduce((acc, curr) => {
 console.log('Part 1:', validCount);
 
 // Part 2
-const newValidCount = input.reduce((acc, curr) => {
+const newValidCount = lines.reduce((acc, curr) => {
 	const [indexes, letter, password] = curr.split(/:? /);
 	const [pos1, pos2] = indexes.split('-').map(l => parseInt(l) - 1);
 
