@@ -1,0 +1,11 @@
+{
+	"name": "advent-of-code",
+	"version": "1.0.0",
+	"repository": "https://github.com/ElCholoGamer/advent-of-code.git",
+	"author": "ElCholoGamer <josedanielgrayson@gmail.com>",
+	"license": "MIT",
+	"private": true,
+	"dependencies": {
+		"md5": "^2.3.0"
+	}
+}
