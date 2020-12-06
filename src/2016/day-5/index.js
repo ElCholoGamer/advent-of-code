@@ -9,8 +9,8 @@ let count = 0;
 for (let i = 0; i < 8; i++) {
 	let hash;
 
-	// while (!(hash = md5(input + (count += 1))).startsWith('00000')) {}
-	// password += hash[5];
+	while (!(hash = md5(input + (count += 1))).startsWith('00000')) {}
+	password += hash[5];
 }
 
 console.log('Part 1:', password);
@@ -19,6 +19,7 @@ console.log('Part 1:', password);
 count = 0;
 password = '-'.repeat(8);
 const cinematic = process.argv.includes('--cinematic');
+if (cinematic) console.clear();
 
 while (password.indexOf('-') !== -1) {
 	let hash;
