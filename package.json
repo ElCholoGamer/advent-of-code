@@ -6,6 +6,7 @@
 	"license": "MIT",
 	"private": true,
 	"dependencies": {
+		"chalk": "^4.1.0",
 		"md5": "^2.3.0"
 	}
 }
