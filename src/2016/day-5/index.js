@@ -41,9 +41,25 @@ while (password.indexOf('-') !== -1) {
 }
 
 if (cinematic) {
-	console.log(chalk.green('================================'));
-	console.log(chalk.green('||     Password decrypted     ||'));
-	console.log(chalk.green('================================'));
-}
+	console.clear();
 
-console.log('Part 2:', password);
+	const timer = setInterval(() => {
+		console.log(chalk.green('================================'));
+		console.log(chalk.green('||                            ||'));
+		console.log(
+			chalk.green(`||    ${chalk.bold('Password decrypted')}      ||`)
+		);
+		console.log(chalk.green('||                            ||'));
+		console.log(chalk.green('================================'));
+		setTimeout(() => console.clear(), 500);
+	}, 1000);
+
+	setTimeout(() => {
+		console.log('========================');
+		console.log(chalk.green('Password:', password));
+		console.log('========================');
+		process.exit(0);
+	}, 5000);
+} else {
+	console.log('Part 2:', password);
+}
