@@ -2,23 +2,26 @@ const md5 = require('md5');
 const chalk = require('chalk');
 const [input] = require('./input.json');
 
+const cinematic = process.argv.includes('--cinematic');
+
 // Part 1
-let password = '';
-let count = 0;
+if (!cinematic) {
+	let password = '';
+	let count = 0;
 
-for (let i = 0; i < 8; i++) {
-	let hash;
+	for (let i = 0; i < 8; i++) {
+		let hash;
 
-	while (!(hash = md5(input + (count += 1))).startsWith('00000')) {}
-	password += hash[5];
+		while (!(hash = md5(input + (count += 1))).startsWith('00000')) {}
+		password += hash[5];
+	}
+
+	console.log('Part 1:', password);
 }
-
-console.log('Part 1:', password);
 
 // Part 2
 count = 0;
 password = '-'.repeat(8);
-const cinematic = process.argv.includes('--cinematic');
 if (cinematic) console.clear();
 
 while (password.indexOf('-') !== -1) {
@@ -44,7 +47,7 @@ while (password.indexOf('-') !== -1) {
 if (cinematic) {
 	console.clear();
 
-	const timer = setInterval(() => {
+	function print() {
 		console.log(chalk.green('================================'));
 		console.log(chalk.green('||                            ||'));
 		console.log(
@@ -52,13 +55,21 @@ if (cinematic) {
 		);
 		console.log(chalk.green('||                            ||'));
 		console.log(chalk.green('================================'));
+
 		setTimeout(() => console.clear(), 500);
+	}
+	print();
+
+	setInterval(() => {
+		print();
 	}, 1000);
 
 	setTimeout(() => {
-		console.log('========================');
+		console.clear();
+
+		console.log(chalk.green('========================'));
 		console.log(chalk.green('Password:', password));
-		console.log('========================');
+		console.log(chalk.green('========================'));
 		process.exit(0);
 	}, 5000);
 } else {
