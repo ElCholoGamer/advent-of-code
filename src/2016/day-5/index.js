@@ -31,9 +31,15 @@ while (password.indexOf('-') !== -1) {
 			const displayPassword = password.replace(/-/g, () =>
 				chalk.red(Math.random().toString(16)[4])
 			);
-			console.log(
-				chalk.greenBright(`${hash} | | Password: ${displayPassword}`)
+			console.clear();
+			const line = chalk.green(
+				'================================================================='
 			);
+			console.log(line);
+			console.log(
+				chalk.green(`||  ${hash}  ||  Password:  ${displayPassword}  ||`)
+			);
+			console.log(line);
 		}
 	}
 
@@ -67,9 +73,9 @@ if (cinematic) {
 	setTimeout(() => {
 		console.clear();
 
-		console.log(chalk.green('========================'));
-		console.log(chalk.green('Password:', password));
-		console.log(chalk.green('========================'));
+		console.log(chalk.green('=========================='));
+		console.log(chalk.green(`||  Password: ${password}  ||`));
+		console.log(chalk.green('=========================='));
 		process.exit(0);
 	}, 5000);
 } else {
