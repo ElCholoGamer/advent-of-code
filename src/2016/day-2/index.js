@@ -79,4 +79,4 @@ const newPassword = input.reduce((acc, line) => {
 	return acc + newButtons[pos[0]][pos[1]];
 }, '');
 
-console.log('Part 1:', newPassword);
+console.log('Part 2:', newPassword);
