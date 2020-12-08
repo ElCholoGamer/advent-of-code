@@ -27,8 +27,10 @@ console.log('Part 1:', acc);
 // Part 2
 const tests = input.map((line, index, arr) => {
 	const newInput = [...arr];
+
 	if (line.includes('nop')) line = line.replace('nop', 'jmp');
 	else if (line.includes('jmp')) line = line.replace('jmp', 'nop');
+
 	newInput[index] = line;
 	return newInput;
 });
