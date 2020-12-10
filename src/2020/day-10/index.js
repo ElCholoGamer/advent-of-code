@@ -26,8 +26,6 @@ const groups = ordered.reduce(
 	[[]]
 );
 
-console.log('Groups:', groups);
-
 const isValidSequence = arr =>
 	arr.every((num, index, arr) => (arr[index + 1] || 0) - num <= 3);
 
@@ -56,24 +54,17 @@ const possibilities = groups.reduce((acc, group) => {
 			if (!selected.length || alreadyUsed(selected)) continue;
 			usedSelected.push(selected);
 
-			console.log('Selected:', selected);
-
 			// Copy group and delete selected elements
 			const copy = [...group];
 			selected.forEach(num => copy.splice(copy.indexOf(num), 1));
 
 			// Add to count if sequence is valid
-			if (isValidSequence(copy)) {
-				console.log('Valid possibility:', copy);
-				count++;
-			}
+			if (isValidSequence(copy)) count++;
 
 			// Select the rest of removable numbers
 			const invertSelected = removable.filter(num => !selected.includes(num));
 			if (!invertSelected.length || alreadyUsed(invertSelected)) continue;
 			usedSelected.push(invertSelected);
-
-			console.log('Inverted selected:', invertSelected);
 
 			// Remove new selected elements from new group copy
 			const invertCopy = [...group];
@@ -82,15 +73,10 @@ const possibilities = groups.reduce((acc, group) => {
 			);
 
 			// Add to count if sequence is valid
-			if (isValidSequence(invertCopy)) {
-				console.log('Valid possibility:', invertCopy);
-				count++;
-			}
+			if (isValidSequence(invertCopy)) count++;
 		}
 	}
 
-	console.log('Group possibilities for [ ' + group.join(', ') + ' ]:', count);
-	console.log('='.repeat(30));
 	return acc * count;
 }, 1);
 
