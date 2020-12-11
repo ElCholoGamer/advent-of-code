@@ -77,6 +77,10 @@ do {
 
 			const assign1 = !isNaN(value1) ? parseInt(value1) : values[value1];
 			const assign2 = !isNaN(value2) ? parseInt(value2) : values[value2];
+			if (!assign1 && assign1 !== 0) {
+				console.log(value1);
+				return;
+			}
 
 			switch (operation) {
 				case 'AND':
