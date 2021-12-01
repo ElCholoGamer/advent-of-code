@@ -94,7 +94,10 @@ const runCommand: Command<Flags> = {
 						headers: {
 							cookie: 'session=' + SESSION_COOKIE,
 						},
+						responseType: 'text',
+						transformResponse: res => res,
 					});
+
 					input = res.data;
 
 					fs.writeFileSync(inputPath, input);
@@ -105,7 +108,7 @@ const runCommand: Command<Flags> = {
 					if (axiosErr.response) {
 						console.error(chalk.bold.red(axiosErr.response.statusText));
 					} else {
-						console.error(chalk.bold.red(axiosErr));
+						throw axiosErr;
 					}
 					return;
 				}
