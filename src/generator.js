@@ -6,7 +6,7 @@ const { existsSync, mkdirSync, writeFileSync } = require('fs');
 const { join, resolve } = require('path');
 const { EOL } = require('os');
 
-for (let year = 2015; year <= 2020; year++) {
+for (let year = 2015; year <= 2021; year++) {
 	if (!existsSync(year.toString())) mkdirSync(year.toString());
 
 	for (let day = 1; day <= 25; day++) {
