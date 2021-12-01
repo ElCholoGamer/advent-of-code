@@ -95,7 +95,7 @@ const runCommand: Command<Flags> = {
 							cookie: 'session=' + SESSION_COOKIE,
 						},
 					});
-					input = res.data.trim();
+					input = res.data;
 
 					fs.writeFileSync(inputPath, input);
 				} catch (err: unknown) {

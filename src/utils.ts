@@ -32,6 +32,6 @@ export const getAllCommands = (() => {
 	};
 })();
 
-export const splitInput = (input: string) => input.trim().split(/\n\r?/g);
+export const splitInput = (input: string) => input.trim().split(/\r?\n/);
 
 export const parseInput = (input: string) => splitInput(input).map(Number);
