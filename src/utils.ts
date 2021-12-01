@@ -31,3 +31,7 @@ export const getAllCommands = (() => {
 		return memo;
 	};
 })();
+
+export const splitInput = (input: string) => input.trim().split(/\n\r?/g);
+
+export const parseInput = (input: string) => splitInput(input).map(Number);
