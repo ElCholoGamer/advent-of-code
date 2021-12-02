@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = ([input]) => {
 	const alreadyVisited = [[0, 0]];
 	const pos = [0, 0];
 
@@ -35,7 +35,7 @@ export const part1: AoCPart = input => {
 	}, 1);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = ([input]) => {
 	const alreadyVisited = [[0, 0]];
 
 	const santa = [0, 0];

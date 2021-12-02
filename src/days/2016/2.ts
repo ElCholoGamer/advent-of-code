@@ -1,10 +1,8 @@
 import { AoCPart } from '../../types';
-import { splitInput } from '../../utils';
 
 const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max);
 
-export const part1: AoCPart = inputStr => {
-	const input = splitInput(inputStr);
+export const part1: AoCPart = input => {
 	const pos = [1, 1];
 
 	const buttons = [
@@ -40,9 +38,7 @@ export const part1: AoCPart = inputStr => {
 	}, '');
 };
 
-export const part2: AoCPart = inputStr => {
-	const input = splitInput(inputStr);
-
+export const part2: AoCPart = input => {
 	const newButtons = [
 		[null, null, '5', null, null],
 		[null, '2', '6', 'A', null],

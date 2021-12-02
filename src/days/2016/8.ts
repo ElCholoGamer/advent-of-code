@@ -1,5 +1,4 @@
 import { AoCPart } from '../../types';
-import { splitInput } from '../../utils';
 
 function makeScreen(input: string[]) {
 	const screen = [...Array(50)].map(() => Array(6).fill(false));
@@ -51,15 +50,13 @@ function makeScreen(input: string[]) {
 	return screen;
 }
 
-export const part1: AoCPart = inputStr => {
-	const input = splitInput(inputStr);
+export const part1: AoCPart = input => {
 	const screen = makeScreen(input);
 
 	return screen.reduce((acc, col) => acc + col.reduce((acc, light) => acc + light, 0), 0);
 };
 
-export const part2: AoCPart = inputStr => {
-	const input = splitInput(inputStr);
+export const part2: AoCPart = input => {
 	const screen = makeScreen(input);
 
 	const lines = [''];

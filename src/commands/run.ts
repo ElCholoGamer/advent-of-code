@@ -2,7 +2,7 @@ import fs from 'fs';
 import chalk from 'chalk';
 import { AoCPart, Command } from '../types';
 import path from 'path';
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 type Flags = {
 	year: number;
@@ -59,7 +59,7 @@ const runCommand: Command<Flags> = {
 			return;
 		}
 
-		let input: string;
+		let inputStr: string;
 		if (inputPath) {
 			try {
 				if (!fs.existsSync(inputPath)) {
@@ -67,7 +67,7 @@ const runCommand: Command<Flags> = {
 					return;
 				}
 
-				input = fs.readFileSync(inputPath, { encoding: 'utf-8' });
+				inputStr = fs.readFileSync(inputPath, { encoding: 'utf-8' });
 			} catch (err) {
 				console.error(chalk.bold.red('Error: Could not read input file, see below for error:'));
 				console.error(err);
@@ -90,17 +90,20 @@ const runCommand: Command<Flags> = {
 
 				try {
 					console.log(chalk.italic.blue('Fetching input...'));
-					const res = await axios.get(`https://adventofcode.com/${year}/day/${day}/input`, {
-						headers: {
-							cookie: 'session=' + SESSION_COOKIE,
-						},
-						responseType: 'text',
-						transformResponse: res => res,
-					});
+					const res: AxiosResponse<string> = await axios.get(
+						`https://adventofcode.com/${year}/day/${day}/input`,
+						{
+							headers: {
+								cookie: 'session=' + SESSION_COOKIE,
+							},
+							responseType: 'text',
+							transformResponse: res => res,
+						}
+					);
 
-					input = res.data;
+					inputStr = res.data;
 
-					fs.writeFileSync(inputPath, input);
+					fs.writeFileSync(inputPath, inputStr);
 				} catch (err: unknown) {
 					console.error(chalk.bold.red('Error: Could not fetch input, read below:'));
 
@@ -113,9 +116,11 @@ const runCommand: Command<Flags> = {
 					return;
 				}
 			} else {
-				input = fs.readFileSync(inputPath, { encoding: 'utf-8' });
+				inputStr = fs.readFileSync(inputPath, { encoding: 'utf-8' });
 			}
 		}
+
+		const input = inputStr.replace(/\r?\n$/, '').split(/\r?\n/);
 
 		let funcs: { part1: AoCPart; part2: AoCPart };
 
@@ -145,7 +150,7 @@ const runCommand: Command<Flags> = {
 	},
 };
 
-async function runPart(func: AoCPart, input: string) {
+async function runPart(func: AoCPart, input: string[]) {
 	const start = Date.now();
 
 	try {

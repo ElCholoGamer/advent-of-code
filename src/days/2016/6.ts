@@ -1,5 +1,4 @@
 import { AoCPart } from '../../types';
-import { splitInput } from '../../utils';
 
 function getLetters(input: string[]): string[][] {
 	const letters: string[][] = [];
@@ -14,8 +13,7 @@ function getLetters(input: string[]): string[][] {
 	return letters;
 }
 
-export const part1: AoCPart = inputStr => {
-	const input = splitInput(inputStr);
+export const part1: AoCPart = input => {
 	const letters = getLetters(input);
 
 	const repeated = letters.map(chars => {
@@ -32,7 +30,7 @@ export const part1: AoCPart = inputStr => {
 };
 
 export const part2: AoCPart = input => {
-	const letters = getLetters(splitInput(input));
+	const letters = getLetters(input);
 
 	const repeated = letters.map(chars => {
 		const count = chars.reduce<Record<string, number>>((acc, char) => {

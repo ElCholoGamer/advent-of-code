@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = ([input]) => {
 	const steps = input.split(', ');
 	let direction = 0;
 	const pos = [0, 0];
@@ -41,7 +41,7 @@ export const part1: AoCPart = input => {
 	return Math.abs(pos[0]) + Math.abs(pos[1]);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = ([input]) => {
 	const pos: [number, number] = [0, 0];
 	let direction = 0;
 

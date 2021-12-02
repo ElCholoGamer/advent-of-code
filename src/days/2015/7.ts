@@ -1,9 +1,6 @@
 import { AoCPart } from '../../types';
-import { splitInput } from '../../utils';
 
-export const part1: AoCPart = inputStr => {
-	const input = splitInput(inputStr);
-
+export const part1: AoCPart = input => {
 	const actions = input.map(line => {
 		const [expression, destination] = line.split(' -> ');
 		const [value1, operation, value2] = !expression.startsWith('NOT')
@@ -60,10 +57,8 @@ export const part1: AoCPart = inputStr => {
 	return values.a;
 };
 
-export const part2: AoCPart = async inputStr => {
-	const input = splitInput(inputStr);
-
-	const a = <number>await part1(inputStr);
+export const part2: AoCPart = async input => {
+	const a = <number>await part1(input);
 	const values: Record<string, number> = { a };
 
 	const actions = input.map(line => {

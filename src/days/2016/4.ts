@@ -1,5 +1,4 @@
 import { AoCPart } from '../../types';
-import { splitInput } from '../../utils';
 
 function getRealRooms(input: string[]) {
 	return input.reduce<string[]>((acc, room) => {
@@ -28,8 +27,7 @@ function getRealRooms(input: string[]) {
 	}, []);
 }
 
-export const part1: AoCPart = inputStr => {
-	const input = splitInput(inputStr);
+export const part1: AoCPart = input => {
 	const realRooms = getRealRooms(input);
 
 	return realRooms.reduce((acc, room) => {
@@ -38,8 +36,7 @@ export const part1: AoCPart = inputStr => {
 	}, 0);
 };
 
-export const part2: AoCPart = async inputStr => {
-	const input = splitInput(inputStr);
+export const part2: AoCPart = async input => {
 	const realRooms = getRealRooms(input);
 
 	const letters = 'abcdefghijklmnopqrstuvwxyz';

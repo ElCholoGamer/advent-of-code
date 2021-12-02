@@ -1,9 +1,6 @@
 import { AoCPart } from '../../types';
-import { splitInput } from '../../utils';
 
-export const part1: AoCPart = inputStr => {
-	const input = splitInput(inputStr);
-
+export const part1: AoCPart = input => {
 	const findPair = (str: string) =>
 		str.split('').some((char, index, arr) => {
 			const pair = arr[index + 1];
@@ -21,9 +18,7 @@ export const part1: AoCPart = inputStr => {
 	}, 0);
 };
 
-export const part2: AoCPart = inputStr => {
-	const input = splitInput(inputStr);
-
+export const part2: AoCPart = input => {
 	return input.reduce((acc, ip) => {
 		const clear = ip.replace(/\[[a-z]+\]/g, '--');
 		const inBrackets = ip.replace(/(\]|^)[a-z]+(\[|$)/g, '--');

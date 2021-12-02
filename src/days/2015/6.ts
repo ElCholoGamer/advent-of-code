@@ -1,9 +1,6 @@
 import { AoCPart } from '../../types';
-import { splitInput } from '../../utils';
 
-export const part1: AoCPart = inputStr => {
-	const input = splitInput(inputStr);
-
+export const part1: AoCPart = input => {
 	const lights = [...Array(1000)].map(() => Array(1000).fill(false));
 
 	for (const line of input) {
@@ -23,8 +20,7 @@ export const part1: AoCPart = inputStr => {
 	return lights.reduce((acc, col) => acc + col.reduce((acc, light) => acc + light, 0), 0);
 };
 
-export const part2: AoCPart = inputStr => {
-	const input = splitInput(inputStr);
+export const part2: AoCPart = input => {
 	const lights = [...Array(1000)].map(() => Array(1000).fill(0));
 
 	for (const line of input) {

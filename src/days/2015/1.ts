@@ -1,11 +1,10 @@
 import { AoCPart } from '../../types';
-import { parseInput } from '../../utils';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = ([input]) => {
 	return input.split('').reduce((acc, char) => acc + (char === '(' ? 1 : -1), 0);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = ([input]) => {
 	let floor = 0;
 	let basementChar;
 

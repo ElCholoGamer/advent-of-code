@@ -1,9 +1,6 @@
 import { AoCPart } from '../../types';
-import { splitInput } from '../../utils';
 
-export const part1: AoCPart = inputStr => {
-	const input = splitInput(inputStr);
-
+export const part1: AoCPart = input => {
 	return input.reduce((acc, string) => {
 		// Rule 1
 		const vowels = string.match(/[aeiou]/g)?.length || 0;
@@ -21,9 +18,7 @@ export const part1: AoCPart = inputStr => {
 	}, 0);
 };
 
-export const part2: AoCPart = inputStr => {
-	const input = splitInput(inputStr);
-
+export const part2: AoCPart = input => {
 	return input.reduce((acc, string) => {
 		const chars = string.split('');
 

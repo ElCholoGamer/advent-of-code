@@ -1,9 +1,6 @@
 import { AoCPart } from '../../types';
-import { parseInput, splitInput } from '../../utils';
 
-export const part1: AoCPart = inputStr => {
-	const input = splitInput(inputStr);
-
+export const part1: AoCPart = input => {
 	return input.reduce((acc, line) => {
 		const [side1, side2, side3] = line.trim().split(/\s+/).map(Number);
 
@@ -18,12 +15,12 @@ export const part1: AoCPart = inputStr => {
 	}, 0);
 };
 
-export const part2: AoCPart = inputStr => {
-	const input = splitInput(inputStr).join(' ').split(/\s+/).map(Number);
+export const part2: AoCPart = input => {
+	const nums = input.join(' ').split(/\s+/).map(Number);
 
-	const triangles = input.reduce<number[][]>((acc, num, index) => {
+	const triangles = nums.reduce<number[][]>((acc, num, index) => {
 		if (index % 9 > 2) return acc;
-		return [...acc, [num, input[index + 3], input[index + 6]]];
+		return [...acc, [num, nums[index + 3], nums[index + 6]]];
 	}, []);
 
 	return triangles.reduce((acc, triangle) => {

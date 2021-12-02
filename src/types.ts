@@ -29,4 +29,4 @@ export type Flag<T extends string | number> = {
 	validate?: (value: T) => ValidationResult | Promise<ValidationResult>;
 };
 
-export type AoCPart = (input: string) => (string | number) | Promise<string | number>;
+export type AoCPart = (input: string[]) => (string | number) | Promise<string | number>;
