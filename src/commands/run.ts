@@ -122,15 +122,10 @@ const runCommand: Command<Flags> = {
 
 		const input = inputStr.replace(/\r?\n$/, '').split(/\r?\n/);
 
-		let funcs: { part1: AoCPart; part2: AoCPart };
+		let funcs: { part1?: AoCPart; part2?: AoCPart };
 
 		try {
 			funcs = await import(path.resolve(__dirname, `../days/${year}/${day}`));
-
-			if (typeof funcs.part1 !== 'function' || typeof funcs.part2 !== 'function') {
-				console.error(chalk.bold.red(`Error: Could not get both functions for day ${day} module`));
-				return;
-			}
 		} catch {
 			console.error(chalk.bold.red(`Error: Could not import day ${day} module`));
 			return;
@@ -150,7 +145,12 @@ const runCommand: Command<Flags> = {
 	},
 };
 
-async function runPart(func: AoCPart, input: string[]) {
+async function runPart(func: AoCPart | undefined, input: string[]) {
+	if (!func) {
+		console.error(chalk.bold.red('Error: Could not find part function, aborting.'));
+		return;
+	}
+
 	const start = Date.now();
 
 	try {
