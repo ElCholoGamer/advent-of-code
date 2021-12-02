@@ -8,13 +8,14 @@ Includes a useful CLI tool to automatically fetch puzzle input and execute code.
 
 1. Set the `SESSION_COOKIE` variable in a `.env` file, using your own session cookie from the AoC website:
 
-```dotenv
+```bash
+# .env
 SESSION_COOKIE=abcdefghijklmnopqrstuvwxyz
 ```
 
-2. Put your own code into one of the files in the `src/days/[year]` folder. The file must export 2 functions of type `AoCPart`, that must named `part1` and `part2` and return either a string or a number as the result.
+2. Put your own code into one of the files in the `src/days/[year]` folder. The file must export 2 functions of type `AoCPart`, that must be named `part1` and `part2`, and return either a string or a number as the result.
 
-```ts
+```typescript
 import { AoCDay } from '../../types';
 
 export const part1: AoCDay = input => {
