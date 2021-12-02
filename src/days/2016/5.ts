@@ -1,10 +1,9 @@
 import chalk from 'chalk';
 import md5 from 'md5';
 import { AoCPart } from '../../types';
+import { sleep } from '../../utils';
 
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-export const part1: AoCPart = input => {
+export const part1: AoCPart = ([input]) => {
 	// Part 1
 	let password = '';
 	let count = 0;
@@ -23,7 +22,7 @@ export const part1: AoCPart = input => {
 	return password;
 };
 
-export const part2: AoCPart = async input => {
+export const part2: AoCPart = async ([input]) => {
 	input = input.trim();
 	console.clear();
 
