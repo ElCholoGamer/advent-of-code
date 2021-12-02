@@ -54,7 +54,7 @@ const runCommand: Command<Flags> = {
 		year ||= new Date().getFullYear();
 		const day = Number(args[0]);
 
-		if (new Date(Date.now() - 5 * 36e5) < new Date(year, 11, day)) {
+		if (new Date(Date.now() - 5) < new Date(year, 11, day)) {
 			console.error(chalk.bold.red(`Error: Input for day ${day} is not available yet`));
 			return;
 		}
