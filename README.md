@@ -1,8 +1,39 @@
 # Advent of Code
 
-So these will be my attempts for Advent of Code 2020, I'll probably be committing daily with the new puzzles.
-(I've already generated all the files so that's why this is full)
+My own entries for the [Advent of Code](https://adventofcode.com) event.
 
-I'll probably end up also adding puzzles for the previous years
+Includes a useful CLI tool to automatically fetch puzzle input and execute code.
 
-### Be sure to check out the original puzzles [here](https://adventofcode.com)!
+## CLI Usage
+
+1. Set the `SESSION_COOKIE` variable in a `.env` file, using your own session cookie from the AoC website:
+
+```dotenv
+SESSION_COOKIE=abcdefghijklmnopqrstuvwxyz
+```
+
+2. Put your own code into one of the files in the `src/days/[year]` folder. The file must export 2 functions of type `AoCPart`, that must named `part1` and `part2` and return either a string or a number as the result.
+
+```ts
+import { AoCDay } from '../../types';
+
+export const part1: AoCDay = input => {
+	return '[This is the result for part 1!]';
+};
+
+export const part2: AoCDay = input => {
+	return '[This is the result for part 2!]';
+};
+```
+
+3. Run the program from the command line, either using the `dev` script or building and using the `start` script
+
+```bash
+# Run day 4 of the current year
+$ npm run dev run
+# or...
+$ npm run build
+$ npm start run 4
+```
+
+For more information on the available flags and options, use the `help` command.
