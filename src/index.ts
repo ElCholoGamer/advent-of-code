@@ -104,4 +104,4 @@ const {
 	...flags
 } = minimist(process.argv.slice(2));
 
-main(command?.toLowerCase(), args, flags);
+main(command?.toString().toLowerCase(), args, flags);
