@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = ([input]) => {
 	let decompressed = input;
 	const regex = /(?<!\([0-9]+x[0-9]+\))(\([0-9]+x[0-9]+\))/g;
 
@@ -23,7 +23,7 @@ export const part1: AoCPart = input => {
 	return decompressed.replace(/\s+/g, '').length;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = ([input]) => {
 	function decompress(str: string) {
 		const regex = /(?<!\([0-9]+x[0-9]+\))(\([0-9]+x[0-9]+\))/g;
 

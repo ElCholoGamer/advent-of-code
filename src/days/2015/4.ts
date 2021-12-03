@@ -1,7 +1,7 @@
 import md5 from 'md5';
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = ([input]) => {
 	let num = 0;
 	let hash: string;
 
@@ -13,7 +13,7 @@ export const part1: AoCPart = input => {
 	return num;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = ([input]) => {
 	let num = 0;
 	let hash: string;
 
