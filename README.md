@@ -16,13 +16,13 @@ SESSION_COOKIE=abcdefghijklmnopqrstuvwxyz
 2. Put your own code into one of the files in the `src/days/[year]` folder. The file must export 2 functions of type `AoCPart`, that must be named `part1` and `part2`, and return either a string or a number as the result.
 
 ```typescript
-import { AoCDay } from '../../types';
+import { AoCPart } from '../../types';
 
-export const part1: AoCDay = input => {
+export const part1: AoCPart = input => {
 	return '[This is the result for part 1!]';
 };
 
-export const part2: AoCDay = input => {
+export const part2: AoCPart = input => {
 	return '[This is the result for part 2!]';
 };
 ```
