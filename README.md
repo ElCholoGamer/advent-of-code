@@ -1,4 +1,4 @@
-# Advent of Code
+# Advent of Code &middot; [![Build](https://github.com/ElCholoGamer/advent-of-code/actions/workflows/build.yml/badge.svg)](https://github.com/ElCholoGamer/advent-of-code/actions/workflows/build.yml)
 
 My own entries for the [Advent of Code](https://adventofcode.com) event.
 
