@@ -1,119 +1,113 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
-	const actions = input.map(line => {
-		const [expression, destination] = line.split(' -> ');
-		const [value1, operation, value2] = !expression.startsWith('NOT')
-			? expression.split(' ')
-			: [expression.replace('NOT ', ''), 'NOT'];
+const MAX_INT16 = Math.pow(2, 16);
 
-		return { value1, value2, operation, destination, done: false };
-	});
+interface WireOperation {
+	target: string;
+	operator: string;
+	leftHand?: string | number;
+	rightHand: string | number;
+}
 
-	const values: Record<string, number> = {};
+const tryParse = (str: string) => (isNaN(Number(str)) ? str : Number(str));
+
+function parseOperation(line: string): WireOperation {
+	const [sourceStr, target] = line.split(' -> ');
+
+	const sourceArgs = sourceStr.split(' ');
+
+	let operator: string;
+	let rightHand: string | number;
+	let leftHand: string | number | undefined;
+
+	if (sourceArgs.length === 1) {
+		operator = '+';
+		rightHand = tryParse(sourceArgs[0]);
+	} else if (sourceArgs[0] === 'NOT') {
+		operator = 'NOT';
+		rightHand = tryParse(sourceArgs[1]);
+	} else {
+		leftHand = tryParse(sourceArgs[0]);
+		operator = sourceArgs[1];
+		rightHand = tryParse(sourceArgs[2]);
+	}
+
+	return { target, rightHand, operator, leftHand };
+}
+
+function runOperations(
+	wires: Record<string, number>,
+	operations: WireOperation[],
+	overrideWires: string[] = []
+) {
+	const getValue = (val: string | number) => (typeof val === 'string' ? wires[val] : val);
+
 	do {
-		actions.forEach(action => {
-			const { done, operation, destination: dest } = action;
-			const value1 = Number(action.value1);
-			const value2 = Number(action.value2);
+		const newOperations: WireOperation[] = [];
+		for (let i = 0; i < operations.length; i++) {
+			const { target, operator, rightHand, leftHand } = operations[i];
 
 			if (
-				done ||
-				(isNaN(value1) && !(value1 in values)) ||
-				(isNaN(value2) && !(value2 in values) && operation && operation !== 'NOT')
-			)
-				return;
-
-			const assign1 = !isNaN(value1) ? value1 : values[value1.toString()];
-			const assign2 = !isNaN(value2) ? value2 : values[value2.toString()];
-
-			switch (operation) {
-				case 'AND':
-					values[dest] = assign1 & assign2;
-					break;
-				case 'OR':
-					values[dest] = assign1 | assign2;
-					break;
-				case 'NOT':
-					values[dest] = ~assign1;
-					break;
-				case 'RSHIFT':
-					values[dest] = assign1 >>> assign2;
-					break;
-				case 'LSHIFT':
-					values[dest] = assign1 << assign2;
-					break;
-				case undefined:
-					values[dest] = assign1;
-					break;
-				default:
-					throw new Error(`Invalid operation found: ${operation}`);
+				(typeof rightHand === 'string' && !(rightHand in wires)) ||
+				(typeof leftHand === 'string' && !(leftHand in wires))
+			) {
+				newOperations.push(operations[i]);
+				continue;
 			}
 
-			action.done = true;
-		});
-	} while (actions.some(action => !action.done));
+			if (overrideWires.includes(target)) continue;
 
-	return values.a;
+			const rightValue = getValue(rightHand);
+
+			if (operator === '+') {
+				wires[target] = rightValue;
+			} else if (operator === 'NOT') {
+				wires[target] = ~rightValue;
+			} else {
+				if (!leftHand) throw new Error('Operation left hand required');
+
+				const leftValue = getValue(leftHand);
+
+				switch (operator) {
+					case 'AND':
+						wires[target] = leftValue & rightValue;
+						break;
+					case 'OR':
+						wires[target] = leftValue | rightValue;
+						break;
+					case 'RSHIFT':
+						wires[target] = leftValue >>> rightValue;
+						break;
+					case 'LSHIFT':
+						wires[target] = leftValue << rightValue;
+						break;
+					default:
+						throw new Error('Invalid operator: ' + operator);
+				}
+			}
+
+			wires[target] %= MAX_INT16;
+			while (wires[target] < 0) wires[target] += MAX_INT16;
+		}
+
+		operations = newOperations;
+	} while (operations.length > 0);
+
+	return wires;
+}
+
+export const part1: AoCPart = input => {
+	const operations = input.map(parseOperation);
+	const wires = runOperations({}, operations);
+
+	return wires.a;
 };
 
 export const part2: AoCPart = async input => {
 	const a = <number>await part1(input);
-	const values: Record<string, number> = { a };
 
-	const actions = input.map(line => {
-		const [expression, destination] = line.split(' -> ');
-		const [value1, operation, value2] = !expression.startsWith('NOT')
-			? expression.split(' ')
-			: [expression.replace('NOT ', ''), 'NOT'];
+	const operations = input.map(parseOperation);
+	const wires = runOperations({ b: a }, operations, ['b']);
 
-		return { value1, value2, operation, destination, done: false };
-	});
-
-	do {
-		actions
-			.filter(a => !a.done)
-			.forEach(action => {
-				const { value1, value2, operation, destination: dest } = action;
-				if (
-					(isNaN(Number(value1)) && !(value1 in values)) ||
-					(isNaN(Number(value2)) && !(value2 in values) && operation && operation !== 'NOT')
-				)
-					return;
-
-				const assign1 = !isNaN(Number(value1)) ? Number(value1) : values[value1];
-				const assign2 = !isNaN(Number(value2)) ? Number(value2) : values[value2];
-				if (!assign1 && assign1 !== 0) {
-					console.log(value1);
-					return;
-				}
-
-				switch (operation) {
-					case 'AND':
-						values[dest] = assign1 & assign2;
-						break;
-					case 'OR':
-						values[dest] = assign1 | assign2;
-						break;
-					case 'NOT':
-						values[dest] = ~assign1;
-						break;
-					case 'RSHIFT':
-						values[dest] = assign1 >>> assign2;
-						break;
-					case 'LSHIFT':
-						values[dest] = assign1 << assign2;
-						break;
-					case undefined:
-						values[dest] = assign1;
-						break;
-					default:
-						throw new Error(`Invalid operation found: ${operation}`);
-				}
-
-				action.done = true;
-			});
-	} while (actions.some(action => !action.done));
-
-	return values.a;
+	return wires.a;
 };
