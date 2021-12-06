@@ -43,7 +43,7 @@ export const part2: AoCPart = ([input]) => {
 		fish[9] += fish[0];
 		fish[7] += fish[0];
 
-		// Move fish down a timer
+		// Move other fish down a timer
 		for (let i = 1; i < fish.length; i++) {
 			fish[i - 1] = fish[i] || 0;
 			fish[i] = 0;
