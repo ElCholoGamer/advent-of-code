@@ -50,5 +50,9 @@ export const part2: AoCPart = ([input]) => {
 		}
 	}
 
+<<<<<<< HEAD
 	return Array.from(fish.values()).reduce((sum, fishCount) => sum + fishCount);
+=======
+	return Array.from(fish.values()).reduce((sum, fish) => sum + fish);
+>>>>>>> da741a53380a93dc4fdef0eee25330f1b4173cc4
 };
