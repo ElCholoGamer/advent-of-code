@@ -151,7 +151,7 @@ async function runPart(func: AoCPart | undefined, input: string[]) {
 		return;
 	}
 
-	const start = performance.now();
+	const start = Date.now();
 
 	try {
 		const result = await func(input);
@@ -160,7 +160,7 @@ async function runPart(func: AoCPart | undefined, input: string[]) {
 		console.error(err);
 	}
 
-	console.log(chalk.bold.blue(`Elapsed: ${Math.floor(performance.now() - start)}ms`));
+	console.log(chalk.bold.blue(`Elapsed: ${Math.floor(Date.now() - start)}ms`));
 }
 
 export default runCommand;
