@@ -108,6 +108,5 @@ export const part2: AoCPart = input => {
 		return Number(numberStr);
 	});
 
-	console.log(sums);
 	return sums.reduce((total, sum) => total + sum);
 };
