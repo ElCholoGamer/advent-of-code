@@ -67,26 +67,20 @@ export const part2: AoCPart = input => {
 				const oneChars = patterns.find(pattern => entry.patterns[pattern] === 1)!.split('');
 
 				if (oneChars.some(oneChar => !chars.includes(oneChar))) {
-					// Number is six
-					entry.patterns[pattern] = 6;
+					entry.patterns[pattern] = 6; // Pattern is six
 				} else {
 					// Might be 0 or 9
 					const fourChars = patterns.find(pattern => entry.patterns[pattern] === 4)!.split('');
-					if (fourChars.some(fourChar => !chars.includes(fourChar))) {
-						// Number is 0
-						entry.patterns[pattern] = 0;
-					} else {
-						// Number is 9
-						entry.patterns[pattern] = 9;
-					}
+					const isZero = fourChars.some(fourChar => !chars.includes(fourChar));
+
+					entry.patterns[pattern] = isZero ? 0 : 9;
 				}
 			} else if (pattern.length === 5) {
 				// Might be 2, 3 or 5
 				const oneChars = patterns.find(pattern => entry.patterns[pattern] === 1)!.split('');
 
 				if (oneChars.every(oneChar => chars.includes(oneChar))) {
-					// Number is 3
-					entry.patterns[pattern] = 3;
+					entry.patterns[pattern] = 3; // Pattern is 3
 				} else {
 					// Number might be 2 or 5
 					const fourChars = patterns.find(pattern => entry.patterns[pattern] === 4)!.split('');
@@ -96,6 +90,7 @@ export const part2: AoCPart = input => {
 						if (!chars.includes(fourChar)) missing++;
 					}
 
+					// If pattern differs from 4 by 2 segments, it's a 2, else it's a 5
 					entry.patterns[pattern] = missing === 2 ? 2 : 5;
 				}
 			}
