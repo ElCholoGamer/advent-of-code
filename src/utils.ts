@@ -49,6 +49,10 @@ export class Grid2D<T> {
 		return this.values.get(key);
 	}
 
+	public has(x: number, y: number) {
+		return this.values.has(`${x},${y}`);
+	}
+
 	public set(x: number, y: number, value: T): this {
 		const key = `${x},${y}`;
 		this.values.set(key, value);
