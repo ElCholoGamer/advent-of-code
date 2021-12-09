@@ -33,3 +33,36 @@ export const getAllCommands = (() => {
 })();
 
 export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+export class Grid2D<T> {
+	public readonly values = new Map<string, T>();
+
+	public constructor() {}
+
+	public getOrDefault<D extends T>(x: number, y: number, defaultValue: D) {
+		const key = `${x},${y}`;
+		return this.values.get(key) ?? defaultValue;
+	}
+
+	public get(x: number, y: number) {
+		const key = `${x},${y}`;
+		return this.values.get(key);
+	}
+
+	public set(x: number, y: number, value: T): this {
+		const key = `${x},${y}`;
+		this.values.set(key, value);
+
+		return this;
+	}
+
+	public keys() {
+		return Array.from(this.values.keys()).map(
+			key => key.split(',').map(Number) as [x: number, y: number]
+		);
+	}
+
+	public get sizeTotal() {
+		return this.values.size;
+	}
+}
