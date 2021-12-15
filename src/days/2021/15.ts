@@ -1,18 +1,15 @@
 import { AoCPart } from '../../types';
 
-class Node<T> {
-	public constructor(public readonly data: T, public priority: number) {}
-
-	public toString(): string {
-		return `[${this.priority}: ${this.data}]`;
-	}
+interface Node<T> {
+	data: T;
+	priority: number;
 }
 
 class PriorityQueue<T> {
 	public readonly items: Node<T>[] = [];
 
 	public push(data: T, priority: number): number {
-		const node = new Node(data, priority);
+		const node: Node<T> = { data, priority };
 		let contain = false;
 
 		for (let i = 0; i < this.items.length; i++) {
@@ -56,7 +53,7 @@ class PriorityQueue<T> {
 interface Cell {
 	risk: number;
 	visited: boolean;
-	distance: number;
+	totalRisk: number;
 }
 
 function parseInput(input: string[]): Cell[][] {
@@ -68,7 +65,7 @@ function parseInput(input: string[]): Cell[][] {
 			cells[x][y] = {
 				risk: Number(input[y][x]),
 				visited: false,
-				distance: Infinity,
+				totalRisk: Infinity,
 			};
 		}
 	}
@@ -76,15 +73,15 @@ function parseInput(input: string[]): Cell[][] {
 	return cells;
 }
 
-function dijkstra(grid: Cell[][], startX: number, startY: number) {
-	grid[startX][startY].distance = 0;
+function dijkstra(cells: Cell[][], startX: number, startY: number) {
+	cells[startX][startY].totalRisk = 0;
 
 	const queue = new PriorityQueue<[x: number, y: number]>();
 	queue.push([startX, startY], 0);
 
 	while (queue.size) {
 		const [x, y] = queue.pop()!;
-		const cell = grid[x][y];
+		const cell = cells[x][y];
 
 		cell.visited = true;
 
@@ -96,22 +93,23 @@ function dijkstra(grid: Cell[][], startX: number, startY: number) {
 		];
 
 		for (const [bX, bY] of branches) {
-			const branch = grid[bX]?.[bY];
+			const branch = cells[bX]?.[bY];
 			if (!branch || branch.visited) continue;
 
 			const branchNode = queue.findNode(({ data }) => data[0] === bX && data[1] === bY);
 
-			const minDistance = Math.min(branch.distance, cell.distance + branch.risk);
-			if (minDistance !== branch.distance) {
-				branch.distance = minDistance;
+			const totalRisk = cell.totalRisk + branch.risk;
+
+			if (totalRisk < branch.totalRisk) {
+				branch.totalRisk = totalRisk;
 
 				if (branchNode) {
-					queue.setNodePriority(branchNode, minDistance);
+					queue.setNodePriority(branchNode, totalRisk);
 				}
 			}
 
 			if (!branchNode) {
-				queue.push([bX, bY], branch.distance);
+				queue.push([bX, bY], branch.totalRisk);
 			}
 		}
 	}
@@ -122,7 +120,7 @@ export const part1: AoCPart = async input => {
 	dijkstra(cells, 0, 0);
 
 	const lastColumn = cells[cells.length - 1];
-	return lastColumn[lastColumn.length - 1].distance;
+	return lastColumn[lastColumn.length - 1].totalRisk;
 };
 
 export const part2: AoCPart = async input => {
@@ -145,7 +143,7 @@ export const part2: AoCPart = async input => {
 					cells[netX] ||= [];
 					cells[netX][netY] = {
 						risk,
-						distance: Infinity,
+						totalRisk: Infinity,
 						visited: false,
 					};
 				}
@@ -156,5 +154,5 @@ export const part2: AoCPart = async input => {
 	dijkstra(cells, 0, 0);
 
 	const lastColumn = cells[cells.length - 1];
-	return lastColumn[lastColumn.length - 1].distance;
+	return lastColumn[lastColumn.length - 1].totalRisk;
 };
