@@ -70,3 +70,21 @@ export class Grid2D<T> {
 		return this.values.size;
 	}
 }
+
+export function formatGrid(grid: string[][]): string {
+	const lines: string[] = [];
+
+	const maxHeight = Math.max(...grid.map(col => col.length));
+
+	for (let y = 0; y < maxHeight; y++) {
+		let line = '';
+
+		for (let x = 0; x < grid.length; x++) {
+			line += grid[x][y];
+		}
+
+		lines.push(line);
+	}
+
+	return lines.join('\n');
+}
