@@ -1,45 +1,61 @@
 import { AoCPart } from '../../types';
 
 export const part1: AoCPart = ([input]) => {
-	let decompressed = input;
-	const regex = /(?<!\([0-9]+x[0-9]+\))(\([0-9]+x[0-9]+\))/g;
+	function getLength(data: string): number {
+		let length = 0;
+		let match: RegExpMatchArray | null = null;
 
-	let match;
-	while ((match = regex.exec(decompressed)) !== null) {
-		const { index } = match;
-		const [length, times] = (match[0].match(/[0-9]+/g) || []).map(match => parseInt(match));
+		while ((match = data.match(/\([0-9]+x[0-9]+\)/)) !== null) {
+			const { [0]: marker, index = 0 } = match;
+			length += index;
 
-		const str = decompressed.substr(index + match[0].length, length);
+			data = data.substring(index + marker.length);
 
-		// Add a space to these to prevent regex matching
-		const repeated = str.replace(/\(/g, '( ').repeat(times);
+			const [seqLength, repeats] = marker
+				.substring(1, marker.length - 1)
+				.split('x')
+				.map(Number);
 
-		decompressed =
-			decompressed.substr(0, index) +
-			repeated +
-			decompressed.substr(index + match[0].length + str.length);
+			const toRepeat = data.substring(0, seqLength);
+			data = data.substring(seqLength);
+
+			length += toRepeat.length * repeats;
+		}
+
+		length += data.length; // Remaining length
+
+		return length;
 	}
 
-	return decompressed.replace(/\s+/g, '').length;
+	return getLength(input);
 };
 
 export const part2: AoCPart = ([input]) => {
-	function decompress(str: string) {
-		const regex = /(?<!\([0-9]+x[0-9]+\))(\([0-9]+x[0-9]+\))/g;
+	function getLength(data: string): number {
+		let length = 0;
+		let match: RegExpMatchArray | null = null;
 
-		let match;
-		while ((match = regex.exec(str)) !== null) {
-			const { index } = match;
-			const [length, times] = (match[0].match(/[0-9]+/g) || []).map(match => parseInt(match));
+		while ((match = data.match(/\([0-9]+x[0-9]+\)/)) !== null) {
+			const { [0]: marker, index = 0 } = match;
+			length += index;
 
-			let sub = str.substr(index + match[0].length, length);
-			sub = decompress(sub);
+			data = data.substring(index + marker.length);
 
-			str = str.substr(0, index) + sub.repeat(times) + str.substr(index + match[0].length + length);
+			const [seqLength, repeats] = marker
+				.substring(1, marker.length - 1)
+				.split('x')
+				.map(Number);
+
+			const toRepeat = data.substring(0, seqLength);
+			data = data.substring(seqLength);
+
+			length += getLength(toRepeat) * repeats;
 		}
 
-		return str;
+		length += data.length; // Remaining length
+
+		return length;
 	}
 
-	return decompress(input).length;
+	return getLength(input);
 };
