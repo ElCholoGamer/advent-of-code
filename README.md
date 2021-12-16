@@ -31,7 +31,7 @@ export const part2: AoCPart = input => {
 
 ```bash
 # Run day 4 of the current year
-$ npm run dev run
+$ npm run dev run 4
 # or...
 $ npm run build
 $ npm start run 4
