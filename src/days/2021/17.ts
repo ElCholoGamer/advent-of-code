@@ -66,9 +66,10 @@ export const part1: AoCPart = ([input]) => {
 			if (position[1] < targetArea.y1) {
 				// Trajectory passes the target area by Y
 				if (lastPosition[1] > targetArea.y2) {
-					// Trajectory goes through target area, highest initial velocity has been found
+					// Trajectory goes through target area, highest initial velocity might have been found
 					if (++retry > 100) break main;
 
+					// Retry at most 100 times to find next highest Y
 					initialVelocity[1]++;
 					break;
 				}
@@ -146,9 +147,10 @@ export const part2: AoCPart = ([input]) => {
 
 				// Trajectory passes the target area by Y
 				if (lastPosition[1] > targetArea.y2) {
-					// Trajectory goes through target area, highest initial velocity has been found
+					// Trajectory goes through target area, highest initial velocity might have been found
 					if (++retry > 100) break main;
 
+					// Retry at most 100 times to find next highest Y
 					initialVelocity[0] = 0;
 					initialVelocity[1]++;
 					break;
