@@ -7,7 +7,7 @@ function reverseSelection<T>(arr: T[], position: number, length: number): T[] {
 		const to = (position + i) % arr.length;
 		const from = (position + length - 1 - i) % arr.length;
 
-		arr[to] = arr[from];
+		out[to] = arr[from];
 	}
 
 	return out;
