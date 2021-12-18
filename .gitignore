@@ -3,4 +3,4 @@ dist/
 cache/
 
 *.env
-*.test.*
+*.test.txt
