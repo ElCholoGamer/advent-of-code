@@ -1,13 +1,13 @@
 import { AoCPart } from '../../types';
 
-interface FishGroup {
-	amount: number;
+interface Options {
+	totalDays?: number;
 }
 
-export const part1: AoCPart = ([input]) => {
+export const part1: AoCPart<Options> = ([input], { totalDays = 80 }) => {
 	let fish = input.split(',').map(Number);
 
-	for (let d = 0; d < 80; d++) {
+	for (let d = 0; d < totalDays; d++) {
 		let newFish = Array(fish.length);
 
 		for (let i = 0; i < fish.length; i++) {
