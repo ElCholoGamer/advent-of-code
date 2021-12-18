@@ -103,8 +103,8 @@ export const part1: AoCPart = input => {
 	return wires.a;
 };
 
-export const part2: AoCPart = async input => {
-	const a = <number>await part1(input);
+export const part2: AoCPart = async (input, options) => {
+	const a = <number>await part1(input, options);
 
 	const operations = input.map(parseOperation);
 	const wires = runOperations({ b: a }, operations, ['b']);

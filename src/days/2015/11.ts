@@ -72,8 +72,8 @@ export const part1: AoCPart = async ([input]) => {
 	return password;
 };
 
-export const part2: AoCPart = async input => {
-	let password = <string>await part1(input);
+export const part2: AoCPart = async (input, options) => {
+	let password = <string>await part1(input, options);
 
 	do {
 		password = incrementString(password);

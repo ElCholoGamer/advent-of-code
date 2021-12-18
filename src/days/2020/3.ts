@@ -28,11 +28,11 @@ export const part1: AoCPart = input => {
 	return part1WithCoords(input)[0];
 };
 
-export const part2: AoCPart = async input => {
+export const part2: AoCPart = async (input, options) => {
 	if (process.argv.includes('--animated')) {
-		return await part2Animated(input);
+		return await part2Animated(input, options);
 	} else {
-		return part2Normal(input);
+		return part2Normal(input, options);
 	}
 };
 

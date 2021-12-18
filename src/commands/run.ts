@@ -154,7 +154,7 @@ async function runPart(func: AoCPart | undefined, input: string[]) {
 	const start = Date.now();
 
 	try {
-		const result = await func(input);
+		const result = await func(input, {});
 		console.log(chalk.green(chalk.bold('Result: ') + result));
 	} catch (err) {
 		console.error(err);

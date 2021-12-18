@@ -17,8 +17,8 @@ export const part1: AoCPart = inputStrings => {
 	throw new Error('Could not find result');
 };
 
-export const part2: AoCPart = async input => {
-	const result = <number>await part1(input);
+export const part2: AoCPart = async (input, options) => {
+	const result = <number>await part1(input, options);
 
 	const index = input.indexOf(result.toString());
 

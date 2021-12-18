@@ -39,9 +39,9 @@ export const part1: AoCPart = input => {
 	return result;
 };
 
-export const part2: AoCPart = async input => {
+export const part2: AoCPart = async (input, options) => {
 	const programs = parsePrograms(input);
-	const base = <string>await part1(input);
+	const base = <string>await part1(input, options);
 
 	function checkProgram(name: string): number {
 		// This function assumes that the given program has one unbalanced child
