@@ -59,10 +59,7 @@ describe.each(Object.keys(allYearTests))('year %i', (year: string) => {
 
 		const parts = [testData.part1, testData.part2]
 			.filter(tests => tests?.length)
-			.map((tests, i) => ({
-				tests,
-				index: i + 1,
-			}));
+			.map((tests, i) => ({ tests, index: i + 1 }));
 
 		for (const part of parts) {
 			if (!validateTests(part.tests)) {
