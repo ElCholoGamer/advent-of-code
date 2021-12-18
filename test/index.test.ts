@@ -46,9 +46,7 @@ const runTestCase = (() => {
 		if (!mod[funcName]) return fail(`Could not find ${funcName} function`);
 
 		const inputArr = typeof test.input === 'string' ? [test.input] : test.input;
-
-		const result = await mod[funcName](inputArr, test.options);
-		expect(result).toBe(test.result);
+		return await mod[funcName](inputArr, test.options || {});
 	};
 })();
 
@@ -75,8 +73,9 @@ describe.each(Object.keys(allYearTests))('year %i', (year: string) => {
 		describe.each(parts)('part $index', ({ tests, index }: IndexedTestCases) => {
 			const indexedTests = tests.map((test, i) => ({ test, index: i + 1 }));
 
-			it.each(indexedTests)(`case $index`, ({ test }) => {
-				runTestCase(test, modPath, `part${index}`);
+			it.each(indexedTests)(`case $index`, async ({ test }) => {
+				const result = await runTestCase(test, modPath, `part${index}`);
+				expect(result).toBe(test.result);
 			});
 		});
 	});
