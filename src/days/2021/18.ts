@@ -12,7 +12,7 @@ interface NumberedSnailPair extends SnailPair {
 function parseSnailPair(data: string): SnailPair {
 	data = data.replace(/\s+/g, '');
 
-	const number: SnailPair = { data: [-1, -1], parent: null };
+	const pair: SnailPair = { data: [-1, -1], parent: null };
 
 	for (let i = 1; i < data.length - 1; i++) {
 		const char = data[i];
@@ -33,10 +33,10 @@ function parseSnailPair(data: string): SnailPair {
 			} while (openBrackets > 0);
 
 			const subGroup = data.substring(start, i);
-			const subNumber = parseSnailPair(subGroup);
-			subNumber.parent = number;
+			const subPair = parseSnailPair(subGroup);
+			subPair.parent = pair;
 
-			number.data[number.data.indexOf(-1)] = subNumber;
+			pair.data[pair.data.indexOf(-1)] = subPair;
 			continue;
 		}
 
@@ -48,10 +48,10 @@ function parseSnailPair(data: string): SnailPair {
 			numStr += data[++i];
 		}
 
-		number.data[number.data.indexOf(-1)] = Number(numStr);
+		pair.data[pair.data.indexOf(-1)] = Number(numStr);
 	}
 
-	return number;
+	return pair;
 }
 
 function snailMagnitude(pair: SnailPair): number {
