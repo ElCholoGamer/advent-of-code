@@ -229,7 +229,6 @@ function addSnailPairs(pair1: SnailPair, pair2: SnailPair) {
 export const part1: AoCPart = input => {
 	const pairs = input.map(parseSnailPair);
 	let rootPair = pairs[0];
-	reducePair(rootPair);
 
 	for (let i = 1; i < pairs.length; i++) {
 		rootPair = addSnailPairs(rootPair, pairs[i]);
