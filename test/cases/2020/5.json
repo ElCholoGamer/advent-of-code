@@ -1,0 +1,8 @@
+{
+	"part1": [
+		{
+			"input": ["BFFFBBFRRR", "FFFBBBFRRR", "BBFFBBFRLL"],
+			"result": 820
+		}
+	]
+}

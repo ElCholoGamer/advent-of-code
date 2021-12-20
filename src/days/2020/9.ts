@@ -1,13 +1,15 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = inputStrings => {
-	const input = inputStrings.map(Number);
+interface Options {
+	preambleLength: number;
+}
 
-	const preamble = 25;
+export const part1: AoCPart<Options> = (inputStrings, { preambleLength = 25 }) => {
+	const input = inputStrings.map(Number);
 
 	for (let i = 25; i < input.length; i++) {
 		const num = input[i];
-		const prev = input.slice(i - preamble, i);
+		const prev = input.slice(i - preambleLength, i);
 
 		if (!prev.some(n => prev.some(other => other !== n && other + n === num))) {
 			return num;
@@ -17,7 +19,7 @@ export const part1: AoCPart = inputStrings => {
 	throw new Error('Could not find result');
 };
 
-export const part2: AoCPart = async (input, options) => {
+export const part2: AoCPart<Options> = async (input, options) => {
 	const result = <number>await part1(input, options);
 
 	const index = input.indexOf(result.toString());
