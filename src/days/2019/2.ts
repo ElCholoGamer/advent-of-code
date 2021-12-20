@@ -1,31 +1,14 @@
 import { AoCPart } from '../../types';
-
-function runProgram(program: number[]): number {
-	program = [...program];
-
-	for (let i = 0; i < program.length; i += 4) {
-		const op = program[i];
-		if (op === 99) break;
-
-		if (op !== 1 && op !== 2) throw new Error('Invalid opcode: ' + op);
-
-		const left = program[program[i + 1]];
-		const right = program[program[i + 2]];
-		const to = program[i + 3];
-
-		program[to] = op === 1 ? left + right : left * right;
-	}
-
-	return program[0];
-}
+import { parseProgramBody, runProgram } from './intcode';
 
 export const part1: AoCPart = ([input]) => {
-	const program = input.split(',').map(Number);
+	const body = parseProgramBody(input);
 
-	program[1] = 12;
-	program[2] = 2;
+	body[1] = 12;
+	body[2] = 2;
 
-	return runProgram(program);
+	const program = runProgram(body);
+	return program.body[0];
 };
 
 interface Options {
@@ -33,14 +16,14 @@ interface Options {
 }
 
 export const part2: AoCPart<Options> = ([input], { expectedOutput = 19690720 }) => {
-	const program = input.split(',').map(Number);
+	const body = parseProgramBody(input);
 
 	for (let noun = 0; noun < 100; noun++) {
-		program[1] = noun;
+		body[1] = noun;
 		for (let verb = 0; verb < 100; verb++) {
-			program[2] = verb;
-			const result = runProgram(program);
-			if (result === expectedOutput) {
+			body[2] = verb;
+			const program = runProgram(body);
+			if (program.body[0] === expectedOutput) {
 				return 100 * noun + verb;
 			}
 		}
