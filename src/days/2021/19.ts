@@ -1,24 +1,22 @@
 import { mat4, vec3 } from 'gl-matrix';
-import { AoCPart } from '../../types';
-
-type Coordinate = [x: number, y: number, z: number];
+import { AoCPart, Coordinate3D } from '../../types';
 
 const PI_OVER_2 = Math.PI / 2;
 
-function addCoords(c1: Coordinate, c2: Coordinate): Coordinate {
+function addCoords(c1: Coordinate3D, c2: Coordinate3D): Coordinate3D {
 	return [c1[0] + c2[0], c1[1] + c2[1], c1[2] + c2[2]];
 }
 
-function subtractCoords(c1: Coordinate, c2: Coordinate): Coordinate {
+function subtractCoords(c1: Coordinate3D, c2: Coordinate3D): Coordinate3D {
 	return [c1[0] - c2[0], c1[1] - c2[1], c1[2] - c2[2]];
 }
 
-function coordsEqual(c1: Coordinate, c2: Coordinate): boolean {
+function coordsEqual(c1: Coordinate3D, c2: Coordinate3D): boolean {
 	return c1[0] === c2[0] && c1[1] === c2[1] && c1[2] === c2[2];
 }
 
 function parseScanners(input: string[]): Scanner[] {
-	const reports: Coordinate[][] = [[]];
+	const reports: Coordinate3D[][] = [[]];
 	for (let i = 1; i < input.length; i++) {
 		const line = input[i];
 
@@ -36,17 +34,17 @@ function parseScanners(input: string[]): Scanner[] {
 }
 
 interface CoordinateWithDifferences {
-	value: Coordinate;
-	diffs: Coordinate[];
+	value: Coordinate3D;
+	diffs: Coordinate3D[];
 }
 
 class Scanner {
-	public position: Coordinate | null = null;
+	public position: Coordinate3D | null = null;
 
 	public beaconPermutations: CoordinateWithDifferences[][] = [];
 	public finalBeaconPermutation: CoordinateWithDifferences[] | null = null;
 
-	public constructor(relativeBeacons: Coordinate[]) {
+	public constructor(relativeBeacons: Coordinate3D[]) {
 		// Compute all 24 permutations of the coordinate list
 		for (let face = 0; face < 6; face++) {
 			const faceMatrix =
@@ -56,13 +54,13 @@ class Scanner {
 
 			for (let rotation = 0; rotation < 4; rotation++) {
 				const rotationMatrix = mat4.rotateX(mat4.create(), faceMatrix, rotation * PI_OVER_2);
-				const permutation: Coordinate[] = [];
+				const permutation: Coordinate3D[] = [];
 
 				for (const [x, y, z] of relativeBeacons) {
 					const vec = vec3.fromValues(x, y, z);
 					vec3.transformMat4(vec, vec, rotationMatrix);
 
-					permutation.push(vec as Coordinate);
+					permutation.push(vec as Coordinate3D);
 				}
 
 				this.beaconPermutations.push(
@@ -99,7 +97,7 @@ function inferScannerPositions(scanners: Scanner[], minOverlaps: number) {
 				}
 
 				for (const permutation of unknownScanner.beaconPermutations) {
-					let overlappingBeacons: { fromBase: Coordinate; fromUnknown: Coordinate }[] = [];
+					let overlappingBeacons: { fromBase: Coordinate3D; fromUnknown: Coordinate3D }[] = [];
 
 					for (const baseBeacon of knownScanner.finalBeaconPermutation) {
 						for (const beacon of permutation) {

@@ -43,3 +43,6 @@ export type Tuple<T, N extends number> = N extends N
 type _TupleOf<T, N extends number, R extends unknown[]> = R['length'] extends N
 	? R
 	: _TupleOf<T, N, [T, ...R]>;
+
+export type Coordinate2D = [x: number, y: number];
+export type Coordinate3D = [x: number, y: number, z: number];
