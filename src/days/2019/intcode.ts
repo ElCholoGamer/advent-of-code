@@ -1,8 +1,8 @@
-interface IntcodeProgram {
-	pointer: number;
-	body: number[];
-	inputs: number[];
-	outputs: number[];
+export type OpCodeAction = (...args: OpcodeParam[]) => void;
+
+export const enum ParameterMode {
+	POSITION,
+	INMEDIATE,
 }
 
 export const enum OpCode {
@@ -17,130 +17,127 @@ export const enum OpCode {
 	EXIT = 99,
 }
 
-interface OpCodeInfo {
-	args: number;
-	run(program: IntcodeProgram, args: Parameter[]): void;
-}
-
-interface Parameter {
+export interface OpcodeParam {
 	mode: ParameterMode;
 	get(): number;
 	set(value: number): void;
 }
 
-const opcodeInfo: Record<OpCode, OpCodeInfo> = {
-	[OpCode.EXIT]: {
-		args: 0,
-		run(program) {
-			program.pointer = program.body.length;
+export class IntcodeProgram {
+	public pointer = 0;
+	public readonly body: number[];
+
+	private readonly inputs: number[] = [];
+	private output: number | undefined = undefined;
+
+	private readonly opcodeActions: Record<OpCode, OpCodeAction> = {
+		[OpCode.EXIT]: () => {
+			this.pointer = this.body.length;
 		},
-	},
-	[OpCode.ADD]: {
-		args: 3,
-		run(program, [left, right, target]) {
+		[OpCode.ADD]: (left, right, target) => {
 			target.set(left.get() + right.get());
 		},
-	},
-	[OpCode.MULTIPLY]: {
-		args: 3,
-		run(program, [left, right, target]) {
+		[OpCode.MULTIPLY]: (left, right, target) => {
 			target.set(left.get() * right.get());
 		},
-	},
-	[OpCode.INPUT]: {
-		args: 1,
-		run(program, [target]) {
-			if (!program.inputs.length) throw new Error('Could not find an input');
+		[OpCode.INPUT]: target => {
+			if (!this.inputs.length) throw new Error('Could not find input');
 
-			const input = program.inputs.shift()!;
+			const input = this.inputs.shift()!;
 			target.set(input);
 		},
-	},
-	[OpCode.OUTPUT]: {
-		args: 1,
-		run(program, [value]) {
-			program.outputs.push(value.get());
+		[OpCode.OUTPUT]: value => {
+			this.output = value.get();
 		},
-	},
-	[OpCode.JUMP_IF_TRUE]: {
-		args: 2,
-		run(program, [condition, target]) {
+		[OpCode.JUMP_IF_TRUE]: (condition, target) => {
 			if (condition.get() !== 0) {
-				program.pointer = target.get();
+				this.pointer = target.get();
 			}
 		},
-	},
-	[OpCode.JUMP_IF_FALSE]: {
-		args: 2,
-		run(program, [condition, target]) {
+		[OpCode.JUMP_IF_FALSE]: (condition, target) => {
 			if (condition.get() === 0) {
-				program.pointer = target.get();
+				this.pointer = target.get();
 			}
 		},
-	},
-	[OpCode.LESS_THAN]: {
-		args: 3,
-		run(program, [left, right, target]) {
+		[OpCode.LESS_THAN]: (left, right, target) => {
 			target.set(+(left.get() < right.get()));
 		},
-	},
-	[OpCode.EQUALS]: {
-		args: 3,
-		run(program, [left, right, target]) {
+		[OpCode.EQUALS]: (left, right, target) => {
 			target.set(+(left.get() === right.get()));
 		},
-	},
-};
-
-export const enum ParameterMode {
-	POSITION,
-	INMEDIATE,
-}
-
-function makeParameter(value: number, mode: ParameterMode, program: IntcodeProgram): Parameter {
-	return {
-		mode,
-		get() {
-			if (mode === ParameterMode.INMEDIATE) return value;
-			return program.body[value] || 0;
-		},
-		set(newValue) {
-			if (mode === ParameterMode.INMEDIATE)
-				throw new Error('Cannot set a parameter in inmediate mode');
-
-			program.body[value] = newValue;
-		},
 	};
-}
 
-export function runProgram(body: number[], inputs: number[] = []): IntcodeProgram {
-	const program: IntcodeProgram = { pointer: 0, body, inputs, outputs: [] };
+	public constructor(bodyData: string) {
+		this.body = bodyData.split(',').map(str => parseInt(str));
+		if (this.body.some(isNaN)) throw new Error('Could not parse Intcode program body');
+	}
 
-	while (program.pointer < program.body.length) {
-		const opData = program.body[program.pointer].toString().padStart(2, '0');
+	private runCurrentAction() {
+		const opData = this.body[this.pointer].toString().padStart(2, '0');
 		const op = Number(opData.substring(opData.length - 2));
 
-		const action = opcodeInfo[op as OpCode];
-		if (!action) throw new Error('Invalid opcode: ' + op);
+		const action = this.opcodeActions[op as OpCode];
+		if (!action) throw new Error(`Invalid opcode at index ${this.pointer}: ${op}`);
 
-		const argInts = program.body.slice(program.pointer + 1, program.pointer + 1 + action.args);
+		const argInts = this.body.slice(this.pointer + 1, this.pointer + 1 + action.length);
 
 		const paramData = opData.substring(0, opData.length - 2);
 		const paramModes = paramData.split('').map(Number).reverse();
 
-		const params: Parameter[] = argInts.map((int, index) =>
-			makeParameter(int, paramModes[index] || ParameterMode.POSITION, program)
+		const params: OpcodeParam[] = argInts.map((value, index) =>
+			this.makeParameter(value, paramModes[index] || ParameterMode.POSITION)
 		);
 
-		const prevPointer = program.pointer;
-		action.run(program, params);
+		const prevPointer = this.pointer;
+		action(...params);
 
-		if (program.pointer === prevPointer) {
-			program.pointer += 1 + action.args;
+		if (this.pointer === prevPointer) {
+			this.pointer += 1 + action.length;
 		}
 	}
 
-	return program;
-}
+	public input(...inputs: number[]) {
+		this.inputs.push(...inputs);
+	}
 
-export const parseProgramBody = (data: string) => data.split(',').map(str => parseInt(str));
+	public nextOutput(): number | undefined {
+		if (this.pointer >= this.body.length) {
+			throw new Error('Program has already ended');
+		}
+
+		this.output = undefined;
+
+		while (this.output === undefined && this.pointer < this.body.length) {
+			this.runCurrentAction();
+		}
+
+		return this.output;
+	}
+
+	public remainingOutputs(): number[] {
+		const outputs: number[] = [];
+
+		let output: number | undefined;
+		while ((output = this.nextOutput()) !== undefined) {
+			outputs.push(output);
+		}
+
+		return outputs;
+	}
+
+	private makeParameter(value: number, mode: ParameterMode): OpcodeParam {
+		return {
+			mode,
+			get: () => {
+				if (mode === ParameterMode.INMEDIATE) return value;
+				return this.body[value] || 0;
+			},
+			set: newValue => {
+				if (mode === ParameterMode.INMEDIATE)
+					throw new Error('Cannot set a parameter in inmediate mode');
+
+				this.body[value] = newValue;
+			},
+		};
+	}
+}

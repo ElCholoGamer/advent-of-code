@@ -1,9 +1,11 @@
 import { AoCPart } from '../../types';
-import { parseProgramBody, runProgram } from './intcode';
+import { IntcodeProgram } from './intcode';
 
 export const part1: AoCPart = ([input]) => {
-	const body = parseProgramBody(input);
-	const { outputs } = runProgram(body, [1]);
+	const program = new IntcodeProgram(input);
+	program.input(1);
+
+	const outputs = program.remainingOutputs();
 
 	for (let i = 0; i < outputs.length - 1; i++) {
 		if (outputs[i] !== 0) {
@@ -15,8 +17,11 @@ export const part1: AoCPart = ([input]) => {
 };
 
 export const part2: AoCPart = ([input]) => {
-	const body = parseProgramBody(input);
-	const program = runProgram(body, [5]);
+	const program = new IntcodeProgram(input);
+	program.input(5);
 
-	return program.outputs[0];
+	const output = program.nextOutput();
+	if (output === undefined) throw new Error('No output found');
+
+	return output;
 };
