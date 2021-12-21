@@ -31,7 +31,7 @@ export type Flag<T extends string | number> = {
 
 export type AoCPart<T extends {} = {}> = (
 	input: string[],
-	options: T
+	options: Partial<T>
 ) => (string | number) | Promise<string | number>;
 
 export type Tuple<T, N extends number> = N extends N
