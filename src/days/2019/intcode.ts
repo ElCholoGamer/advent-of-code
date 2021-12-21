@@ -3,6 +3,7 @@ export type OpCodeAction = (...args: OpcodeParam[]) => void;
 export const enum ParameterMode {
 	POSITION,
 	INMEDIATE,
+	RELATIVE,
 }
 
 export const enum OpCode {
@@ -14,6 +15,7 @@ export const enum OpCode {
 	JUMP_IF_FALSE,
 	LESS_THAN,
 	EQUALS,
+	RELATIVE_BASE_OFFSET,
 	EXIT = 99,
 }
 
@@ -27,6 +29,7 @@ export class IntcodeProgram {
 	public pointer = 0;
 	public readonly body: number[];
 
+	private relativeBase = 0;
 	private readonly inputs: number[] = [];
 	private output: number | undefined = undefined;
 
@@ -64,6 +67,9 @@ export class IntcodeProgram {
 		},
 		[OpCode.EQUALS]: (left, right, target) => {
 			target.set(+(left.get() === right.get()));
+		},
+		[OpCode.RELATIVE_BASE_OFFSET]: value => {
+			this.relativeBase += value.get();
 		},
 	};
 
@@ -130,13 +136,28 @@ export class IntcodeProgram {
 			mode,
 			get: () => {
 				if (mode === ParameterMode.INMEDIATE) return value;
-				return this.body[value] || 0;
+
+				let address = value;
+				if (mode === ParameterMode.RELATIVE) {
+					address += this.relativeBase;
+				}
+
+				if (address < 0) throw new Error('Cannot access an address less than zero');
+
+				return this.body[address] || 0;
 			},
 			set: newValue => {
 				if (mode === ParameterMode.INMEDIATE)
 					throw new Error('Cannot set a parameter in inmediate mode');
 
-				this.body[value] = newValue;
+				let address = value;
+				if (mode === ParameterMode.RELATIVE) {
+					address += this.relativeBase;
+				}
+
+				if (address < 0) throw new Error('Cannot access an address less than zero');
+
+				this.body[address] = newValue;
 			},
 		};
 	}
