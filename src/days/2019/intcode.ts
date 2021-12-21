@@ -27,7 +27,7 @@ export interface OpcodeParam {
 
 export class IntcodeProgram {
 	public pointer = 0;
-	public readonly body: number[];
+	public readonly memory: number[];
 
 	private relativeBase = 0;
 	private readonly inputs: number[] = [];
@@ -35,7 +35,7 @@ export class IntcodeProgram {
 
 	private readonly opcodeActions: Record<OpCode, OpCodeAction> = {
 		[OpCode.EXIT]: () => {
-			this.pointer = this.body.length;
+			this.pointer = this.memory.length;
 		},
 		[OpCode.ADD]: (left, right, target) => {
 			target.set(left.get() + right.get());
@@ -73,19 +73,23 @@ export class IntcodeProgram {
 		},
 	};
 
-	public constructor(bodyData: string) {
-		this.body = bodyData.split(',').map(str => parseInt(str));
-		if (this.body.some(isNaN)) throw new Error('Could not parse Intcode program body');
+	public constructor(initialMemory: string | number[]) {
+		if (Array.isArray(initialMemory)) {
+			this.memory = [...initialMemory];
+		} else {
+			this.memory = initialMemory.split(',').map(str => parseInt(str));
+			if (this.memory.some(isNaN)) throw new Error('Could not parse Intcode program body');
+		}
 	}
 
 	private runCurrentAction() {
-		const opData = this.body[this.pointer].toString().padStart(2, '0');
+		const opData = this.memory[this.pointer].toString().padStart(2, '0');
 		const op = Number(opData.substring(opData.length - 2));
 
 		const action = this.opcodeActions[op as OpCode];
 		if (!action) throw new Error(`Invalid opcode at index ${this.pointer}: ${op}`);
 
-		const argInts = this.body.slice(this.pointer + 1, this.pointer + 1 + action.length);
+		const argInts = this.memory.slice(this.pointer + 1, this.pointer + 1 + action.length);
 
 		const paramData = opData.substring(0, opData.length - 2);
 		const paramModes = paramData.split('').map(Number).reverse();
@@ -107,13 +111,13 @@ export class IntcodeProgram {
 	}
 
 	public nextOutput(): number | undefined {
-		if (this.pointer >= this.body.length) {
+		if (this.pointer >= this.memory.length) {
 			throw new Error('Program has already ended');
 		}
 
 		this.output = undefined;
 
-		while (this.output === undefined && this.pointer < this.body.length) {
+		while (this.output === undefined && this.pointer < this.memory.length) {
 			this.runCurrentAction();
 		}
 
@@ -144,7 +148,7 @@ export class IntcodeProgram {
 
 				if (address < 0) throw new Error('Cannot access an address less than zero');
 
-				return this.body[address] || 0;
+				return this.memory[address] || 0;
 			},
 			set: newValue => {
 				if (mode === ParameterMode.INMEDIATE)
@@ -157,7 +161,7 @@ export class IntcodeProgram {
 
 				if (address < 0) throw new Error('Cannot access an address less than zero');
 
-				this.body[address] = newValue;
+				this.memory[address] = newValue;
 			},
 		};
 	}
