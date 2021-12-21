@@ -1,15 +1,18 @@
-import { AoCPart, Coordinate2D } from '../../types';
+import { AoCPart } from '../../types';
+import { PI_OVER_2 } from '../../utils';
+import { Vector2 } from '../../utils/vector';
 import { IntcodeProgram } from './intcode';
 
 function paintTiles(tiles: Map<string, boolean>, programBody: string) {
 	const program = new IntcodeProgram(programBody);
 
-	const pos: Coordinate2D = [0, 0];
-	let direction: Coordinate2D = [0, 1];
+	const pos = new Vector2(0, 0);
+	let direction = new Vector2(0, 1);
 
 	// true: white, false: black, undefined: black & unpainted
 	while (true) {
-		program.input(+(tiles.get(pos.join(',')) || 0));
+		const posKey = `${pos.x},${pos.y}`;
+		program.input(+(tiles.get(posKey) || 0));
 
 		const color = program.nextOutput();
 		if (color === undefined) break;
@@ -17,18 +20,16 @@ function paintTiles(tiles: Map<string, boolean>, programBody: string) {
 		const turnDirection = program.nextOutput();
 		if (turnDirection === undefined) throw new Error('checking just in case');
 
-		tiles.set(pos.join(','), Number(color) === 1);
+		tiles.set(posKey, Number(color) === 1);
 
 		if (turnDirection === 0) {
-			// Turn left
-			direction = [direction[1], -direction[0]];
+			direction.rotateBy(-PI_OVER_2);
 		} else {
-			// Turn right
-			direction = [-direction[1], direction[0]];
+			direction.rotateBy(PI_OVER_2);
 		}
 
-		pos[0] += direction[0];
-		pos[1] += direction[1];
+		direction.round(); // Because Math.PI + sin/cos isn't completely accurate
+		pos.add(direction);
 	}
 }
 

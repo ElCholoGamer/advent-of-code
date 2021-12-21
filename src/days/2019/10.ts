@@ -1,20 +1,19 @@
-import { AoCPart, Coordinate2D } from '../../types';
-
-const PI_OVER_2 = Math.PI / 2;
-const TWO_PI = Math.PI * 2;
+import { AoCPart } from '../../types';
+import { PI_OVER_2, TWO_PI } from '../../utils';
+import { Vector2 } from '../../utils/vector';
 
 function greatestCommonDivisor(a: number, b: number): number {
 	if (!b) return a;
 	return greatestCommonDivisor(b, a % b);
 }
 
-function parseAsteroids(input: string[]): Coordinate2D[] {
-	const out: Coordinate2D[] = [];
+function parseAsteroids(input: string[]): Vector2[] {
+	const out: Vector2[] = [];
 
 	for (let y = 0; y < input.length; y++) {
 		for (let x = 0; x < input[y].length; x++) {
 			if (input[y][x] === '#') {
-				out.push([x, y]);
+				out.push(new Vector2(x, y));
 			}
 		}
 	}
@@ -22,24 +21,18 @@ function parseAsteroids(input: string[]): Coordinate2D[] {
 	return out;
 }
 
-function canDetectAsteroid(from: Coordinate2D, to: Coordinate2D, asteroids: Coordinate2D[]) {
-	const [x1, y1] = from;
-	const [x2, y2] = to;
+function canDetectAsteroid(from: Vector2, to: Vector2, asteroids: Vector2[]) {
+	const diff = to.clone().subtract(from);
+	const gcd = greatestCommonDivisor(diff.x, diff.y);
 
-	const diffX = x2 - x1;
-	const diffY = y2 - y1;
-	const gcd = greatestCommonDivisor(diffX, diffY);
-
-	const incX = Math.abs(diffX / gcd) * Math.sign(diffX);
-	const incY = Math.abs(diffY / gcd) * Math.sign(diffY);
+	const increment = diff.clone().divideScalar(Math.abs(gcd));
 
 	for (let i = 1; true; i++) {
-		const checkX = x1 + incX * i;
-		const checkY = y1 + incY * i;
+		const checking = from.clone().add(increment.clone().multiplyScalar(i));
 
-		if (checkX === to[0] && checkY === to[1]) break;
+		if (checking.equals(to)) break;
 
-		if (asteroids.some(other => other[0] === checkX && other[1] === checkY)) {
+		if (asteroids.some(other => other.equals(checking))) {
 			// An asteroid is blocking the way
 			return false;
 		}
@@ -48,23 +41,23 @@ function canDetectAsteroid(from: Coordinate2D, to: Coordinate2D, asteroids: Coor
 	return true;
 }
 
-function detectAsteroids(from: Coordinate2D, asteroids: Coordinate2D[]): Coordinate2D[] {
-	const out: Coordinate2D[] = [];
+function detectAsteroids(from: Vector2, asteroids: Vector2[]): Vector2[] {
+	const out: Vector2[] = [];
 
 	for (const otherAsteroid of asteroids) {
 		if (otherAsteroid === from) continue;
 
 		if (canDetectAsteroid(from, otherAsteroid, asteroids)) {
-			out.push([...otherAsteroid]);
+			out.push(otherAsteroid.clone());
 		}
 	}
 
 	return out;
 }
 
-function bestAsteroid(asteroids: Coordinate2D[]): Coordinate2D {
+function bestAsteroid(asteroids: Vector2[]): Vector2 {
 	let maxDetections = 0;
-	let bestAsteroid: Coordinate2D = asteroids[0];
+	let bestAsteroid: Vector2 = asteroids[0];
 
 	for (const asteroid of asteroids) {
 		const detections = detectAsteroids(asteroid, asteroids);
@@ -75,13 +68,6 @@ function bestAsteroid(asteroids: Coordinate2D[]): Coordinate2D {
 	}
 
 	return bestAsteroid;
-}
-
-function rotationFromUp(vec: Coordinate2D): number {
-	let rot = (Math.atan2(vec[1], vec[0]) + PI_OVER_2) % TWO_PI;
-	while (rot < 0) rot += TWO_PI;
-
-	return rot;
 }
 
 export const part1: AoCPart = input => {
@@ -105,20 +91,27 @@ export const part2: AoCPart<Options> = (input, { targetAsteroid = 200 }) => {
 		const detected = detectAsteroids(laser, asteroids);
 
 		if (vaporized + detected.length < targetAsteroid) {
-			asteroids = asteroids.filter(a => !detected.some(d => a[0] === d[0] && a[1] === d[1]));
+			asteroids = asteroids.filter(
+				asteroid => !detected.some(detectedAsteroid => detectedAsteroid.equals(asteroid))
+			);
 			vaporized += detected.length;
 			continue;
 		}
 
 		// Last iteration
 		const rotations = detected.map(asteroid => {
-			const diff: Coordinate2D = [asteroid[0] - laser[0], asteroid[1] - laser[1]];
-			return { asteroid, rotation: rotationFromUp(diff) };
+			let rotation = asteroid.clone().subtract(laser).toRotation();
+
+			// Make rotation start upwards
+			rotation = (rotation + PI_OVER_2) % TWO_PI;
+			while (rotation < 0) rotation += TWO_PI;
+
+			return { asteroid, rotation };
 		});
 
 		rotations.sort((a, b) => a.rotation - b.rotation);
 
 		const result = rotations[targetAsteroid - vaporized - 1].asteroid;
-		return result[0] * 100 + result[1];
+		return result.x * 100 + result.y;
 	}
 };

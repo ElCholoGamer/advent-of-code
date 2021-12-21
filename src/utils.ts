@@ -88,3 +88,11 @@ export function formatGrid(grid: string[][]): string {
 
 	return lines.join('\n');
 }
+
+export function wrapRotation(angle: number): number {
+	while (angle < 0) angle += TWO_PI;
+	return angle % TWO_PI;
+}
+
+export const PI_OVER_2 = Math.PI / 2;
+export const TWO_PI = Math.PI * 2;
