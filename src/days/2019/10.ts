@@ -1,5 +1,5 @@
 import { AoCPart } from '../../types';
-import { PI_OVER_2, TWO_PI } from '../../utils';
+import { PI_OVER_2, TWO_PI, wrapRotation } from '../../utils';
 import { Vector2 } from '../../utils/vector';
 
 function greatestCommonDivisor(a: number, b: number): number {
@@ -100,13 +100,8 @@ export const part2: AoCPart<Options> = (input, { targetAsteroid = 200 }) => {
 
 		// Last iteration
 		const rotations = detected.map(asteroid => {
-			let rotation = asteroid.clone().subtract(laser).toRotation();
-
-			// Make rotation start upwards
-			rotation = (rotation + PI_OVER_2) % TWO_PI;
-			while (rotation < 0) rotation += TWO_PI;
-
-			return { asteroid, rotation };
+			const rotation = asteroid.clone().subtract(laser).toRotation();
+			return { asteroid, rotation: wrapRotation(rotation + PI_OVER_2) };
 		});
 
 		rotations.sort((a, b) => a.rotation - b.rotation);
