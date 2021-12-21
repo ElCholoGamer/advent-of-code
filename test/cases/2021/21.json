@@ -1,0 +1,14 @@
+{
+	"part1": [
+		{
+			"input": ["Player 1 starting position: 4", "Player 2 starting position: 8"],
+			"result": 739785
+		}
+	],
+	"part2": [
+		{
+			"input": ["Player 1 starting position: 4", "Player 2 starting position: 8"],
+			"result": 444356092776315
+		}
+	]
+}
