@@ -1,4 +1,4 @@
-import { PI_OVER_2, TWO_PI, wrapRotation } from '../utils';
+import { wrapRotation } from '../utils';
 
 export class Vector2 {
 	public constructor(public x: number, public y: number) {}
