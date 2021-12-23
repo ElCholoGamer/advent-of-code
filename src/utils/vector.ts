@@ -133,6 +133,22 @@ export class Vector2 {
 		return this.x === vec.x && this.y === vec.y;
 	}
 
+	public greaterThan(vec: Vector2): boolean {
+		return this.x > vec.x && this.y > vec.y;
+	}
+
+	public lessThan(vec: Vector2): boolean {
+		return this.x < vec.x && this.y < vec.y;
+	}
+
+	public equalOrGreaterThan(vec: Vector2): boolean {
+		return this.x >= vec.x && this.y >= vec.y;
+	}
+
+	public equalOrLessThan(vec: Vector2): boolean {
+		return this.x <= vec.x && this.y <= vec.y;
+	}
+
 	public static fromArray(arr: number[]): Vector2 {
 		if (arr.length < 2) throw new Error('Vector2 array must have at least 2 elements');
 		return new Vector2(arr[0], arr[1]);
@@ -307,6 +323,22 @@ export class Vector3 {
 
 	public equals(vec: Vector3): boolean {
 		return this.x === vec.x && this.y === vec.y && this.z === vec.z;
+	}
+
+	public greaterThan(vec: Vector3): boolean {
+		return this.x > vec.x && this.y > vec.y && this.z > vec.z;
+	}
+
+	public lessThan(vec: Vector3): boolean {
+		return this.x < vec.x && this.y < vec.y && this.z < vec.z;
+	}
+
+	public equalOrGreaterThan(vec: Vector3): boolean {
+		return this.x >= vec.x && this.y >= vec.y && this.z >= vec.z;
+	}
+
+	public equalOrLessThan(vec: Vector3): boolean {
+		return this.x <= vec.x && this.y <= vec.y && this.z <= vec.z;
 	}
 
 	public static fromArray(arr: number[]): Vector3 {
