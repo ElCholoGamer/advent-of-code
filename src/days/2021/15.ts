@@ -1,54 +1,5 @@
 import { AoCPart } from '../../types';
-
-interface Node<T> {
-	data: T;
-	priority: number;
-}
-
-class PriorityQueue<T> {
-	public readonly items: Node<T>[] = [];
-
-	public push(data: T, priority: number): number {
-		const node: Node<T> = { data, priority };
-		let contain = false;
-
-		for (let i = 0; i < this.items.length; i++) {
-			if (this.items[i].priority > node.priority) {
-				this.items.splice(i, 0, node);
-				contain = true;
-				break;
-			}
-		}
-
-		if (!contain) this.items.push(node);
-
-		return this.size;
-	}
-
-	public pop(): T | undefined {
-		if (this.size === 0) return undefined;
-
-		return this.items.shift()?.data;
-	}
-
-	public setNodePriority(node: Node<T>, priority: number) {
-		const index = this.items.indexOf(node);
-		if (index === -1) throw new Error('Could not find node');
-
-		this.items.splice(index, 1);
-		this.push(node.data, priority);
-	}
-
-	public findNode(
-		predicate: (value: Node<T>, index: number, obj: Node<T>[]) => boolean
-	): Node<T> | undefined {
-		return this.items.find(predicate);
-	}
-
-	public get size() {
-		return this.items.length;
-	}
-}
+import PriorityQueue from '../../utils/priority-queue';
 
 interface Cell {
 	risk: number;
@@ -80,7 +31,7 @@ function dijkstra(cells: Cell[][], startX: number, startY: number) {
 	queue.push([startX, startY], 0);
 
 	while (queue.size) {
-		const [x, y] = queue.pop()!;
+		const [x, y] = queue.shift()!;
 		const cell = cells[x][y];
 
 		cell.visited = true;
