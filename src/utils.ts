@@ -11,7 +11,7 @@ export function christmasify(s: string) {
 }
 
 export const getAllCommands = (() => {
-	let memo: Record<string, Command<Record<string, string | number>>> | null = null;
+	let memo: Record<string, Command<any>> | null = null;
 
 	return async () => {
 		if (!memo) {
@@ -33,61 +33,6 @@ export const getAllCommands = (() => {
 })();
 
 export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-export class Grid2D<T> {
-	public readonly values = new Map<string, T>();
-
-	public constructor() {}
-
-	public getOrDefault<D extends T>(x: number, y: number, defaultValue: D) {
-		const key = `${x},${y}`;
-		return this.values.get(key) ?? defaultValue;
-	}
-
-	public get(x: number, y: number) {
-		const key = `${x},${y}`;
-		return this.values.get(key);
-	}
-
-	public has(x: number, y: number) {
-		return this.values.has(`${x},${y}`);
-	}
-
-	public set(x: number, y: number, value: T): this {
-		const key = `${x},${y}`;
-		this.values.set(key, value);
-
-		return this;
-	}
-
-	public keys() {
-		return Array.from(this.values.keys()).map(
-			key => key.split(',').map(Number) as [x: number, y: number]
-		);
-	}
-
-	public get sizeTotal() {
-		return this.values.size;
-	}
-}
-
-export function formatGrid(grid: string[][]): string {
-	const lines: string[] = [];
-
-	const maxHeight = Math.max(...grid.map(col => col.length));
-
-	for (let y = 0; y < maxHeight; y++) {
-		let line = '';
-
-		for (let x = 0; x < grid.length; x++) {
-			line += grid[x][y];
-		}
-
-		lines.push(line);
-	}
-
-	return lines.join('\n');
-}
 
 export function wrapRotation(angle: number): number {
 	while (angle < 0) angle += TWO_PI;
