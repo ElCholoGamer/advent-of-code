@@ -2,7 +2,6 @@ import chalk from 'chalk';
 import minimist from 'minimist';
 import dotenv from 'dotenv';
 import { christmasify, getAllCommands } from './utils';
-import { Command } from './types';
 
 dotenv.config();
 
