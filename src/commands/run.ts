@@ -59,6 +59,11 @@ const runCommand: Command<Flags> = {
 			return;
 		}
 
+		if (day === 25 && part === 2) {
+			console.error(chalk.bold.red('Error: Day 25 does not have part 2'));
+			return;
+		}
+
 		let inputStr: string;
 		if (inputPath) {
 			try {
@@ -138,7 +143,7 @@ const runCommand: Command<Flags> = {
 			await runPart(funcs.part1, input);
 		}
 
-		if (part !== 1) {
+		if (day !== 25 && part !== 1) {
 			console.log(runningMsg.replace('{p}', '2'));
 			await runPart(funcs.part2, input);
 		}
