@@ -21,10 +21,6 @@ class MonadProgram {
 	}
 
 	public nextDigit(digit: number): boolean {
-		const divisors = [1, 1, 1, 26, 26, 1, 26, 26, 1, 26, 1, 1, 26, 26];
-		const matchOffsets = [12, 14, 11, -9, -7, 11, -1, -16, 11, -15, 10, 12, -4, 0];
-		const counterAdds = [15, 12, 15, 12, 15, 2, 11, 15, 10, 2, 0, 0, 15, 15];
-
 		let newZ = this.z;
 
 		const divisor = this.divisors[this.currentDigit];
