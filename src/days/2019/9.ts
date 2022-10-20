@@ -1,9 +1,10 @@
 import { AoCPart } from '../../types';
-import { IntcodeProgram } from './intcode';
+import { ExtendedIntcodeVM } from './intcode';
 
 export const part1: AoCPart = ([input]) => {
-	const program = new IntcodeProgram(input);
-	program.input(1);
+	const program = new ExtendedIntcodeVM(input);
+	program.queueInput(1);
+	program.run();
 
 	const keycode = program.nextOutput();
 	if (keycode === undefined) throw new Error('Could not get output');
@@ -12,8 +13,9 @@ export const part1: AoCPart = ([input]) => {
 };
 
 export const part2: AoCPart = ([input]) => {
-	const program = new IntcodeProgram(input);
-	program.input(2);
+	const program = new ExtendedIntcodeVM(input);
+	program.queueInput(2);
+	program.run();
 
 	const distressSignal = program.nextOutput();
 	if (distressSignal === undefined) throw new Error('Could not get output');

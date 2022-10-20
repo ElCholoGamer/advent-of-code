@@ -1,5 +1,5 @@
 import { AoCPart } from '../../types';
-import { IntcodeProgram } from './intcode';
+import { ExtendedIntcodeVM } from './intcode';
 
 function permutations<T>(arr: T[]): T[][] {
 	const results: T[][] = [];
@@ -27,10 +27,10 @@ function runAmplifiers(programBody: number[], phaseSettings: number[]): number {
 	let currentOutput = 0;
 
 	for (let i = 0; i < 5; i++) {
-		const program = new IntcodeProgram(programBody.join(','));
-		program.input(phaseSettings[i], currentOutput);
+		const program = new ExtendedIntcodeVM(programBody.join(','));
+		program.queueInput(phaseSettings[i], currentOutput);
 
-		const output = program.nextOutput();
+		const output = program.runUntilNextOutput();
 		if (output === undefined) throw new Error('Could not find output');
 
 		currentOutput = output;
@@ -48,10 +48,10 @@ export const part1: AoCPart = ([input]) => {
 		let currentSignal = 0;
 
 		for (let i = 0; i < 5; i++) {
-			const program = new IntcodeProgram(input);
-			program.input(settings[i], currentSignal);
+			const program = new ExtendedIntcodeVM(input);
+			program.queueInput(settings[i], currentSignal);
 
-			const output = program.nextOutput();
+			const output = program.runUntilNextOutput();
 			if (output === undefined) throw new Error('Could not find output');
 
 			currentSignal = output;
@@ -72,22 +72,22 @@ export const part2: AoCPart = ([input]) => {
 
 	for (const settings of settingPermutations) {
 		const programs = settings.map(v => {
-			const program = new IntcodeProgram(input);
-			program.input(v);
+			const program = new ExtendedIntcodeVM(input);
+			program.queueInput(v);
 			return program;
 		});
 
-		programs[0].input(0);
+		programs[0].queueInput(0);
 
 		let currentSignal = 0;
 
 		main: while (true) {
 			for (let i = 0; i < programs.length; i++) {
-				const output = programs[i].nextOutput();
+				const output = programs[i].runUntilNextOutput();
 				if (output === undefined) break main;
 
 				currentSignal = output;
-				programs[(i + 1) % programs.length].input(currentSignal);
+				programs[(i + 1) % programs.length].queueInput(currentSignal);
 			}
 		}
 

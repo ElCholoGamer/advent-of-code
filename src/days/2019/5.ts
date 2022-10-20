@@ -1,11 +1,12 @@
 import { AoCPart } from '../../types';
-import { IntcodeProgram } from './intcode';
+import { ExtendedIntcodeVM } from './intcode';
 
 export const part1: AoCPart = ([input]) => {
-	const program = new IntcodeProgram(input);
-	program.input(1);
+	const program = new ExtendedIntcodeVM(input);
+	program.queueInput(1);
+	program.run();
 
-	const outputs = program.remainingOutputs();
+	const outputs = program.getAllOutputs();
 
 	for (let i = 0; i < outputs.length - 1; i++) {
 		if (outputs[i] !== 0) {
@@ -17,8 +18,9 @@ export const part1: AoCPart = ([input]) => {
 };
 
 export const part2: AoCPart = ([input]) => {
-	const program = new IntcodeProgram(input);
-	program.input(5);
+	const program = new ExtendedIntcodeVM(input);
+	program.queueInput(5);
+	program.run();
 
 	const output = program.nextOutput();
 	if (output === undefined) throw new Error('No output found');

@@ -1,10 +1,10 @@
 import { AoCPart } from '../../types';
 import { PI_OVER_2 } from '../../utils';
 import { Vector2 } from '../../utils/vector';
-import { IntcodeProgram } from './intcode';
+import { ExtendedIntcodeVM } from './intcode';
 
 function paintTiles(tiles: Map<string, boolean>, programBody: string) {
-	const program = new IntcodeProgram(programBody);
+	const program = new ExtendedIntcodeVM(programBody);
 
 	const pos = new Vector2(0, 0);
 	let direction = new Vector2(0, 1);
@@ -12,12 +12,12 @@ function paintTiles(tiles: Map<string, boolean>, programBody: string) {
 	// true: white, false: black, undefined: black & unpainted
 	while (true) {
 		const posKey = `${pos.x},${pos.y}`;
-		program.input(+(tiles.get(posKey) || 0));
+		program.queueInput(+(tiles.get(posKey) || 0));
 
-		const color = program.nextOutput();
+		const color = program.runUntilNextOutput();
 		if (color === undefined) break;
 
-		const turnDirection = program.nextOutput();
+		const turnDirection = program.runUntilNextOutput();
 		if (turnDirection === undefined) throw new Error('checking just in case');
 
 		tiles.set(posKey, Number(color) === 1);

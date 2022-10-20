@@ -1,15 +1,15 @@
 import { AoCPart } from '../../types';
-import { IntcodeProgram } from './intcode';
+import { ExtendedIntcodeVM } from './intcode';
 
 export const part1: AoCPart = ([input]) => {
-	const program = new IntcodeProgram(input);
+	const program = new ExtendedIntcodeVM(input);
 
-	program.memory[1] = 12;
-	program.memory[2] = 2;
+	program.writeMemory(1, 12);
+	program.writeMemory(2, 2);
 
-	program.nextOutput();
+	program.runUntilNextOutput();
 
-	return program.memory[0];
+	return program.readMemory(0);
 };
 
 interface Options {
@@ -19,14 +19,14 @@ interface Options {
 export const part2: AoCPart<Options> = ([input], { expectedOutput = 19690720 }) => {
 	for (let noun = 0; noun < 100; noun++) {
 		for (let verb = 0; verb < 100; verb++) {
-			const program = new IntcodeProgram(input);
+			const program = new ExtendedIntcodeVM(input);
 
-			program.memory[1] = noun;
-			program.memory[2] = verb;
+			program.writeMemory(1, noun);
+			program.writeMemory(2, verb);
 
-			program.nextOutput();
+			program.run();
 
-			if (program.memory[0] === expectedOutput) {
+			if (program.readMemory(0) === expectedOutput) {
 				return 100 * noun + verb;
 			}
 		}

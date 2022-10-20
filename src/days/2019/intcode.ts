@@ -1,12 +1,10 @@
-export type OpCodeAction = (...args: OpcodeParam[]) => void;
-
 export const enum ParameterMode {
 	POSITION,
 	INMEDIATE,
 	RELATIVE,
 }
 
-export const enum OpCode {
+export const enum Opcode {
 	ADD = 1,
 	MULTIPLY,
 	INPUT,
@@ -19,150 +17,195 @@ export const enum OpCode {
 	EXIT = 99,
 }
 
-export interface OpcodeParam {
-	mode: ParameterMode;
-	get(): number;
-	set(value: number): void;
-}
+export class IntcodeVM {
+	protected readonly memory: number[];
+	protected outputs: number[] = [];
 
-export class IntcodeProgram {
-	public pointer = 0;
-	public readonly memory: number[];
+	private _inputRequest = false;
+	private _halted = false;
+	private rb = 0;
+	private pc = 0;
+	private paramCount = 0;
 
-	private relativeBase = 0;
-	private readonly inputs: number[] = [];
-	private output: number | undefined = undefined;
-
-	private readonly opcodeActions: Record<OpCode, OpCodeAction> = {
-		[OpCode.EXIT]: () => {
-			this.pointer = this.memory.length;
-		},
-		[OpCode.ADD]: (left, right, target) => {
-			target.set(left.get() + right.get());
-		},
-		[OpCode.MULTIPLY]: (left, right, target) => {
-			target.set(left.get() * right.get());
-		},
-		[OpCode.INPUT]: target => {
-			if (!this.inputs.length) throw new Error('Could not find input');
-
-			const input = this.inputs.shift()!;
-			target.set(input);
-		},
-		[OpCode.OUTPUT]: value => {
-			this.output = value.get();
-		},
-		[OpCode.JUMP_IF_TRUE]: (condition, target) => {
-			if (condition.get() !== 0) {
-				this.pointer = target.get();
-			}
-		},
-		[OpCode.JUMP_IF_FALSE]: (condition, target) => {
-			if (condition.get() === 0) {
-				this.pointer = target.get();
-			}
-		},
-		[OpCode.LESS_THAN]: (left, right, target) => {
-			target.set(+(left.get() < right.get()));
-		},
-		[OpCode.EQUALS]: (left, right, target) => {
-			target.set(+(left.get() === right.get()));
-		},
-		[OpCode.RELATIVE_BASE_OFFSET]: value => {
-			this.relativeBase += value.get();
-		},
-	};
-
-	public constructor(initialMemory: string | number[]) {
+	public constructor(initialMemory: number[] | string) {
 		if (Array.isArray(initialMemory)) {
 			this.memory = [...initialMemory];
 		} else {
-			this.memory = initialMemory.split(',').map(str => parseInt(str));
+			this.memory = initialMemory.split(',').map(s => parseInt(s));
 			if (this.memory.some(isNaN)) throw new Error('Could not parse Intcode program body');
 		}
 	}
 
-	private runCurrentAction() {
-		const opData = this.memory[this.pointer].toString().padStart(2, '0');
-		const op = Number(opData.substring(opData.length - 2));
+	public step() {
+		if (this._halted || this._inputRequest) return;
 
-		const action = this.opcodeActions[op as OpCode];
-		if (!action) throw new Error(`Invalid opcode at index ${this.pointer}: ${op}`);
+		this.paramCount = 0;
 
-		const argInts = this.memory.slice(this.pointer + 1, this.pointer + 1 + action.length);
+		const instructionAddress = this.pc;
+		const instruction = this.readMemory(this.pc++);
+		const opcode = instruction % 100;
 
-		const paramData = opData.substring(0, opData.length - 2);
-		const paramModes = paramData.split('').map(Number).reverse();
-
-		const params: OpcodeParam[] = argInts.map((value, index) =>
-			this.makeParameter(value, paramModes[index] || ParameterMode.POSITION)
-		);
-
-		const prevPointer = this.pointer;
-		action(...params);
-
-		if (this.pointer === prevPointer) {
-			this.pointer += 1 + action.length;
+		switch (opcode) {
+			case Opcode.ADD: {
+				const a = this.readParam(instruction);
+				const b = this.readParam(instruction);
+				this.writeParam(instruction, a + b);
+				break;
+			}
+			case Opcode.MULTIPLY: {
+				const a = this.readParam(instruction);
+				const b = this.readParam(instruction);
+				this.writeParam(instruction, a * b);
+				break;
+			}
+			case Opcode.INPUT:
+				this._inputRequest = true;
+				break;
+			case Opcode.OUTPUT:
+				const value = this.readParam(instruction);
+				this.outputs.push(value);
+				break;
+			case Opcode.JUMP_IF_TRUE: {
+				const condition = this.readParam(instruction);
+				const addr = this.readParam(instruction);
+				if (condition) this.pc = addr;
+				break;
+			}
+			case Opcode.JUMP_IF_FALSE: {
+				const condition = this.readParam(instruction);
+				const addr = this.readParam(instruction);
+				if (!condition) this.pc = addr;
+				break;
+			}
+			case Opcode.LESS_THAN: {
+				const a = this.readParam(instruction);
+				const b = this.readParam(instruction);
+				this.writeParam(instruction, +(a < b));
+				break;
+			}
+			case Opcode.EQUALS: {
+				const a = this.readParam(instruction);
+				const b = this.readParam(instruction);
+				this.writeParam(instruction, +(a === b));
+				break;
+			}
+			case Opcode.RELATIVE_BASE_OFFSET:
+				this.rb += this.readParam(instruction);
+				break;
+			case Opcode.EXIT:
+				this._halted = true;
+				break;
+			default:
+				throw new Error(`Illegal opcode instruction at address ${instructionAddress}: ${opcode}`);
 		}
 	}
 
-	public input(...inputs: number[]) {
-		this.inputs.push(...inputs);
+	private readParam(instruction: number): number {
+		const mode = paramMode(instruction, this.paramCount++);
+		const value = this.readMemory(this.pc++);
+
+		switch (mode) {
+			case ParameterMode.POSITION:
+				return this.readMemory(value);
+			case ParameterMode.INMEDIATE:
+				return value;
+			case ParameterMode.RELATIVE:
+				return this.readMemory(value + this.rb);
+			default:
+				throw new Error(`Illegal parameter mode: ${mode}`);
+		}
 	}
 
-	public nextOutput(): number | undefined {
-		if (this.pointer >= this.memory.length) {
-			throw new Error('Program has already ended');
+	private writeParam(instruction: number, value: number) {
+		const mode = paramMode(instruction, this.paramCount++);
+		const addr = this.readMemory(this.pc++);
+
+		switch (mode) {
+			case ParameterMode.POSITION:
+				this.writeMemory(addr, value);
+				break;
+			case ParameterMode.INMEDIATE:
+				throw new Error('Cannot write in immediate mode');
+			case ParameterMode.RELATIVE:
+				this.writeMemory(addr + this.rb, value);
+				break;
+			default:
+				throw new Error(`Illegal parameter mode: ${mode}`);
 		}
-
-		this.output = undefined;
-
-		while (this.output === undefined && this.pointer < this.memory.length) {
-			this.runCurrentAction();
-		}
-
-		return this.output;
 	}
 
-	public remainingOutputs(): number[] {
-		const outputs: number[] = [];
+	public writeInput(value: number) {
+		if (!this._inputRequest) return;
 
-		let output: number | undefined;
-		while ((output = this.nextOutput()) !== undefined) {
-			outputs.push(output);
-		}
-
-		return outputs;
+		this.writeParam(this.readMemory(this.pc - 1), value);
+		this._inputRequest = false;
 	}
 
-	private makeParameter(value: number, mode: ParameterMode): OpcodeParam {
-		return {
-			mode,
-			get: () => {
-				if (mode === ParameterMode.INMEDIATE) return value;
+	public readMemory(addr: number) {
+		if (addr >= this.memory.length) return 0;
+		return this.memory[addr];
+	}
 
-				let address = value;
-				if (mode === ParameterMode.RELATIVE) {
-					address += this.relativeBase;
-				}
+	public run() {
+		while (!this._halted) {
+			this.step();
+		}
+	}
 
-				if (address < 0) throw new Error('Cannot access an address less than zero');
+	public writeMemory(addr: number, value: number) {
+		if (addr >= this.memory.length) {
+			this.memory.push(...Array(addr - this.memory.length + 1).fill(0));
+		}
 
-				return this.memory[address] || 0;
-			},
-			set: newValue => {
-				if (mode === ParameterMode.INMEDIATE)
-					throw new Error('Cannot set a parameter in inmediate mode');
+		this.memory[addr] = value;
+	}
 
-				let address = value;
-				if (mode === ParameterMode.RELATIVE) {
-					address += this.relativeBase;
-				}
+	public nextOutput() {
+		return this.outputs.shift();
+	}
 
-				if (address < 0) throw new Error('Cannot access an address less than zero');
+	public getAllOutputs() {
+		return [...this.outputs];
+	}
 
-				this.memory[address] = newValue;
-			},
-		};
+	public get halted() {
+		return this._halted;
+	}
+
+	public get inputRequest() {
+		return this._inputRequest;
 	}
 }
+
+export class ExtendedIntcodeVM extends IntcodeVM {
+	private readonly inputQueue: number[] = [];
+
+	public step() {
+		super.step();
+
+		if (this.inputRequest) {
+			if (!this.inputQueue.length) throw new Error('No input found');
+			this.writeInput(this.inputQueue.shift()!);
+		}
+	}
+
+	public queueInput(...inputs: number[]) {
+		this.inputQueue.push(...inputs);
+	}
+
+	public runUntilNextOutput(): number | undefined {
+		while (!this.halted) {
+			const output = this.nextOutput();
+			if (output !== undefined) return output;
+
+			this.step();
+		}
+
+		return undefined;
+	}
+}
+
+const paramMode = (instruction: number, index: number) => {
+	const result = Math.floor(instruction / 10 ** (index + 2)) % 10;
+	return result;
+};
