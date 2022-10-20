@@ -39,9 +39,7 @@ export function wrapRotation(angle: number): number {
 	return angle % TWO_PI;
 }
 
-export function zip<T>(a: T[], b: T[]): [T, T][] {
-	return a.map((e, index) => [e, b[index]]);
-}
+export const zip = <T>(a: T[], b: T[]): [T, T][] => a.map((e, index) => [e, b[index]]);
 
 export function gcd(a: number, b: number): number {
 	if (b === 0) return a;
