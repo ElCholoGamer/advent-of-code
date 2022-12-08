@@ -74,5 +74,15 @@ export function chunks<T>(arr: T[], chunkSize: number): T[][] {
 	return out;
 }
 
+export function count<T>(arr: T[], predicate: (element: T, index: number) => boolean): number {
+	let count = 0;
+
+	for (let i = 0; i < arr.length; i++) {
+		if (predicate(arr[i], i)) count++;
+	}
+
+	return count;
+}
+
 export const PI_OVER_2 = Math.PI / 2;
 export const TWO_PI = Math.PI * 2;
