@@ -1,5 +1,5 @@
 import { AoCPart } from '../../types';
-import { PI_OVER_2 } from '../../utils';
+import { PI_OVER_2 } from '../../utils/math';
 import { Vector2 } from '../../utils/vector';
 import { ExtendedIntcodeVM } from './intcode';
 

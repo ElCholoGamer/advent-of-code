@@ -1,11 +1,6 @@
 import { AoCPart } from '../../types';
-import { PI_OVER_2, TWO_PI, wrapRotation } from '../../utils';
+import { gcd, PI_OVER_2, wrapRotation } from '../../utils/math';
 import { Vector2 } from '../../utils/vector';
-
-function greatestCommonDivisor(a: number, b: number): number {
-	if (!b) return a;
-	return greatestCommonDivisor(b, a % b);
-}
 
 function parseAsteroids(input: string[]): Vector2[] {
 	const out: Vector2[] = [];
@@ -23,9 +18,9 @@ function parseAsteroids(input: string[]): Vector2[] {
 
 function canDetectAsteroid(from: Vector2, to: Vector2, asteroids: Vector2[]) {
 	const diff = to.clone().subtract(from);
-	const gcd = greatestCommonDivisor(diff.x, diff.y);
+	const divisor = gcd(diff.x, diff.y);
 
-	const increment = diff.clone().divideScalar(Math.abs(gcd));
+	const increment = diff.clone().divideScalar(Math.abs(divisor));
 
 	for (let i = 1; true; i++) {
 		const checking = from.clone().add(increment.clone().multiplyScalar(i));

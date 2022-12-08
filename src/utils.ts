@@ -33,26 +33,3 @@ export const getAllCommands = (() => {
 })();
 
 export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-export function wrapRotation(angle: number): number {
-	while (angle < 0) angle += TWO_PI;
-	return angle % TWO_PI;
-}
-
-export function gcd(a: number, b: number): number {
-	if (b === 0) return a;
-	return gcd(b, a % b);
-}
-
-export function mcm(...numbers: number[]) {
-	let result = 1;
-	for (const num of numbers) {
-		const divisor = gcd(result, num);
-		result = (result * num) / divisor;
-	}
-
-	return result;
-}
-
-export const PI_OVER_2 = Math.PI / 2;
-export const TWO_PI = Math.PI * 2;

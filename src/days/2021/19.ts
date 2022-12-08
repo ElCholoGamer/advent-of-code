@@ -1,6 +1,6 @@
 import { mat4, vec3 } from 'gl-matrix';
 import { AoCPart } from '../../types';
-import { PI_OVER_2 } from '../../utils';
+import { PI_OVER_2 } from '../../utils/math';
 import { Vector3 } from '../../utils/vector';
 
 function parseScanners(input: string[]): Scanner[] {

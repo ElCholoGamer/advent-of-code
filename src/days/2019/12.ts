@@ -1,5 +1,6 @@
 import { AoCPart } from '../../types';
-import { mcm, zip } from '../../utils';
+import { zip } from '../../utils/arrays';
+import { mcm } from '../../utils/math';
 import { Vector3 } from '../../utils/vector';
 
 interface Moon {
