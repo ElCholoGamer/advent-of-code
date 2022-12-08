@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import { AoCPart, Visualization } from '../../types';
+import { sleep } from '../../utils';
 import { enumerate } from '../../utils/arrays';
 import { HIDE_CURSOR, setChar } from '../../utils/strings';
 import { Vector2 } from '../../utils/vector';
@@ -90,8 +91,12 @@ export const visualization: Visualization = input => {
 
 	const addCraneToLine = (str: string, height: number) => {
 		const logIndex = 3 - height;
-		if (logIndex >= 0 && logIndex < logs.length) {
-			str += chalk[logIndex === 0 ? 'yellow' : 'gray'](logs[logIndex]);
+		if (logIndex >= 0) {
+			if (logIndex < logs.length) {
+				str += chalk[logIndex === 0 ? 'yellow' : 'gray'](logs[logIndex]);
+			}
+		} else if (allDone && logIndex === -2) {
+			str += chalk.green`   ${chalk.bold('Message:')} ${piles.map(pile => pile.at(-1)).join('')}`;
 		}
 		const absoluteX = cranePos.x + 5;
 		if (cranePos.y > height) return setChar(str, absoluteX, '|');
@@ -108,10 +113,13 @@ export const visualization: Visualization = input => {
 	let iterationCount = 0;
 
 	console.log(HIDE_CURSOR);
-	const interval = setInterval(() => {
+
+	let cleared = false;
+	const interval = setInterval(async () => {
 		if (allDone) {
 			if (--cranePos.y === 0) {
 				clearInterval(interval);
+				cleared = true;
 			}
 		} else if (pickedCrate === null) {
 			const targetX = currentInstruction.from * 4;
@@ -181,5 +189,7 @@ export const visualization: Visualization = input => {
 			console.log(line);
 		}
 		console.log(`||${'-'.repeat(innerWidth)}||`);
+
+		if (cleared) await sleep(3000);
 	}, 50);
 };
