@@ -5,7 +5,7 @@ import { getAllCommands } from '../utils';
 const helpCommand: Command = {
 	name: 'help',
 	description: 'Shows a list of commands',
-	subArgs: [
+	arguments: [
 		{
 			name: 'command',
 			required: false,
@@ -25,7 +25,7 @@ const helpCommand: Command = {
 		} else {
 			const selectedCommand = commands[args[0]];
 
-			const { description, subArgs = [] } = selectedCommand;
+			const { description, arguments: subArgs = [] } = selectedCommand;
 			const flags = <Record<string, Flag<any>>>(selectedCommand.flags || {});
 
 			const names = subArgs.map(a => (a.required ? `[${a.name}]` : `(${a.name})`));

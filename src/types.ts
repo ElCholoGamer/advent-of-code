@@ -1,9 +1,11 @@
 export type ValidationResult = true | string;
 
-export type Command<F extends Record<string, string | number> = {}> = {
+export type Awaitable<T> = T | Promise<T>;
+
+export type Command<F extends Record<string, string | number | boolean> = {}> = {
 	name: string;
 	description: string;
-	subArgs?: {
+	arguments?: {
 		name: string;
 		required?: boolean;
 		transform?: (value: string) => string;
@@ -17,22 +19,24 @@ export type Command<F extends Record<string, string | number> = {}> = {
 		flags: {
 			[K in keyof F]: F[K];
 		}
-	): Promise<void> | void;
+	): Awaitable<void>;
 };
 
-export type Flag<T extends string | number> = {
+export type Flag<T extends string | number | boolean> = {
 	description: string;
 	short?: string;
 	required?: boolean;
-	type: T extends string ? 'String' : 'Number';
+	type: T extends string ? 'String' : T extends number ? 'Number' : 'Boolean';
 	transform?: (value: T) => T;
-	validate?: (value: T) => ValidationResult | Promise<ValidationResult>;
+	validate?: (value: T) => Awaitable<ValidationResult>;
 };
 
-export type AoCPart<T extends {} = {}> = (
+export type AoCPart<O extends {} = {}> = (
 	input: string[],
-	options: Partial<T>
-) => (string | number) | Promise<string | number>;
+	options: Partial<O>
+) => Awaitable<string | number>;
+
+export type Visualization = (input: string[]) => Awaitable<void>;
 
 export type Tuple<T, N extends number> = N extends N
 	? number extends N

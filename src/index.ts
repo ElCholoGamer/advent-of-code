@@ -6,7 +6,7 @@ import { getAllCommands } from './utils';
 dotenv.config();
 
 async function main(
-	commandName: string | undefined,
+	commandName = 'help',
 	args: string[],
 	cliFlags: Record<string, string | number>
 ) {
@@ -14,22 +14,19 @@ async function main(
 	console.log(chalk.blue.bold('│      Advent of Code CLI       │'));
 	console.log(chalk.blue.bold('└───────────────────────────────┘'));
 
-	const commands = await getAllCommands();
+	const { [commandName]: command } = await getAllCommands();
 
-	commandName ||= 'help';
-
-	const command = commands[commandName];
 	if (!command) {
 		console.log(chalk.bold(chalk.red('Invalid command! Use "help" for more.')));
 		return;
 	}
 
-	const { subArgs = [] } = command;
+	const { arguments: argumentOptions = [] } = command;
 	const flags = command.flags || {};
 
-	// Validate sub-args
-	for (let i = 0; i < subArgs.length; i++) {
-		const { name, required = true, transform, validate } = subArgs[i];
+	// Validate arguments
+	for (let i = 0; i < argumentOptions.length; i++) {
+		const { name, required = true, transform, validate } = argumentOptions[i];
 
 		if (!args[i]) {
 			if (required) {

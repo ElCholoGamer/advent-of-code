@@ -2,28 +2,26 @@ import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { performance } from 'node:perf_hooks';
 import path from 'node:path';
 import chalk from 'chalk';
-import { AoCPart, Command } from '../types';
+import { AoCPart, Command, Visualization } from '../types';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
 type Flags = {
 	year: number;
 	part: number;
 	input: string;
+	visualize: boolean;
 };
 
 const runCommand: Command<Flags> = {
 	name: 'run',
 	description: 'Runs a puzzle solution',
-	subArgs: [
+	arguments: [
 		{
 			name: 'day',
 			required: true,
 			validate: value => {
-				const num = Number(value);
-				return (
-					(!isNaN(num) && Number.isInteger(num) && num >= 1 && num <= 25) ||
-					'Day must be an integer between 1 and 25'
-				);
+				const num = parseInt(value);
+				return (!isNaN(num) && num >= 1 && num <= 25) || 'Day must be an integer between 1 and 25';
 			},
 		},
 	],
@@ -48,10 +46,14 @@ const runCommand: Command<Flags> = {
 			short: 'I',
 			description: 'A custom input file path',
 		},
+		visualize: {
+			type: 'Boolean',
+			short: 'V',
+			description: 'Show a visualization if available',
+		},
 	},
-	async run(args, { year, part, input: inputPath }) {
-		year ||= new Date().getFullYear();
-		const day = Number(args[0]);
+	async run(args, { year = new Date().getFullYear(), part, input: inputPath, visualize }) {
+		const day = parseInt(args[0]);
 
 		if (new Date(Date.now() - 5) < new Date(year, 11, day)) {
 			console.error(chalk.bold.red(`Error: Input for day ${day} is not available yet`));
@@ -59,7 +61,7 @@ const runCommand: Command<Flags> = {
 		}
 
 		if (day === 25 && part === 2) {
-			console.error(chalk.bold.red('Error: Day 25 does not have part 2'));
+			console.error(chalk.bold.red('Error: Day 25 does not have a part 2'));
 			return;
 		}
 
@@ -120,12 +122,22 @@ const runCommand: Command<Flags> = {
 
 		const input = rawInput.replace(/\r?\n$/, '').split(/\r?\n/);
 
-		let funcs: { part1?: AoCPart; part2?: AoCPart };
+		let funcs: { part1?: AoCPart; part2?: AoCPart; visualization?: Visualization };
 
 		try {
 			funcs = await import(path.resolve(__dirname, `../days/${year}/${day}`));
 		} catch {
 			console.error(chalk.bold.red(`Error: Could not import day ${day} module`));
+			return;
+		}
+
+		if (visualize) {
+			if (!funcs.visualization) {
+				console.error(chalk.bold.red('Error: Missing visualization function'));
+				return;
+			}
+
+			await funcs.visualization(input);
 			return;
 		}
 
