@@ -56,5 +56,23 @@ export function mcm(...numbers: number[]) {
 	return result;
 }
 
+export function windows<T>(arr: T[], windowSize: number): T[][] {
+	if (windowSize > arr.length) return [];
+	return [...Array(arr.length - windowSize + 1)].map((_, index) =>
+		arr.slice(index, index + windowSize)
+	);
+}
+
+export function chunks<T>(arr: T[], chunkSize: number): T[][] {
+	if (chunkSize > arr.length) return [];
+
+	const out: T[][] = [];
+	for (let i = 0; i < arr.length; i += chunkSize) {
+		out.push(arr.slice(i, i + chunkSize));
+	}
+
+	return out;
+}
+
 export const PI_OVER_2 = Math.PI / 2;
 export const TWO_PI = Math.PI * 2;
