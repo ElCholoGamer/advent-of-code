@@ -1,5 +1,5 @@
 import { AoCPart } from '../../types';
-import { count } from '../../utils';
+import { count } from '../../utils/arrays';
 
 interface Range {
 	start: number;

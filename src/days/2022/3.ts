@@ -1,5 +1,5 @@
 import { AoCPart } from '../../types';
-import { chunks } from '../../utils';
+import { chunks } from '../../utils/arrays';
 
 const itemPriority = (char: string) => {
 	const code = char.charCodeAt(0);

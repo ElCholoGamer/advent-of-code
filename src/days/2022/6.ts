@@ -1,5 +1,5 @@
 import { AoCPart } from '../../types';
-import { windows } from '../../utils';
+import { windows } from '../../utils/arrays';
 
 function findMarker(str: string, markerLength: number) {
 	return (
