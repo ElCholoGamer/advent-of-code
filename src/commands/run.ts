@@ -1,7 +1,8 @@
-import fs from 'fs';
+import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { performance } from 'node:perf_hooks';
+import path from 'node:path';
 import chalk from 'chalk';
 import { AoCPart, Command } from '../types';
-import path from 'path';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
 type Flags = {
@@ -12,7 +13,7 @@ type Flags = {
 
 const runCommand: Command<Flags> = {
 	name: 'run',
-	description: 'Runs an AoC day',
+	description: 'Runs a puzzle solution',
 	subArgs: [
 		{
 			name: 'day',
@@ -30,19 +31,17 @@ const runCommand: Command<Flags> = {
 		year: {
 			type: 'Number',
 			short: 'Y',
-			description: 'The year to run the day of. Defaults to current year',
+			description: 'The year of the solution to run. Defaults to the current year.',
 			validate: n => {
 				const currentYear = new Date().getFullYear();
-				return (
-					(n >= 2015 && n <= currentYear) || 'The year must be between 2015 and ' + currentYear
-				);
+				return (n >= 2015 && n <= currentYear) || `Year must be between 2015 and ${currentYear}`;
 			},
 		},
 		part: {
 			type: 'Number',
 			short: 'P',
-			description: 'The challenge part to execute. Defaults to both parts',
-			validate: n => n === 1 || n === 2 || 'The part must be either 1 or 2',
+			description: 'The part of the solution to execute. Defaults to both.',
+			validate: n => n === 1 || n === 2 || 'Part must be either 1 or 2',
 		},
 		input: {
 			type: 'String',
@@ -64,29 +63,24 @@ const runCommand: Command<Flags> = {
 			return;
 		}
 
-		let inputStr: string;
+		let rawInput: string;
+
 		if (inputPath) {
 			try {
-				if (!fs.existsSync(inputPath)) {
-					console.log(chalk.bold.red('Error: Input file does not exist'));
-					return;
-				}
-
-				inputStr = fs.readFileSync(inputPath, { encoding: 'utf-8' });
+				rawInput = await readFile(inputPath, { encoding: 'utf-8' });
 			} catch (err) {
 				console.error(chalk.bold.red('Error: Could not read input file, see below for error:'));
 				console.error(err);
 				return;
 			}
 		} else {
-			const storeDir = path.join('cache', year.toString());
-			inputPath = path.join(storeDir, day + '.txt');
+			const inputDirectory = path.join('cache', year.toString());
+			inputPath = path.join(inputDirectory, day + '.txt');
 
-			if (!fs.existsSync(inputPath)) {
-				if (!fs.existsSync(storeDir)) {
-					fs.mkdirSync(storeDir, { recursive: true });
-				}
-
+			try {
+				rawInput = await readFile(inputPath, { encoding: 'utf-8' });
+			} catch {
+				await access(inputDirectory).catch(() => mkdir(inputDirectory, { recursive: true }));
 				const { SESSION_COOKIE } = process.env;
 				if (!SESSION_COOKIE) {
 					console.error(chalk.bold.red('Error: Could not find SESSION_COOKIE env variable'));
@@ -94,25 +88,26 @@ const runCommand: Command<Flags> = {
 				}
 
 				try {
-					console.log(chalk.italic.blue('Fetching input...'));
+					console.log(chalk.italic.yellow('Fetching input...'));
 					const res: AxiosResponse<string> = await axios.get(
 						`https://adventofcode.com/${year}/day/${day}/input`,
 						{
 							headers: {
-								cookie: 'session=' + SESSION_COOKIE,
+								cookie: `session=${SESSION_COOKIE}`,
+								'User-Agent':
+									'github.com/ElCholoGamer/advent-of-code by josedanielgrayson@gmail.com',
 							},
 							responseType: 'text',
 							transformResponse: res => res,
 						}
 					);
 
-					inputStr = res.data;
-
-					fs.writeFileSync(inputPath, inputStr);
+					rawInput = res.data;
+					await writeFile(inputPath, rawInput);
 				} catch (err: unknown) {
 					console.error(chalk.bold.red('Error: Could not fetch input, read below:'));
 
-					const axiosErr = <AxiosError>err;
+					const axiosErr = err as AxiosError;
 					if (axiosErr.response) {
 						console.error(chalk.bold.red(axiosErr.response.statusText));
 					} else {
@@ -120,12 +115,10 @@ const runCommand: Command<Flags> = {
 					}
 					return;
 				}
-			} else {
-				inputStr = fs.readFileSync(inputPath, { encoding: 'utf-8' });
 			}
 		}
 
-		const input = inputStr.replace(/\r?\n$/, '').split(/\r?\n/);
+		const input = rawInput.replace(/\r?\n$/, '').split(/\r?\n/);
 
 		let funcs: { part1?: AoCPart; part2?: AoCPart };
 
@@ -136,15 +129,15 @@ const runCommand: Command<Flags> = {
 			return;
 		}
 
-		const runningMsg = chalk.bold.yellow(`Running: ${year} Day ${day} - Part {p}`);
+		console.log(chalk.bold.yellow`Running ${year} - Day ${day}`);
 
 		if (part !== 2) {
-			console.log(runningMsg.replace('{p}', '1'));
+			console.log(chalk.bold.blue('──────── Part 1 ────────'));
 			await runPart(funcs.part1, input);
 		}
 
 		if (day !== 25 && part !== 1) {
-			console.log(runningMsg.replace('{p}', '2'));
+			console.log(chalk.bold.blue('──────── Part 2 ────────'));
 			await runPart(funcs.part2, input);
 		}
 	},
@@ -152,20 +145,20 @@ const runCommand: Command<Flags> = {
 
 async function runPart(func: AoCPart | undefined, input: string[]) {
 	if (!func) {
-		console.error(chalk.bold.red('Error: Could not find part function, aborting.'));
+		console.error(chalk.bold.red('Error: Unimplemented.'));
 		return;
 	}
 
-	const start = Date.now();
+	const start = performance.now();
 
 	try {
 		const result = await func(input, {});
-		console.log(chalk.green(chalk.bold('Result: ') + result));
+		console.log(chalk.green`${chalk.bold('Result:')} ${result}`);
 	} catch (err) {
 		console.error(err);
 	}
 
-	console.log(chalk.bold.blue(`Elapsed: ${Math.floor(Date.now() - start)}ms`));
+	console.log(chalk.yellow(`${chalk.bold('Elapsed:')} ${Math.floor(performance.now() - start)}ms`));
 }
 
 export default runCommand;

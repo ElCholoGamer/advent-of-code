@@ -18,9 +18,9 @@ const helpCommand: Command = {
 		const commands = await getAllCommands();
 
 		if (args.length === 0) {
-			console.log(chalk.bold.green('Commands:'));
-			for (const key in commands) {
-				console.log(chalk.blue(chalk.bold(key + ': ') + commands[key].description));
+			console.log(chalk.bold.blue('Commands:'));
+			for (const name in commands) {
+				console.log(chalk.yellow(chalk.bold(name + ': ') + commands[name].description));
 			}
 		} else {
 			const selectedCommand = commands[args[0]];
@@ -28,13 +28,9 @@ const helpCommand: Command = {
 			const { description, subArgs = [] } = selectedCommand;
 			const flags = <Record<string, Flag<any>>>(selectedCommand.flags || {});
 
-			console.log(chalk.bold(chalk.green('Command: ' + args[0])));
-			console.log(chalk.green(description));
-
-			if (subArgs.length > 0) {
-				const names = subArgs.map(a => (a.required ? `[${a.name}]` : `(${a.name})`));
-				console.log(chalk.blue(chalk.bold('Arguments: ') + names.join(' ')));
-			}
+			const names = subArgs.map(a => (a.required ? `[${a.name}]` : `(${a.name})`));
+			console.log(chalk.blue`${chalk.bold('Command:')} ${args[0]} ${names.join(' ')}`);
+			console.log(chalk.yellow(description));
 
 			const flagNames = Object.keys(flags);
 			if (flagNames.length > 0) {

@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import minimist from 'minimist';
 import dotenv from 'dotenv';
-import { christmasify, getAllCommands } from './utils';
+import { getAllCommands } from './utils';
 
 dotenv.config();
 
@@ -10,9 +10,9 @@ async function main(
 	args: string[],
 	cliFlags: Record<string, string | number>
 ) {
-	console.log(chalk.bold(christmasify('---------------------------------')));
-	console.log(chalk.bold(christmasify('||     Advent of Code CLI      ||')));
-	console.log(chalk.bold(christmasify('---------------------------------')));
+	console.log(chalk.blue.bold('┌───────────────────────────────┐'));
+	console.log(chalk.blue.bold('│      Advent of Code CLI       │'));
+	console.log(chalk.blue.bold('└───────────────────────────────┘'));
 
 	const commands = await getAllCommands();
 

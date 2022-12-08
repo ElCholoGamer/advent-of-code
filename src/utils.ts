@@ -1,14 +1,6 @@
-import chalk from 'chalk';
-import fs from 'fs';
+import { readdir } from 'fs/promises';
 import path from 'path';
 import { Command } from './types';
-
-export function christmasify(s: string) {
-	return s
-		.split('')
-		.map((char, i) => (i % 2 === 0 ? chalk.redBright(char) : chalk.whiteBright(char)))
-		.join('');
-}
 
 export const getAllCommands = (() => {
 	let memo: Record<string, Command<any>> | null = null;
@@ -16,14 +8,13 @@ export const getAllCommands = (() => {
 	return async () => {
 		if (!memo) {
 			const dir = path.join(__dirname, 'commands');
-			const paths = fs.readdirSync(dir);
+			const paths = await readdir(dir);
 
-			const commands = (
-				await Promise.all(paths.map(async file => import(path.resolve(dir, file))))
-			).map(mod => mod.default);
+			const imports = await Promise.all(paths.map(file => import(path.resolve(dir, file))));
+			const commands = imports.map(module => module.default);
 
 			memo = commands.reduce<Record<string, Command>>(
-				(acc, cmd) => ({ ...acc, [cmd.name]: cmd }),
+				(obj, command) => ({ ...obj, [command.name]: command }),
 				{}
 			);
 		}
