@@ -346,3 +346,7 @@ export class Vector3 {
 		return new Vector3(arr[0], arr[1], arr[2]);
 	}
 }
+
+Vector2.prototype.toString = function () {
+	return `<x=${this.x}, y=${this.y}>`;
+};
