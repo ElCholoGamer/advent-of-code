@@ -133,20 +133,8 @@ export class Vector2 {
 		return this.x === vec.x && this.y === vec.y;
 	}
 
-	public greaterThan(vec: Vector2): boolean {
-		return this.x > vec.x && this.y > vec.y;
-	}
-
-	public lessThan(vec: Vector2): boolean {
-		return this.x < vec.x && this.y < vec.y;
-	}
-
-	public equalOrGreaterThan(vec: Vector2): boolean {
-		return this.x >= vec.x && this.y >= vec.y;
-	}
-
-	public equalOrLessThan(vec: Vector2): boolean {
-		return this.x <= vec.x && this.y <= vec.y;
+	public toString(): string {
+		return `<x=${this.x}, y=${this.y}>`;
 	}
 
 	public static fromArray(arr: number[]): Vector2 {
@@ -281,7 +269,7 @@ export class Vector3 {
 		return new Vector3(this.x, this.y, this.z);
 	}
 
-	public toArray(): number[] {
+	public toArray(): [number, number, number] {
 		return [this.x, this.y, this.z];
 	}
 
@@ -309,15 +297,15 @@ export class Vector3 {
 		return this;
 	}
 
-	public toRotationX(): number {
+	public angleX(): number {
 		return wrapRotation(Math.atan2(this.y, this.z));
 	}
 
-	public toRotationY(): number {
+	public angleY(): number {
 		return wrapRotation(Math.atan2(this.z, this.x));
 	}
 
-	public toRotationZ(): number {
+	public angleZ(): number {
 		return wrapRotation(Math.atan2(this.y, this.x));
 	}
 
@@ -325,20 +313,8 @@ export class Vector3 {
 		return this.x === vec.x && this.y === vec.y && this.z === vec.z;
 	}
 
-	public greaterThan(vec: Vector3): boolean {
-		return this.x > vec.x && this.y > vec.y && this.z > vec.z;
-	}
-
-	public lessThan(vec: Vector3): boolean {
-		return this.x < vec.x && this.y < vec.y && this.z < vec.z;
-	}
-
-	public equalOrGreaterThan(vec: Vector3): boolean {
-		return this.x >= vec.x && this.y >= vec.y && this.z >= vec.z;
-	}
-
-	public equalOrLessThan(vec: Vector3): boolean {
-		return this.x <= vec.x && this.y <= vec.y && this.z <= vec.z;
+	public toString(): string {
+		return `<x=${this.x}, y=${this.y}, z=${this.z}>`;
 	}
 
 	public static fromArray(arr: number[]): Vector3 {
@@ -346,7 +322,3 @@ export class Vector3 {
 		return new Vector3(arr[0], arr[1], arr[2]);
 	}
 }
-
-Vector2.prototype.toString = function () {
-	return `<x=${this.x}, y=${this.y}>`;
-};
