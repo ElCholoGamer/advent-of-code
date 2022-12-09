@@ -52,8 +52,10 @@ class Scanner {
 
 				this.beaconPermutations.push(
 					permutation.map(coord => {
-						const everyOtherCoordinate = permutation.filter(other => other !== coord);
-						const diffs = everyOtherCoordinate.map(other => other.clone().subtract(coord));
+						const diffs = permutation
+							.filter(other => other !== coord)
+							.map(other => other.clone().subtract(coord));
+						diffs.sort((a, b) => a.x - b.x || a.y - b.y);
 
 						return { value: coord, diffs };
 					})
@@ -61,6 +63,27 @@ class Scanner {
 			}
 		}
 	}
+}
+
+function countSameElementsOnSorted<T>(a: T[], b: T[], compare: (a: T, b: T) => number) {
+	let matchCount = 0;
+	let pointerA = 0;
+	let pointerB = 0;
+
+	while (pointerA < a.length && pointerB < b.length) {
+		const result = compare(a[pointerA], b[pointerB]);
+		if (result === 0) {
+			matchCount++;
+			pointerA++;
+			pointerB++;
+		} else if (result > 0) {
+			pointerB++;
+		} else {
+			pointerA++;
+		}
+	}
+
+	return matchCount;
 }
 
 interface Options {
@@ -88,11 +111,13 @@ function inferScannerPositions(scanners: Scanner[], minOverlaps: number) {
 
 					for (const baseBeacon of knownScanner.finalBeaconPermutation) {
 						for (const beacon of permutation) {
-							const overlappingDiffs = baseBeacon.diffs.filter(diff =>
-								beacon.diffs.some(otherDiff => otherDiff.equals(diff))
+							const overlappingDiffs = countSameElementsOnSorted(
+								baseBeacon.diffs,
+								beacon.diffs,
+								(a, b) => a.x - b.x || a.y - b.y
 							);
 
-							if (overlappingDiffs.length >= minOverlaps - 1) {
+							if (overlappingDiffs >= minOverlaps - 1) {
 								overlappingBeacons.push({
 									fromBase: baseBeacon.value,
 									fromUnknown: beacon.value,
