@@ -53,7 +53,7 @@ function monkeyBusinessAfterRounds(monkeys: Monkey[], rounds: number, divideByTh
 
 				if (divideByThree) worryLevel = Math.floor(worryLevel / 3);
 
-				worryLevel = worryLevel % moduloDivisor;
+				worryLevel %= moduloDivisor;
 
 				monkeys[
 					worryLevel % monkey.testDivisible === 0 ? monkey.throwIfTrue : monkey.throwIfFalse
