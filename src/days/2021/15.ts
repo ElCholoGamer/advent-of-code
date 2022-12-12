@@ -26,6 +26,7 @@ function parseInput(input: string[]): Cell[][] {
 
 function dijkstra(cells: Cell[][], startX: number, startY: number) {
 	cells[startX][startY].totalRisk = 0;
+	cells[startX][startY].visited = true;
 
 	const queue = new PriorityQueue<[x: number, y: number]>();
 	queue.push([startX, startY], 0);
@@ -33,8 +34,6 @@ function dijkstra(cells: Cell[][], startX: number, startY: number) {
 	while (queue.size) {
 		const [x, y] = queue.shift()!;
 		const cell = cells[x][y];
-
-		cell.visited = true;
 
 		const branches = [
 			[x - 1, y],
@@ -47,21 +46,9 @@ function dijkstra(cells: Cell[][], startX: number, startY: number) {
 			const branch = cells[bX]?.[bY];
 			if (!branch || branch.visited) continue;
 
-			const branchNode = queue.findNode(({ data }) => data[0] === bX && data[1] === bY);
-
-			const totalRisk = cell.totalRisk + branch.risk;
-
-			if (totalRisk < branch.totalRisk) {
-				branch.totalRisk = totalRisk;
-
-				if (branchNode) {
-					queue.setNodePriority(branchNode, totalRisk);
-				}
-			}
-
-			if (!branchNode) {
-				queue.push([bX, bY], branch.totalRisk);
-			}
+			branch.totalRisk = cell.totalRisk + branch.risk;
+			branch.visited = true;
+			queue.push([bX, bY], branch.totalRisk);
 		}
 	}
 }
