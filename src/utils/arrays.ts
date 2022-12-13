@@ -28,8 +28,4 @@ export const count = <T>(arr: T[], predicate: (element: T, index: number) => boo
 	return count;
 };
 
-export function* enumerate<T>(arr: T[]): Generator<[T, number]> {
-	for (let i = 0; i < arr.length; i++) {
-		yield [arr[i], i];
-	}
-}
+export const enumerate = <T>(arr: T[]): [number, T][] => arr.map((el, i) => [i, el]);

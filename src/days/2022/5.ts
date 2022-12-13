@@ -179,7 +179,7 @@ export const visualization: Visualization = input => {
 
 		for (let y = 0; y < innerHeight; y++) {
 			let line = addCraneToLine(`||${' '.repeat(innerWidth)}||`, y);
-			for (const [pile, pileNumber] of enumerate(piles)) {
+			for (const [pileNumber, pile] of enumerate(piles)) {
 				const crateIndex = maxPileHeight - y + 1;
 				if (crateIndex < pile.length) {
 					const pos = 4 + pileNumber * 4;
