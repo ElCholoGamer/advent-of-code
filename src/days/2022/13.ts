@@ -1,7 +1,7 @@
 import { AoCPart } from '../../types';
 import { chunks, enumerate } from '../../utils/arrays';
 
-type PacketData = number | PacketData[];
+type PacketDataArray = (number | PacketDataArray)[];
 
 const enum Comparison {
 	RIGHT = -1,
@@ -10,37 +10,38 @@ const enum Comparison {
 }
 
 function parsePacketData(str: string) {
-	function parsePacketChunk(chars: string[]): PacketData {
-		const packetData: PacketData = [];
+	const stack: PacketDataArray[] = [];
 
-		while (chars.length > 0) {
-			const char = chars.shift()!;
-			if (char === '[') {
-				packetData.push(parsePacketChunk(chars));
-			} else if (char === ']') {
-				return packetData;
-			} else if (char !== ',') {
-				const numEnd = chars.findIndex(c => isNaN(Number(c)));
-				const numStr = char + chars.splice(0, numEnd).join('');
+	for (let c = 0; c < str.length; c++) {
+		const char = str[c];
 
-				packetData.push(parseInt(numStr));
+		if (char === '[') {
+			stack.push([]);
+		} else if (char === ']') {
+			const packetData = stack.pop()!;
+			if (stack.length === 0) return packetData;
+			stack.at(-1)!.push(packetData);
+		} else if (char !== ',') {
+			let numStr = char;
+			while (!isNaN(Number(str[c + 1]))) {
+				numStr += str[++c];
 			}
-		}
 
-		return packetData;
+			stack.at(-1)!.push(parseInt(numStr));
+		}
 	}
 
-	return parsePacketChunk(str.split('').slice(1));
+	throw new Error('missing end bracket');
 }
 
-function parsePacketPairs(input: string[]): [PacketData, PacketData][] {
+function parsePacketPairs(input: string[]): [PacketDataArray, PacketDataArray][] {
 	return chunks(input, 3).map(([first, second]) => [
 		parsePacketData(first),
 		parsePacketData(second),
 	]);
 }
 
-function compareValues(a: number | PacketData, b: number | PacketData): Comparison {
+function compareValues(a: number | PacketDataArray, b: number | PacketDataArray): Comparison {
 	if (typeof a === 'number' && typeof b === 'number') {
 		return Math.sign(a - b) as Comparison;
 	}
