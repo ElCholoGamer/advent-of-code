@@ -1,4 +1,12 @@
+import chalk from 'chalk';
 import { AoCPart, Visualization } from '../../types';
+import { sleep } from '../../utils';
+import {
+	ColorizedString,
+	HIDE_CURSOR,
+	joinColorizedStrings,
+	SHOW_CURSOR,
+} from '../../utils/strings';
 import { Vector2 } from '../../utils/vector';
 
 const SAND_ORIGIN = new Vector2(500, 0);
@@ -78,6 +86,93 @@ export const part2: AoCPart = input => {
 
 			if (nextMove === undefined) {
 				if (sandPos.y === 0) return sandUnits;
+
+				grid[sandPos.x][sandPos.y] = Tile.SAND;
+				break;
+			}
+
+			sandPos.x += nextMove;
+			sandPos.y++;
+		}
+	}
+};
+
+export const visualization: Visualization = async input => {
+	const { grid, floor } = buildGrid(input);
+
+	function render(extraSand?: Vector2) {
+		const lines: string[] = [];
+
+		for (let y = 0; y <= floor; y++) {
+			const colorizedStrings: ColorizedString[] = [];
+
+			for (let x = 488; x <= 512; x++) {
+				if (x === extraSand?.x && y === extraSand.y) {
+					colorizedStrings.push({ str: 'o', color: chalk.yellow });
+					continue;
+				}
+
+				const tile = grid[x][y];
+
+				if (tile === Tile.AIR && SAND_ORIGIN.x === x && SAND_ORIGIN.y === y) {
+					colorizedStrings.push({ str: '+', color: chalk.green });
+					continue;
+				}
+
+				if (y === floor) {
+					colorizedStrings.push({ str: '#', color: chalk.blue });
+					continue;
+				}
+
+				switch (tile) {
+					case Tile.AIR:
+						colorizedStrings.push({ str: '.', color: chalk.gray });
+						break;
+					case Tile.ROCK:
+						colorizedStrings.push({ str: '#', color: chalk.blue });
+						break;
+					case Tile.SAND:
+						colorizedStrings.push({ str: 'o', color: chalk.yellow });
+						break;
+				}
+			}
+
+			lines.push(joinColorizedStrings(colorizedStrings));
+		}
+
+		console.clear();
+		console.log(lines.join('\n'));
+	}
+
+	console.log(HIDE_CURSOR);
+	render();
+	await sleep(1000);
+
+	for (let sandUnits = 1; ; sandUnits++) {
+		const sandPos = SAND_ORIGIN.clone();
+
+		while (true) {
+			render(sandPos);
+			await sleep(20);
+
+			if (sandPos.y === floor - 1) {
+				grid[sandPos.x][sandPos.y] = Tile.SAND;
+				break;
+			}
+
+			const nextMove = [0, -1, 1].find(
+				xMove => grid[sandPos.x + xMove][sandPos.y + 1] === Tile.AIR
+			);
+
+			if (nextMove === undefined) {
+				if (sandPos.y === 0) {
+					render(sandPos);
+					console.log();
+					console.log(chalk.yellow`${chalk.bold('Sand units:')} ${sandUnits}`);
+					await sleep(3000);
+					console.log(SHOW_CURSOR);
+					return;
+				}
 
 				grid[sandPos.x][sandPos.y] = Tile.SAND;
 				break;
