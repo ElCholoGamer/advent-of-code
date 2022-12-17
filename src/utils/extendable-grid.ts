@@ -5,9 +5,9 @@ export class ExtendableGrid<T> {
 
 	public constructor(private readonly fillValue: T) {}
 
-	public get(x: number, y: number): T | undefined;
+	public get(x: number, y: number): T;
 	public get(x: number, y: number, defaultValue: T): T;
-	public get(x: number, y: number, defaultValue?: T): T | undefined {
+	public get(x: number, y: number, defaultValue = this.fillValue): T {
 		const value = this.grid[x]?.[y];
 		return value === undefined ? defaultValue : value;
 	}
