@@ -3,6 +3,13 @@ import { wrapRotation } from '../utils/math';
 export class Vector2 {
 	public constructor(public x: number, public y: number) {}
 
+	public axisIndex(index: number): number {
+		if (index === 0) return this.x;
+		else if (index === 1) return this.y;
+
+		throw new Error('invalid index provided');
+	}
+
 	public add(vec: Vector2): Vector2 {
 		this.x += vec.x;
 		this.y += vec.y;
@@ -145,6 +152,14 @@ export class Vector2 {
 
 export class Vector3 {
 	public constructor(public x: number, public y: number, public z: number) {}
+
+	public axisIndex(index: number): number {
+		if (index === 0) return this.x;
+		else if (index === 1) return this.y;
+		else if (index === 2) return this.z;
+
+		throw new Error('invalid index provided');
+	}
 
 	public add(vec: Vector3): Vector3 {
 		this.x += vec.x;
