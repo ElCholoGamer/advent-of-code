@@ -157,7 +157,7 @@ const runCommand: Command<Flags> = {
 
 async function runPart(func: AoCPart | undefined, input: string[]) {
 	if (!func) {
-		console.error(chalk.bold.red('Error: Unimplemented.'));
+		console.error(chalk.bold.red('Error: unimplemented.'));
 		return;
 	}
 
@@ -165,12 +165,14 @@ async function runPart(func: AoCPart | undefined, input: string[]) {
 
 	try {
 		const result = await func(input, {});
-		console.log(chalk.green`${chalk.bold('Result:')} ${result}`);
+		console.log(chalk.green`${chalk.bold`Result:`} ${result}`);
 	} catch (err) {
 		console.error(err);
 	}
 
-	console.log(chalk.yellow(`${chalk.bold('Elapsed:')} ${Math.floor(performance.now() - start)}ms`));
+	const elapsedMs = Math.floor(performance.now() - start);
+	const elapsedSecs = elapsedMs / 1000;
+	console.log(chalk.yellow(`${chalk.bold`Elapsed:`} ${elapsedMs}ms (${elapsedSecs}s)`));
 }
 
 export default runCommand;
