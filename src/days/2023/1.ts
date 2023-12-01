@@ -1,12 +1,15 @@
 import { AoCPart } from '../../types';
+import { assertNonNull } from '../../utils/error';
+
+const isDigit = (char: string) => !Number.isNaN(Number(char));
 
 export const part1: AoCPart = (input) => {
 	let sum = 0;
 
 	for (const line of input) {
 		const chars = line.split('');
-		const firstDigit = chars.find((c) => !Number.isNaN(Number(c)))!;
-		const lastDigit = chars.findLast((c) => !Number.isNaN(Number(c)))!;
+		const firstDigit = assertNonNull(chars.find(isDigit));
+		const lastDigit = assertNonNull(chars.findLast(isDigit));
 
 		sum += Number(firstDigit + lastDigit);
 	}
@@ -16,53 +19,46 @@ export const part1: AoCPart = (input) => {
 
 const NUMBERS = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
 
-function findFirstOccurrence(str: string): number {
-	let currentIndex = -1;
-	let num = -1;
+function findFirstNumber(str: string): number | null {
+	for (let i = 0; i < str.length; i++) {
+		const c = str[i];
 
-	for (let n = 0; n < NUMBERS.length; n++) {
-		const indexOfStr = str.indexOf(NUMBERS[n]);
-		if (indexOfStr !== -1 && (indexOfStr < currentIndex || currentIndex === -1)) {
-			currentIndex = indexOfStr;
-			num = n + 1;
+		if (isDigit(c)) return Number(c);
+
+		for (let n = 0; n < NUMBERS.length; n++) {
+			if (str.substring(i, i + NUMBERS[n].length) === NUMBERS[n]) {
+				return n + 1;
+			}
 		}
 	}
 
-	const digitIndex = str.split('').findIndex((c) => !Number.isNaN(Number(c)));
-	if (digitIndex !== -1 && (digitIndex < currentIndex || currentIndex === -1)) {
-		return Number(str[digitIndex]);
-	}
-
-	return num;
+	return null;
 }
 
-function findLastOccurrence(str: string): number {
-	let currentIndex = -1;
-	let num = -1;
+function findLastNumber(str: string): number | null {
+	for (let i = str.length - 1; i >= 0; i--) {
+		const c = str[i];
 
-	for (let n = 0; n < NUMBERS.length; n++) {
-		const indexOfStr = str.lastIndexOf(NUMBERS[n]);
-		if (indexOfStr !== -1 && (indexOfStr > currentIndex || currentIndex === -1)) {
-			currentIndex = indexOfStr;
-			num = n + 1;
+		if (isDigit(c)) return Number(c);
+
+		for (let n = 0; n < NUMBERS.length; n++) {
+			if (str.substring(i - NUMBERS[n].length + 1, i + 1) === NUMBERS[n]) {
+				return n + 1;
+			}
 		}
 	}
-	const digitIndex = str.split('').findLastIndex((c) => !Number.isNaN(Number(c)));
-	if (digitIndex !== -1 && (digitIndex > currentIndex || currentIndex === -1)) {
-		return Number(str[digitIndex]);
-	}
 
-	return num;
+	return null;
 }
 
 export const part2: AoCPart = (input) => {
 	let sum = 0;
 
 	for (const line of input) {
-		const firstDigit = findFirstOccurrence(line);
-		const lastDigit = findLastOccurrence(line);
+		const firstDigit = assertNonNull(findFirstNumber(line));
+		const lastDigit = assertNonNull(findLastNumber(line));
 
-		sum += Number(firstDigit + lastDigit);
+		sum += 10 * firstDigit + lastDigit;
 	}
 
 	return sum;
