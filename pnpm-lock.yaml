@@ -12,8 +12,8 @@ dependencies:
     specifier: ^4.1.0
     version: 4.1.2
   dotenv:
-    specifier: ^10.0.0
-    version: 10.0.0
+    specifier: ^16.3.1
+    version: 16.3.1
   gl-matrix:
     specifier: ^3.4.3
     version: 3.4.3
@@ -1149,9 +1149,9 @@ packages:
       webidl-conversions: 5.0.0
     dev: true
 
-  /dotenv@10.0.0:
-    resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
-    engines: {node: '>=10'}
+  /dotenv@16.3.1:
+    resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
+    engines: {node: '>=12'}
     dev: false
 
   /electron-to-chromium@1.4.23:
