@@ -31,10 +31,10 @@ export const part2: AoCPart = input => {
 
 ```bash
 # Run day 4 of the current year
-$ npm run dev run 4
+$ pnpm dev run 4
 # or...
-$ npm run build
-$ npm start run 4
+$ pnpm build
+$ pnpm start run 4
 ```
 
 For more information on the available flags and options, use the `help` command.
