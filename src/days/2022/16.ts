@@ -1,5 +1,4 @@
 import { AoCPart } from '../../types';
-import LinkedList from '../../utils/linked-list';
 
 interface State {
 	location: string;
@@ -56,11 +55,11 @@ const computeDistances = (valves: Record<string, Valve>) => {
 
 			const nodeDistances: Record<string, number> = {};
 
-			const queue = new LinkedList<string>();
+			const queue: string[] = [];
 			queue.push(from);
 			nodeDistances[from] = 0;
 
-			while (queue.size > 0) {
+			while (queue.length > 0) {
 				const valveName = queue.shift()!;
 
 				for (const neighborName of valves[valveName].leadsTo) {
@@ -77,11 +76,11 @@ const computeDistances = (valves: Record<string, Valve>) => {
 	return distances;
 };
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const valves = parseValves(input);
 	const distances = computeDistances(valves);
 
-	const nonZeroValves = Object.keys(valves).filter(name => valves[name].flowRate > 0);
+	const nonZeroValves = Object.keys(valves).filter((name) => valves[name].flowRate > 0);
 
 	const stack = [] as State[];
 	stack.push({
@@ -115,7 +114,8 @@ export const part1: AoCPart = input => {
 			const newClosedValves = new Set(state.closedValves);
 			newClosedValves.delete(nextValveName);
 
-			const newTotalPressure = state.totalPressure + valves[nextValveName].flowRate * newTimeLeft;
+			const newTotalPressure =
+				state.totalPressure + valves[nextValveName].flowRate * newTimeLeft;
 			stack.push({
 				...state,
 				location: nextValveName,
@@ -137,10 +137,10 @@ interface State2 {
 	elephant: boolean;
 }
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const valves = parseValves(input);
 	const distances = computeDistances(valves);
-	const nonZeroValves = Object.keys(valves).filter(name => valves[name].flowRate > 0);
+	const nonZeroValves = Object.keys(valves).filter((name) => valves[name].flowRate > 0);
 
 	const stack: State2[] = [];
 	stack.push({

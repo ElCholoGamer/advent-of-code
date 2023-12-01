@@ -13,17 +13,17 @@ function parseInstruction(line: string): Instruction {
 
 	const [rangeX, rangeY, rangeZ] = ranges
 		.split(',')
-		.map(str => Vector2.fromArray(str.split('=')[1].split('..').map(Number)));
+		.map((str) => Vector2.fromArray(str.split('=')[1].split('..').map(Number)));
 
 	return { turn, rangeX, rangeY, rangeZ };
 }
 
 function pointVsAAABBB(point: Vector3, aaa: Vector3, bbb: Vector3) {
-	return point.equalOrGreaterThan(aaa) && point.equalOrLessThan(bbb);
+	return equalOrGreaterThan(point, aaa) && equalOrLessThan(point, bbb);
 }
 
 function pointVsAAABBBExclusive(point: Vector3, aaa: Vector3, bbb: Vector3) {
-	return point.greaterThan(aaa) && point.lessThan(bbb);
+	return greaterThan(point, aaa) && lessThan(point, bbb);
 }
 
 function clamp(num: number, min: number, max: number): number {
@@ -88,12 +88,28 @@ class Cuboid {
 	}
 
 	public isValid() {
-		return this.to.greaterThan(this.from);
+		return greaterThan(this.to, this.from);
 	}
 }
 
+function greaterThan(vec1: Vector3, vec2: Vector3) {
+	return vec1.x > vec2.x && vec1.y > vec2.y && vec1.z > vec2.z;
+}
+
+function equalOrGreaterThan(vec1: Vector3, vec2: Vector3) {
+	return vec1.x >= vec2.x && vec1.y >= vec2.y && vec1.z >= vec2.z;
+}
+
+function lessThan(vec1: Vector3, vec2: Vector3) {
+	return vec1.x < vec2.x && vec1.y < vec2.y && vec1.z < vec2.z;
+}
+
+function equalOrLessThan(vec1: Vector3, vec2: Vector3) {
+	return vec1.x <= vec2.x && vec1.y <= vec2.y && vec1.z <= vec2.z;
+}
+
 function getTotalVolume(cuboids: Cuboid[]): number {
-	const volumes = cuboids.map(cuboid => cuboid.volume());
+	const volumes = cuboids.map((cuboid) => cuboid.volume());
 	return volumes.reduce((a, b) => a + b, 0);
 }
 
@@ -104,7 +120,7 @@ function getDifferentAxis(v1: Vector3, v2: Vector3): number {
 function getCommonAxis(vectors: Vector3[]): number {
 	return vectors[0]
 		.toArray()
-		.findIndex((pos, i) => vectors.every(other => other.toArray()[i] === pos));
+		.findIndex((pos, i) => vectors.every((other) => other.toArray()[i] === pos));
 }
 
 function makeVertexPartition(from: Vector3, to: Vector3, v: number) {
@@ -131,11 +147,17 @@ function makeVertexPartition(from: Vector3, to: Vector3, v: number) {
 function splitIntersections(cuboids: Cuboid[], cuboid: Cuboid): Cuboid[] {
 	// Remove smaller overlapping cuboids
 	cuboids = cuboids.filter(
-		other => !(other.from.equalOrGreaterThan(cuboid.from) && other.to.equalOrLessThan(cuboid.to))
+		(other) =>
+			!(
+				equalOrGreaterThan(other.from, cuboid.from) &&
+				equalOrLessThan(other.to, cuboid.to)
+			)
 	);
 
-	const intersects = cuboids.filter(other => cuboid !== other && cuboid.intersects(other));
-	cuboids = cuboids.filter(other => !intersects.includes(other));
+	const intersects = cuboids.filter(
+		(other) => cuboid !== other && cuboid.intersects(other)
+	);
+	cuboids = cuboids.filter((other) => !intersects.includes(other));
 
 	// Split intersections into multiple cuboids
 	for (const intersect of intersects) {
@@ -147,7 +169,11 @@ function splitIntersections(cuboids: Cuboid[], cuboid: Cuboid): Cuboid[] {
 		for (let v = 0; v < vertices.length; v++) {
 			if (pointVsAAABBB(otherVertices[v], cuboid.from, cuboid.to)) continue;
 
-			const partition = makeVertexPartition(otherVertices[v].clone(), vertices[v].clone(), v);
+			const partition = makeVertexPartition(
+				otherVertices[v].clone(),
+				vertices[v].clone(),
+				v
+			);
 			if (partition.isValid()) {
 				// console.log('Adding vertex partition with volume:', partition.volume());
 				cuboids.push(partition);
@@ -165,8 +191,8 @@ function splitIntersections(cuboids: Cuboid[], cuboid: Cuboid): Cuboid[] {
 		];
 
 		for (const vertexIndices of faces) {
-			const fromFace = vertexIndices.map(v => vertices[v].clone());
-			const toFace = vertexIndices.map(v => otherVertices[v].clone());
+			const fromFace = vertexIndices.map((v) => vertices[v].clone());
+			const toFace = vertexIndices.map((v) => otherVertices[v].clone());
 
 			const commonAxisIndex = getCommonAxis(fromFace);
 
@@ -174,18 +200,18 @@ function splitIntersections(cuboids: Cuboid[], cuboid: Cuboid): Cuboid[] {
 			const commonAxis = commonAxisIndex === 0 ? 'x' : commonAxisIndex === 1 ? 'y' : 'z';
 
 			if (
-				toFace.some(vertex => {
+				toFace.some((vertex) => {
 					const pos = vertex[commonAxis];
 
 					const facesWithSameDiffAxis = faces
-						.map(face => face.map(v => vertices[v]))
-						.filter(face => getCommonAxis(face) === commonAxisIndex);
+						.map((face) => face.map((v) => vertices[v]))
+						.filter((face) => getCommonAxis(face) === commonAxisIndex);
 
 					if (facesWithSameDiffAxis.length !== 2)
 						throw new Error('Faces with same common axis must be 2');
 
 					const [min, max] = facesWithSameDiffAxis
-						.map(vec => vec[0][commonAxis])
+						.map((vec) => vec[0][commonAxis])
 						.sort((a, b) => a - b);
 
 					return pos >= min && pos <= max;
@@ -212,7 +238,7 @@ function splitIntersections(cuboids: Cuboid[], cuboid: Cuboid): Cuboid[] {
 
 			const allVertices = [
 				...toFace,
-				...toFace.map(vertex => {
+				...toFace.map((vertex) => {
 					vertex = vertex.clone();
 					vertex[commonAxis] = fromFace[3][commonAxis];
 					return vertex;
@@ -244,27 +270,29 @@ function splitIntersections(cuboids: Cuboid[], cuboid: Cuboid): Cuboid[] {
 			[3, 7],
 		];
 
-		const edges = edgeIndices.map(edge => edge.map(v => vertices[v]));
-		const otherEdges = edgeIndices.map(edge => edge.map(v => otherVertices[v]));
+		const edges = edgeIndices.map((edge) => edge.map((v) => vertices[v]));
+		const otherEdges = edgeIndices.map((edge) => edge.map((v) => otherVertices[v]));
 
 		for (let e = 0; e < edges.length; e++) {
-			const edge = edges[e].map(vec => vec.clone());
-			const otherEdge = otherEdges[e].map(vec => vec.clone());
+			const edge = edges[e].map((vec) => vec.clone());
+			const otherEdge = otherEdges[e].map((vec) => vec.clone());
 
 			const diffAxis = getDifferentAxis(edge[0], edge[1]);
 
 			if (
-				otherEdge.some(vertex => {
-					const pos = Vector2.fromArray(vertex.toArray().filter((_, i) => i !== diffAxis));
+				otherEdge.some((vertex) => {
+					const pos = Vector2.fromArray(
+						vertex.toArray().filter((_, i) => i !== diffAxis)
+					);
 
 					const edgesWithSameDiffAxis = edges.filter(
-						edge => getDifferentAxis(edge[0], edge[1]) === diffAxis
+						(edge) => getDifferentAxis(edge[0], edge[1]) === diffAxis
 					);
 
 					if (edgesWithSameDiffAxis.length !== 4)
 						throw new Error('Edges with the same different axis must be 4');
 
-					const [from, , , to] = edgesWithSameDiffAxis.map(edge =>
+					const [from, , , to] = edgesWithSameDiffAxis.map((edge) =>
 						Vector2.fromArray(edge[0].toArray().filter((_, i) => i !== diffAxis))
 					);
 
@@ -333,19 +361,21 @@ function rebootReactor(instructions: Instruction[]): Cuboid[] {
 	return cuboids;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const maxRange = 50;
 	const instructions = input
 		.map(parseInstruction)
-		.filter(i =>
-			[i.rangeX, i.rangeY, i.rangeZ].every(range => range.x < maxRange && range.y > -maxRange)
+		.filter((i) =>
+			[i.rangeX, i.rangeY, i.rangeZ].every(
+				(range) => range.x < maxRange && range.y > -maxRange
+			)
 		);
 	const cuboids = rebootReactor(instructions);
 
 	return getTotalVolume(cuboids);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const instructions = input.map(parseInstruction);
 	const cuboids = rebootReactor(instructions);
 
