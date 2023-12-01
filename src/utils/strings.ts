@@ -1,4 +1,4 @@
-import chalk, { ChalkInstance } from 'chalk';
+import chalk, { Chalk } from 'chalk';
 
 export const HIDE_CURSOR = '\x1b[?25l';
 export const SHOW_CURSOR = '\x1b[?25h';
@@ -10,7 +10,7 @@ export const setChar = (str: string, index: number, char: string) => {
 
 export interface ColorizedString {
 	str: string;
-	color: ChalkInstance;
+	color: Chalk;
 }
 
 const RESET_COLOR = (chalk.reset as any)._styler.open;
