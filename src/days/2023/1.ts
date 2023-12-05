@@ -1,15 +1,14 @@
 import { AoCPart } from '../../types';
 import { assertNonNull } from '../../utils/error';
-
-const isDigit = (char: string) => !Number.isNaN(Number(char));
+import { isNumber } from '../../utils/strings';
 
 export const part1: AoCPart = (input) => {
 	let sum = 0;
 
 	for (const line of input) {
 		const chars = line.split('');
-		const firstDigit = assertNonNull(chars.find(isDigit));
-		const lastDigit = assertNonNull(chars.findLast(isDigit));
+		const firstDigit = assertNonNull(chars.find(isNumber));
+		const lastDigit = assertNonNull(chars.findLast(isNumber));
 
 		sum += Number(firstDigit + lastDigit);
 	}
@@ -23,7 +22,7 @@ function findFirstNumber(str: string): number | null {
 	for (let i = 0; i < str.length; i++) {
 		const c = str[i];
 
-		if (isDigit(c)) return Number(c);
+		if (isNumber(c)) return Number(c);
 
 		for (let n = 0; n < NUMBERS.length; n++) {
 			if (str.substring(i, i + NUMBERS[n].length) === NUMBERS[n]) {
@@ -39,7 +38,7 @@ function findLastNumber(str: string): number | null {
 	for (let i = str.length - 1; i >= 0; i--) {
 		const c = str[i];
 
-		if (isDigit(c)) return Number(c);
+		if (isNumber(c)) return Number(c);
 
 		for (let n = 0; n < NUMBERS.length; n++) {
 			if (str.substring(i - NUMBERS[n].length + 1, i + 1) === NUMBERS[n]) {

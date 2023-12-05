@@ -1,8 +1,7 @@
 import { AoCPart } from '../../types';
+import { isNumber } from '../../utils/strings';
 
-const isDigit = (char: string) => !Number.isNaN(Number(char));
-
-const isSymbol = (char: string) => char !== '.' && !isDigit(char);
+const isSymbol = (char: string) => char !== '.' && !isNumber(char);
 
 export const part1: AoCPart = (input) => {
 	let sum = 0;
@@ -12,14 +11,14 @@ export const part1: AoCPart = (input) => {
 
 		for (let i = 0; i < line.length; i++) {
 			const char = line[i];
-			if (!isDigit(char)) continue;
+			if (!isNumber(char)) continue;
 
 			let end = i;
 			let numStr = '';
 			do {
 				numStr += line[end];
 				end++;
-			} while (end < line.length && isDigit(line[end]));
+			} while (end < line.length && isNumber(line[end]));
 
 			let isPartNumber = false;
 
@@ -44,7 +43,7 @@ export const part1: AoCPart = (input) => {
 
 export const part2: AoCPart = (input) => {
 	function searchNumberFrom(line: number, column: number): number {
-		while (column > 0 && isDigit(input[line][column - 1])) {
+		while (column > 0 && isNumber(input[line][column - 1])) {
 			column--;
 		}
 
@@ -53,7 +52,7 @@ export const part2: AoCPart = (input) => {
 		do {
 			numStr += input[line][column];
 			column++;
-		} while (column < input[line].length && isDigit(input[line][column]));
+		} while (column < input[line].length && isNumber(input[line][column]));
 
 		return Number(numStr);
 	}
@@ -69,7 +68,7 @@ export const part2: AoCPart = (input) => {
 			const numbers = new Set<number>();
 
 			function tryGearNumber(line: number, column: number) {
-				if (isDigit(input[line]?.[column])) {
+				if (isNumber(input[line]?.[column])) {
 					numbers.add(searchNumberFrom(line, column));
 				}
 			}
@@ -78,7 +77,7 @@ export const part2: AoCPart = (input) => {
 				for (let co = -1; co <= 1; co++) {
 					if (lo === 0 && co === 0) continue;
 
-					if (isDigit(input[l + lo]?.[c + co])) {
+					if (isNumber(input[l + lo]?.[c + co])) {
 						numbers.add(searchNumberFrom(l + lo, c + co));
 					}
 				}

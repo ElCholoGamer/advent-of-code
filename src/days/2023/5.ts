@@ -1,14 +1,13 @@
 import { AoCPart } from '../../types';
 import { chunks, enumerate } from '../../utils/arrays';
 import { clamp } from '../../utils/math';
+import { isNumber } from '../../utils/strings';
 
 interface Map {
 	sourceStart: number;
 	destinationStart: number;
 	length: number;
 }
-
-const isDigit = (char: string) => !Number.isNaN(Number(char));
 
 function parseInput(input: string[]) {
 	const [seedSection, , ...mapSection] = input;
@@ -18,7 +17,7 @@ function parseInput(input: string[]) {
 
 	for (const line of mapSection) {
 		if (line === '') continue;
-		if (!isDigit(line[0])) {
+		if (!isNumber(line[0])) {
 			steps.push([]);
 			continue;
 		}

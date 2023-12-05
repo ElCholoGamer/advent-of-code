@@ -31,3 +31,5 @@ export const joinColorizedStrings = (strings: ColorizedString[]) => {
 
 	return line + RESET_COLOR;
 };
+
+export const isNumber = (char: string) => !Number.isNaN(Number(char));
