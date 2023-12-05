@@ -1,5 +1,5 @@
 import { AoCPart } from '../../types';
-import { chunks, enumerate } from '../../utils/arrays';
+import { chunks } from '../../utils/arrays';
 import { clamp } from '../../utils/math';
 import { isNumber } from '../../utils/strings';
 
