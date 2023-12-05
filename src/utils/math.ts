@@ -20,3 +20,7 @@ export const wrapRotation = (angle: number): number => {
 	if (angle < 0) angle += Math.ceil(TWO_PI / -angle) * TWO_PI;
 	return angle % TWO_PI;
 };
+
+export const clamp = (num: number, min: number, max: number) => {
+	return Math.min(max, Math.max(min, num));
+};
