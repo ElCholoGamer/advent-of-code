@@ -1,5 +1,5 @@
 import { AoCPart } from '../../types';
-import { Vector2 } from '../../utils/vector';
+import { Vector2 } from '../../utils/structures/vector';
 
 interface GridItem {
 	depth: number;
@@ -27,7 +27,7 @@ const getNeighbors = (x: number, y: number) => [
 	new Vector2(x, y + 1),
 ];
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const grid = parseInput(input);
 
 	let totalRisk = 0;
@@ -37,7 +37,8 @@ export const part1: AoCPart = input => {
 			const item = grid[x][y];
 
 			function isDepthHigher(pos: Vector2) {
-				if (pos.x < 0 || pos.x >= grid.length || pos.y < 0 || pos.y >= grid[0].length) return true;
+				if (pos.x < 0 || pos.x >= grid.length || pos.y < 0 || pos.y >= grid[0].length)
+					return true;
 				return grid[pos.x][pos.y].depth > item.depth;
 			}
 
@@ -50,7 +51,7 @@ export const part1: AoCPart = input => {
 	return totalRisk;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const grid = parseInput(input);
 	const basins: number[] = [];
 
@@ -94,12 +95,13 @@ export const part2: AoCPart = input => {
 			const item = grid[x][y];
 
 			function isDepthHigher(pos: Vector2) {
-				if (pos.x < 0 || pos.x >= grid.length || pos.y < 0 || pos.y >= grid[0].length) return true;
+				if (pos.x < 0 || pos.x >= grid.length || pos.y < 0 || pos.y >= grid[0].length)
+					return true;
 				return grid[pos.x][pos.y].depth > item.depth;
 			}
 
 			// Only start from lowest points
-			if (getNeighbors(x, y).some(n => !isDepthHigher(n))) {
+			if (getNeighbors(x, y).some((n) => !isDepthHigher(n))) {
 				continue;
 			}
 

@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 import { PI_OVER_2 } from '../../utils/math';
-import { Vector2 } from '../../utils/vector';
+import { Vector2 } from '../../utils/structures/vector';
 import { ExtendedIntcodeVM } from './intcode';
 
 function paintTiles(tiles: Map<string, boolean>, programBody: string) {
@@ -46,9 +46,9 @@ export const part2: AoCPart = ([input]) => {
 
 	paintTiles(tiles, input);
 
-	const coords = [...tiles.keys()].map(coords => coords.split(',').map(Number));
-	const xs = coords.map(c => c[0]);
-	const ys = coords.map(c => c[1]);
+	const coords = [...tiles.keys()].map((coords) => coords.split(',').map(Number));
+	const xs = coords.map((c) => c[0]);
+	const ys = coords.map((c) => c[1]);
 
 	const minX = Math.min(...xs);
 	const maxX = Math.max(...xs);

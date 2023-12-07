@@ -1,5 +1,5 @@
 import { AoCPart } from '../../types';
-import { assertNonNull } from '../../utils/error';
+import { assertNonNull } from '../../utils/assertion';
 import { isNumber } from '../../utils/strings';
 
 export const part1: AoCPart = (input) => {

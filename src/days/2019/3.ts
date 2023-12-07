@@ -1,5 +1,5 @@
 import { AoCPart } from '../../types';
-import { Vector2 } from '../../utils/vector';
+import { Vector2 } from '../../utils/structures/vector';
 
 interface WireInstruction {
 	distance: number;
@@ -8,7 +8,10 @@ interface WireInstruction {
 
 function parseWire(line: string): WireInstruction[] {
 	const instructionStrings = line.split(',');
-	return instructionStrings.map(str => ({ side: str[0], distance: Number(str.substring(1)) }));
+	return instructionStrings.map((str) => ({
+		side: str[0],
+		distance: Number(str.substring(1)),
+	}));
 }
 
 function movePosition(pos: Vector2, side: string) {
@@ -49,20 +52,20 @@ function getIntersections(wires: WireInstruction[][]): Vector2[] {
 		}
 	}
 
-	const intersections = [...grid.entries()].filter(entry => entry[1] >= 2);
-	return intersections.map(entry => Vector2.fromArray(entry[0].split(',').map(Number)));
+	const intersections = [...grid.entries()].filter((entry) => entry[1] >= 2);
+	return intersections.map((entry) => Vector2.fromArray(entry[0].split(',').map(Number)));
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const wires = input.map(parseWire);
 	const intersections = getIntersections(wires);
 
-	const distances = intersections.map(pos => pos.manhattanLength());
+	const distances = intersections.map((pos) => pos.manhattanLength());
 
 	return Math.min(...distances);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const wires = input.map(parseWire);
 	const intersections = getIntersections(wires);
 

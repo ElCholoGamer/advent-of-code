@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 import { sleep } from '../../utils';
-import { Vector2 } from '../../utils/vector';
+import { Vector2 } from '../../utils/structures/vector';
 
 const enum Direction {
 	NORTH,
@@ -31,7 +31,7 @@ function parseElves(input: string[]) {
 
 function passRound(elves: Elve[], directionOrder: Direction[]): boolean {
 	const nextPositionCounts: Record<string, number> = {};
-	const elvePositions = new Set(elves.map(elve => serVector(elve.position)));
+	const elvePositions = new Set(elves.map((elve) => serVector(elve.position)));
 	let finished = true;
 
 	for (const elve of elves) {
@@ -67,14 +67,20 @@ function passRound(elves: Elve[], directionOrder: Direction[]): boolean {
 			}
 
 			if (direction === Direction.NORTH || direction === Direction.SOUTH) {
-				if ([-1, 0, 1].every(xOffset => !elvePositions.has(`${newPos.x + xOffset},${newPos.y}`))) {
+				if (
+					[-1, 0, 1].every(
+						(xOffset) => !elvePositions.has(`${newPos.x + xOffset},${newPos.y}`)
+					)
+				) {
 					const key = newPos.toString();
 					nextPositionCounts[key] = (nextPositionCounts[key] || 0) + 1;
 					elve.nextPosition = newPos;
 					break;
 				}
 			} else if (
-				[-1, 0, 1].every(yOffset => !elvePositions.has(`${newPos.x},${newPos.y + yOffset}`))
+				[-1, 0, 1].every(
+					(yOffset) => !elvePositions.has(`${newPos.x},${newPos.y + yOffset}`)
+				)
 			) {
 				const key = newPos.toString();
 				nextPositionCounts[key] = (nextPositionCounts[key] || 0) + 1;
@@ -100,25 +106,35 @@ function passRound(elves: Elve[], directionOrder: Direction[]): boolean {
 	return finished;
 }
 
-export const part1: AoCPart = async input => {
+export const part1: AoCPart = async (input) => {
 	const elves = parseElves(input);
-	const directionOrder = [Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST];
+	const directionOrder = [
+		Direction.NORTH,
+		Direction.SOUTH,
+		Direction.WEST,
+		Direction.EAST,
+	];
 
 	for (let r = 1; r <= 10; r++) {
 		passRound(elves, directionOrder);
 	}
 
-	const minX = Math.min(...elves.map(elve => elve.position.x));
-	const maxX = Math.max(...elves.map(elve => elve.position.x));
-	const minY = Math.min(...elves.map(elve => elve.position.y));
-	const maxY = Math.max(...elves.map(elve => elve.position.y));
+	const minX = Math.min(...elves.map((elve) => elve.position.x));
+	const maxX = Math.max(...elves.map((elve) => elve.position.x));
+	const minY = Math.min(...elves.map((elve) => elve.position.y));
+	const maxY = Math.max(...elves.map((elve) => elve.position.y));
 
 	return (maxX - minX + 1) * (maxY - minY + 1) - elves.length;
 };
 
-export const part2: AoCPart = async input => {
+export const part2: AoCPart = async (input) => {
 	const elves = parseElves(input);
-	const directionOrder = [Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST];
+	const directionOrder = [
+		Direction.NORTH,
+		Direction.SOUTH,
+		Direction.WEST,
+		Direction.EAST,
+	];
 
 	for (let r = 1; ; r++) {
 		const finished = passRound(elves, directionOrder);

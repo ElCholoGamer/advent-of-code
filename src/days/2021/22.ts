@@ -1,5 +1,5 @@
 import { AoCPart } from '../../types';
-import { Vector2, Vector3 } from '../../utils/vector';
+import { Vector2, Vector3 } from '../../utils/structures/vector';
 
 interface Instruction {
 	turn: string;

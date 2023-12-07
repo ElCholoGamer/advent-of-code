@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 import { gcd, PI_OVER_2, wrapRotation } from '../../utils/math';
-import { Vector2 } from '../../utils/vector';
+import { Vector2 } from '../../utils/structures/vector';
 
 function parseAsteroids(input: string[]): Vector2[] {
 	const out: Vector2[] = [];
@@ -27,7 +27,7 @@ function canDetectAsteroid(from: Vector2, to: Vector2, asteroids: Vector2[]) {
 
 		if (checking.equals(to)) break;
 
-		if (asteroids.some(other => other.equals(checking))) {
+		if (asteroids.some((other) => other.equals(checking))) {
 			// An asteroid is blocking the way
 			return false;
 		}
@@ -65,7 +65,7 @@ function bestAsteroid(asteroids: Vector2[]): Vector2 {
 	return bestAsteroid;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const asteroids = parseAsteroids(input);
 	const best = bestAsteroid(asteroids);
 
@@ -87,14 +87,15 @@ export const part2: AoCPart<Options> = (input, { targetAsteroid = 200 }) => {
 
 		if (vaporized + detected.length < targetAsteroid) {
 			asteroids = asteroids.filter(
-				asteroid => !detected.some(detectedAsteroid => detectedAsteroid.equals(asteroid))
+				(asteroid) =>
+					!detected.some((detectedAsteroid) => detectedAsteroid.equals(asteroid))
 			);
 			vaporized += detected.length;
 			continue;
 		}
 
 		// Last iteration
-		const rotations = detected.map(asteroid => {
+		const rotations = detected.map((asteroid) => {
 			const rotation = asteroid.clone().subtract(laser).toRotation();
 			return { asteroid, rotation: wrapRotation(rotation + PI_OVER_2) };
 		});

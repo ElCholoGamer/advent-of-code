@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 import { sleep } from '../../utils';
-import { Vector2 } from '../../utils/vector';
+import { Vector2 } from '../../utils/structures/vector';
 
 const enum Direction {
 	RIGHT,
@@ -21,7 +21,7 @@ const enum Tile {
 
 function parseInput(input: string[]) {
 	const gridLines = input.slice(0, input.length - 2);
-	const width = Math.max(...gridLines.map(l => l.length));
+	const width = Math.max(...gridLines.map((l) => l.length));
 	const height = gridLines.length;
 
 	const grid = [...Array(width)].map(() => Array<Tile | null>(height).fill(null));
@@ -60,10 +60,10 @@ function parseInput(input: string[]) {
 	return { grid, instructions };
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const { grid, instructions } = parseInput(input);
 	let pos = new Vector2(
-		grid.findIndex(column => column[0] === Tile.OPEN),
+		grid.findIndex((column) => column[0] === Tile.OPEN),
 		0
 	);
 	let facing = Direction.RIGHT;
@@ -77,25 +77,25 @@ export const part1: AoCPart = input => {
 					case Direction.RIGHT:
 						newPos.x++;
 						if (newPos.x >= grid.length || grid[newPos.x][newPos.y] === null) {
-							newPos.x = grid.findIndex(column => column[newPos.y] !== null);
+							newPos.x = grid.findIndex((column) => column[newPos.y] !== null);
 						}
 						break;
 					case Direction.DOWN:
 						newPos.y++;
 						if (newPos.y >= grid[0].length || grid[newPos.x][newPos.y] === null) {
-							newPos.y = grid[newPos.x].findIndex(tile => tile !== null);
+							newPos.y = grid[newPos.x].findIndex((tile) => tile !== null);
 						}
 						break;
 					case Direction.LEFT:
 						newPos.x--;
 						if (newPos.x < 0 || grid[newPos.x][newPos.y] === null) {
-							newPos.x = grid.findLastIndex(column => column[newPos.y] !== null);
+							newPos.x = grid.findLastIndex((column) => column[newPos.y] !== null);
 						}
 						break;
 					case Direction.UP:
 						newPos.y--;
 						if (newPos.y < 0 || grid[newPos.x][newPos.y] === null) {
-							newPos.y = grid[newPos.x].findLastIndex(tile => tile !== null);
+							newPos.y = grid[newPos.x].findLastIndex((tile) => tile !== null);
 						}
 				}
 
@@ -221,7 +221,7 @@ export const part2: AoCPart<Options> = async (input, { sideLength = 50 }) => {
 		if (typeof instruction === 'number') {
 			for (let i = 0; i < instruction; i++) {
 				const currentSide = sides.find(
-					side =>
+					(side) =>
 						pos.x >= side.topLeft.x &&
 						pos.x <= side.bottomRight.x &&
 						pos.y >= side.topLeft.y &&

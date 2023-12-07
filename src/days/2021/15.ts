@@ -1,5 +1,5 @@
 import { AoCPart } from '../../types';
-import PriorityQueue from '../../utils/priority-queue';
+import PriorityQueue from '../../utils/structures/priority-queue';
 
 interface Cell {
 	risk: number;
@@ -53,7 +53,7 @@ function dijkstra(cells: Cell[][], startX: number, startY: number) {
 	}
 }
 
-export const part1: AoCPart = async input => {
+export const part1: AoCPart = async (input) => {
 	const cells = parseInput(input);
 	dijkstra(cells, 0, 0);
 
@@ -61,10 +61,10 @@ export const part1: AoCPart = async input => {
 	return lastColumn[lastColumn.length - 1].totalRisk;
 };
 
-export const part2: AoCPart = async input => {
+export const part2: AoCPart = async (input) => {
 	const cells = parseInput(input);
 	const ogWidth = cells.length;
-	const ogHeight = Math.max(...cells.map(column => column.length));
+	const ogHeight = Math.max(...cells.map((column) => column.length));
 
 	// Expand grid x5
 	for (let tileX = 0; tileX < 5; tileX++) {

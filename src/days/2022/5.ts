@@ -3,7 +3,7 @@ import { AoCPart, Visualization } from '../../types';
 import { sleep } from '../../utils';
 import { enumerate } from '../../utils/arrays';
 import { HIDE_CURSOR, setChar } from '../../utils/strings';
-import { Vector2 } from '../../utils/vector';
+import { Vector2 } from '../../utils/structures/vector';
 
 interface Instruction {
 	amount: number;
@@ -25,7 +25,7 @@ function parseInput(lines: string[]) {
 		}
 	}
 
-	const instructions: Instruction[] = lines.slice(separatorIndex + 1).map(line => {
+	const instructions: Instruction[] = lines.slice(separatorIndex + 1).map((line) => {
 		const [, amount, , from, , to] = line.split(/\s+/).map(Number);
 		return { amount, from: from - 1, to: to - 1 };
 	});
@@ -36,7 +36,7 @@ function parseInput(lines: string[]) {
 	};
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const { piles, instructions } = parseInput(input);
 
 	for (const instruction of instructions) {
@@ -47,10 +47,10 @@ export const part1: AoCPart = input => {
 		}
 	}
 
-	return piles.map(pile => pile.at(-1)).join('');
+	return piles.map((pile) => pile.at(-1)).join('');
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const { piles, instructions } = parseInput(input);
 
 	for (const instruction of instructions) {
@@ -58,11 +58,11 @@ export const part2: AoCPart = input => {
 		piles[instruction.from].length -= instruction.amount;
 	}
 
-	return piles.map(pile => pile.at(-1)).join('');
+	return piles.map((pile) => pile.at(-1)).join('');
 };
 
 const findMaxPileHeight = (piles: string[][], instructions: Instruction[]) => {
-	const heights = piles.map(pile => pile.length);
+	const heights = piles.map((pile) => pile.length);
 	let maxHeight = Math.max(...heights);
 
 	for (const { amount, from, to } of instructions) {
@@ -74,7 +74,7 @@ const findMaxPileHeight = (piles: string[][], instructions: Instruction[]) => {
 	return maxHeight;
 };
 
-export const visualization: Visualization = input => {
+export const visualization: Visualization = (input) => {
 	const { piles, instructions } = parseInput(input);
 	const innerWidth = piles.length * 4 + 3;
 	const maxPileHeight = findMaxPileHeight(piles, instructions);
@@ -96,13 +96,19 @@ export const visualization: Visualization = input => {
 				str += chalk[logIndex === 0 ? 'yellow' : 'gray'](logs[logIndex]);
 			}
 		} else if (allDone && logIndex === -2) {
-			str += chalk.green`   ${chalk.bold('Message:')} ${piles.map(pile => pile.at(-1)).join('')}`;
+			str += chalk.green`   ${chalk.bold('Message:')} ${piles
+				.map((pile) => pile.at(-1))
+				.join('')}`;
 		}
 		const absoluteX = cranePos.x + 5;
 		if (cranePos.y > height) return setChar(str, absoluteX, '|');
 		if (cranePos.y === height) {
 			if (!pickedCrate) return setChar(str, absoluteX, 'J');
-			return str.substring(0, absoluteX - 1) + `[${pickedCrate}]` + str.substring(absoluteX + 2);
+			return (
+				str.substring(0, absoluteX - 1) +
+				`[${pickedCrate}]` +
+				str.substring(absoluteX + 2)
+			);
 		}
 		return str;
 	};
@@ -160,9 +166,9 @@ export const visualization: Visualization = input => {
 							allDone = true;
 						} else {
 							logs.unshift(
-								`   move ${currentInstruction.amount} from ${currentInstruction.from + 1} to ${
-									currentInstruction.to + 1
-								}`
+								`   move ${currentInstruction.amount} from ${
+									currentInstruction.from + 1
+								} to ${currentInstruction.to + 1}`
 							);
 							if (logs.length > 3) logs.length = 3;
 						}
@@ -174,7 +180,9 @@ export const visualization: Visualization = input => {
 		}
 
 		console.clear();
-		console.log(topBar.substring(0, cranePos.x + 4) + '(-)' + topBar.substring(cranePos.x + 7));
+		console.log(
+			topBar.substring(0, cranePos.x + 4) + '(-)' + topBar.substring(cranePos.x + 7)
+		);
 		console.log(addCraneToLine(`| /${' '.repeat(innerWidth - 2)}\\ |`, -1));
 
 		for (let y = 0; y < innerHeight; y++) {
@@ -183,7 +191,8 @@ export const visualization: Visualization = input => {
 				const crateIndex = maxPileHeight - y + 1;
 				if (crateIndex < pile.length) {
 					const pos = 4 + pileNumber * 4;
-					line = line.substring(0, pos) + `[${pile[crateIndex]}]` + line.substring(pos + 3);
+					line =
+						line.substring(0, pos) + `[${pile[crateIndex]}]` + line.substring(pos + 3);
 				}
 			}
 			console.log(line);

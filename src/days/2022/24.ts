@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
-import PriorityQueue from '../../utils/priority-queue';
-import { Vector2 } from '../../utils/vector';
+import PriorityQueue from '../../utils/structures/priority-queue';
+import { Vector2 } from '../../utils/structures/vector';
 
 interface Blizzard {
 	position: Vector2;
@@ -51,11 +51,13 @@ function parseBlizzards(input: string[]) {
 }
 
 function blizzardsAtTimeGen(initialBlizzards: Blizzard[], width: number, height: number) {
-	const blizzards = initialBlizzards.map(b => ({
+	const blizzards = initialBlizzards.map((b) => ({
 		...b,
 		position: b.position.clone(),
 	}));
-	const stateCache: Set<string>[] = [new Set(initialBlizzards.map(b => b.position.toString()))];
+	const stateCache: Set<string>[] = [
+		new Set(initialBlizzards.map((b) => b.position.toString())),
+	];
 
 	return (time: number) => {
 		for (let i = stateCache.length; i <= time; i++) {
@@ -73,7 +75,7 @@ function blizzardsAtTimeGen(initialBlizzards: Blizzard[], width: number, height:
 				}
 			}
 
-			stateCache.push(new Set(blizzards.map(b => b.position.toString())));
+			stateCache.push(new Set(blizzards.map((b) => b.position.toString())));
 		}
 
 		return stateCache[time];
@@ -127,7 +129,7 @@ function findShortestRoute(
 	throw new Error('route not found');
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const height = input.length - 2;
 	const width = input[0].length - 2;
 	const blizzardsAtTime = blizzardsAtTimeGen(parseBlizzards(input), width, height);
@@ -143,7 +145,7 @@ export const part1: AoCPart = input => {
 	return shortestRoute;
 };
 
-export const part2: AoCPart = async input => {
+export const part2: AoCPart = async (input) => {
 	const height = input.length - 2;
 	const width = input[0].length - 2;
 	const blizzardsAtTime = blizzardsAtTimeGen(parseBlizzards(input), width, height);

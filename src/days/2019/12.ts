@@ -1,7 +1,7 @@
 import { AoCPart } from '../../types';
 import { zip } from '../../utils/arrays';
 import { mcm } from '../../utils/math';
-import { Vector3 } from '../../utils/vector';
+import { Vector3 } from '../../utils/structures/vector';
 
 interface Moon {
 	position: Vector3;
@@ -10,7 +10,7 @@ interface Moon {
 
 function parseMoon(line: string): Moon {
 	const coords = line.substring(1, line.length - 1);
-	const values = coords.split(', ').map(pair => Number(pair.split('=')[1]));
+	const values = coords.split(', ').map((pair) => Number(pair.split('=')[1]));
 	return {
 		position: Vector3.fromArray(values),
 		velocity: new Vector3(0, 0, 0),
@@ -18,7 +18,7 @@ function parseMoon(line: string): Moon {
 }
 
 function cycleMoons(moons: Moon[]) {
-	const oldMoons: Moon[] = moons.map(moon => ({
+	const oldMoons: Moon[] = moons.map((moon) => ({
 		position: moon.position.clone(),
 		velocity: moon.velocity.clone(),
 	}));
@@ -37,7 +37,7 @@ function cycleMoons(moons: Moon[]) {
 	}
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	let moons = input.map(parseMoon);
 
 	for (let step = 0; step < 1000; step++) {
@@ -45,7 +45,7 @@ export const part1: AoCPart = input => {
 	}
 
 	const energies = moons.map(
-		moon => moon.position.manhattanLength() * moon.velocity.manhattanLength()
+		(moon) => moon.position.manhattanLength() * moon.velocity.manhattanLength()
 	);
 
 	return energies.reduce((a, b) => a + b);
@@ -57,7 +57,7 @@ interface MoonAxisState {
 }
 
 function cycleMoonsAxis(axisStates: MoonAxisState[]) {
-	const oldStates = axisStates.map(state => ({ ...state }));
+	const oldStates = axisStates.map((state) => ({ ...state }));
 
 	for (let m = 0; m < axisStates.length; m++) {
 		const state = axisStates[m];
@@ -83,11 +83,13 @@ const moonAxis =
 	};
 
 const statesEqual = (a: MoonAxisState[], b: MoonAxisState[]) => {
-	return zip(a, b).every(([a, b]) => a.position === b.position && a.velocity === b.velocity);
+	return zip(a, b).every(
+		([a, b]) => a.position === b.position && a.velocity === b.velocity
+	);
 };
 
 function findRepetitionPoint(axisStates: MoonAxisState[]) {
-	const initialStates = axisStates.map(state => ({ ...state }));
+	const initialStates = axisStates.map((state) => ({ ...state }));
 	for (let step = 1; true; step++) {
 		cycleMoonsAxis(axisStates);
 		if (statesEqual(axisStates, initialStates)) {
@@ -96,7 +98,7 @@ function findRepetitionPoint(axisStates: MoonAxisState[]) {
 	}
 }
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	let moons = input.map(parseMoon);
 
 	const repeatX = findRepetitionPoint(moons.map(moonAxis('x')));

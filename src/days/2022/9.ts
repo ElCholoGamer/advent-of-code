@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import { AoCPart, Visualization } from '../../types';
 import { sleep } from '../../utils';
 import { HIDE_CURSOR, SHOW_CURSOR } from '../../utils/strings';
-import { Vector2 } from '../../utils/vector';
+import { Vector2 } from '../../utils/structures/vector';
 
 const enum Direction {
 	UP = 'U',
@@ -77,9 +77,9 @@ function simulateRope(moves: Move[], ropeLength: number): number {
 	return visitedPositions.size;
 }
 
-export const part1: AoCPart = input => simulateRope(input.map(parseMove), 2);
+export const part1: AoCPart = (input) => simulateRope(input.map(parseMove), 2);
 
-export const part2: AoCPart = input => simulateRope(input.map(parseMove), 10);
+export const part2: AoCPart = (input) => simulateRope(input.map(parseMove), 10);
 
 function findMovementBounds(moves: Move[], ropeLength: number): [Vector2, Vector2] {
 	const min = new Vector2(0, 0);
@@ -101,7 +101,7 @@ function findMovementBounds(moves: Move[], ropeLength: number): [Vector2, Vector
 	return [min, max];
 }
 
-export const visualization: Visualization = async input => {
+export const visualization: Visualization = async (input) => {
 	const moves = input.map(parseMove);
 	const ROPE_LEN = 10;
 	const [min, max] = findMovementBounds(moves, ROPE_LEN);

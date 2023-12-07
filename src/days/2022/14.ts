@@ -7,7 +7,7 @@ import {
 	joinColorizedStrings,
 	SHOW_CURSOR,
 } from '../../utils/strings';
-import { Vector2 } from '../../utils/vector';
+import { Vector2 } from '../../utils/structures/vector';
 
 const SAND_ORIGIN = new Vector2(500, 0);
 
@@ -18,10 +18,12 @@ const enum Tile {
 }
 
 function buildGrid(input: string[]): { grid: Tile[][]; floor: number } {
-	const paths = input.map(line =>
-		line.split(' -> ').map(s => Vector2.fromArray(s.split(',').map(Number)))
+	const paths = input.map((line) =>
+		line.split(' -> ').map((s) => Vector2.fromArray(s.split(',').map(Number)))
 	);
-	const grid = [...Array(SAND_ORIGIN.x * 2)].map(() => Array(SAND_ORIGIN.x).fill(Tile.AIR));
+	const grid = [...Array(SAND_ORIGIN.x * 2)].map(() =>
+		Array(SAND_ORIGIN.x).fill(Tile.AIR)
+	);
 
 	let maxRockY = 0;
 
@@ -44,7 +46,7 @@ function buildGrid(input: string[]): { grid: Tile[][]; floor: number } {
 	return { grid, floor: maxRockY + 2 };
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const { grid, floor } = buildGrid(input);
 
 	for (let sandUnits = 0; ; sandUnits++) {
@@ -54,7 +56,7 @@ export const part1: AoCPart = input => {
 			if (sandPos.y >= floor) return sandUnits;
 
 			const nextMove = [0, -1, 1].find(
-				xMove => grid[sandPos.x + xMove][sandPos.y + 1] === Tile.AIR
+				(xMove) => grid[sandPos.x + xMove][sandPos.y + 1] === Tile.AIR
 			);
 
 			if (nextMove === undefined) {
@@ -68,7 +70,7 @@ export const part1: AoCPart = input => {
 	}
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const { grid, floor } = buildGrid(input);
 
 	for (let sandUnits = 1; ; sandUnits++) {
@@ -81,7 +83,7 @@ export const part2: AoCPart = input => {
 			}
 
 			const nextMove = [0, -1, 1].find(
-				xMove => grid[sandPos.x + xMove][sandPos.y + 1] === Tile.AIR
+				(xMove) => grid[sandPos.x + xMove][sandPos.y + 1] === Tile.AIR
 			);
 
 			if (nextMove === undefined) {
@@ -97,7 +99,7 @@ export const part2: AoCPart = input => {
 	}
 };
 
-export const visualization: Visualization = async input => {
+export const visualization: Visualization = async (input) => {
 	const { grid, floor } = buildGrid(input);
 
 	function render(extraSand?: Vector2) {
@@ -161,7 +163,7 @@ export const visualization: Visualization = async input => {
 			}
 
 			const nextMove = [0, -1, 1].find(
-				xMove => grid[sandPos.x + xMove][sandPos.y + 1] === Tile.AIR
+				(xMove) => grid[sandPos.x + xMove][sandPos.y + 1] === Tile.AIR
 			);
 
 			if (nextMove === undefined) {

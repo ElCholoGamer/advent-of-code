@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 import { count } from '../../utils/arrays';
-import { Vector3 } from '../../utils/vector';
+import { Vector3 } from '../../utils/structures/vector';
 
 const SIDES = [
 	new Vector3(1, 0, 0),
@@ -13,31 +13,33 @@ const SIDES = [
 
 const parseCube = (line: string) => Vector3.fromArray(line.split(',').map(Number));
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const cubePositions = input.map(parseCube);
-	const cubeStrings = new Set(cubePositions.map(p => p.toString()));
+	const cubeStrings = new Set(cubePositions.map((p) => p.toString()));
 
 	return cubePositions
-		.map(cube => count(SIDES, side => !cubeStrings.has(cube.clone().add(side).toString())))
+		.map((cube) =>
+			count(SIDES, (side) => !cubeStrings.has(cube.clone().add(side).toString()))
+		)
 		.reduce((a, b) => a + b);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const cubePositions = input.map(parseCube);
-	const cubeStrings = new Set(cubePositions.map(p => p.toString()));
+	const cubeStrings = new Set(cubePositions.map((p) => p.toString()));
 
 	const limits = [
 		{
-			max: Math.max(...cubePositions.map(p => p.x)) + 1,
-			min: Math.min(...cubePositions.map(p => p.x)) - 1,
+			max: Math.max(...cubePositions.map((p) => p.x)) + 1,
+			min: Math.min(...cubePositions.map((p) => p.x)) - 1,
 		},
 		{
-			max: Math.max(...cubePositions.map(p => p.y)) + 1,
-			min: Math.min(...cubePositions.map(p => p.y)) - 1,
+			max: Math.max(...cubePositions.map((p) => p.y)) + 1,
+			min: Math.min(...cubePositions.map((p) => p.y)) - 1,
 		},
 		{
-			max: Math.max(...cubePositions.map(p => p.z)) + 1,
-			min: Math.min(...cubePositions.map(p => p.z)) - 1,
+			max: Math.max(...cubePositions.map((p) => p.z)) + 1,
+			min: Math.min(...cubePositions.map((p) => p.z)) - 1,
 		},
 	];
 
@@ -54,7 +56,8 @@ export const part2: AoCPart = input => {
 
 			if (
 				limits.some(
-					({ max, min }, axis) => nextTile.axisIndex(axis) > max || nextTile.axisIndex(axis) < min
+					({ max, min }, axis) =>
+						nextTile.axisIndex(axis) > max || nextTile.axisIndex(axis) < min
 				) ||
 				visitedWaterTiles.has(nextTile.toString())
 			)
@@ -62,7 +65,7 @@ export const part2: AoCPart = input => {
 
 			if (cubeStrings.has(nextTile.toString())) {
 				sideCount++;
-			} else if (!tileQueue.some(tile => tile.equals(nextTile))) {
+			} else if (!tileQueue.some((tile) => tile.equals(nextTile))) {
 				tileQueue.push(nextTile);
 			}
 		}

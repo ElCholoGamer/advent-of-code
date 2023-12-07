@@ -1,5 +1,5 @@
 import { AoCPart } from '../../types';
-import { assertNonNull } from '../../utils/error';
+import { assertNonNull } from '../../utils/assertion';
 
 function getRealRooms(input: string[]) {
 	return input.reduce<string[]>((acc, room) => {

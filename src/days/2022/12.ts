@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import { AoCPart, Visualization } from '../../types';
 import { sleep } from '../../utils';
 import { HIDE_CURSOR, SHOW_CURSOR } from '../../utils/strings';
-import { Vector2 } from '../../utils/vector';
+import { Vector2 } from '../../utils/structures/vector';
 
 interface Square {
 	height: number;
@@ -45,9 +45,14 @@ function parseMap(
 	for (let x = 0; x < grid.length; x++) {
 		for (let y = 0; y < grid[x].length; y++) {
 			const { height } = grid[x][y];
-			const neighbors = [grid[x - 1]?.[y], grid[x + 1]?.[y], grid[x][y - 1], grid[x][y + 1]];
+			const neighbors = [
+				grid[x - 1]?.[y],
+				grid[x + 1]?.[y],
+				grid[x][y - 1],
+				grid[x][y + 1],
+			];
 			grid[x][y].neighbors = neighbors.filter(
-				neighbor => neighbor && filterNeighbor(height, neighbor.height)
+				(neighbor) => neighbor && filterNeighbor(height, neighbor.height)
 			);
 		}
 	}
@@ -77,19 +82,19 @@ function shortestPaths(start: Square) {
 	}
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const { start, end } = parseMap(input, (h, nH) => nH <= h + 1);
 	shortestPaths(start);
 
 	return end.steps;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const { grid, end } = parseMap(input, (h, nH) => nH >= h - 1);
 	shortestPaths(end);
 
-	const aSquares = grid.flat().filter(square => square.height === 0);
-	return Math.min(...aSquares.map(square => square.steps));
+	const aSquares = grid.flat().filter((square) => square.height === 0);
+	return Math.min(...aSquares.map((square) => square.steps));
 };
 
 interface TrackedSquare extends Square {
@@ -97,7 +102,7 @@ interface TrackedSquare extends Square {
 	back: TrackedSquare | null;
 }
 
-export const visualization: Visualization = async input => {
+export const visualization: Visualization = async (input) => {
 	const { grid: baseGrid, start, end } = parseMap(input, (h, nH) => nH <= h + 1);
 	const grid = baseGrid as TrackedSquare[][];
 
@@ -117,7 +122,11 @@ export const visualization: Visualization = async input => {
 			for (let x = 0; x < grid.length; x++) {
 				const square = grid[x][y];
 				const char =
-					square === start ? 'S' : square === end ? 'E' : String.fromCharCode(square.height + 97);
+					square === start
+						? 'S'
+						: square === end
+						? 'E'
+						: String.fromCharCode(square.height + 97);
 
 				if (square === start || square === end) {
 					line += chalk.bold.blue(char);

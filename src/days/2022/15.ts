@@ -1,5 +1,5 @@
 import { AoCPart } from '../../types';
-import { Vector2 } from '../../utils/vector';
+import { Vector2 } from '../../utils/structures/vector';
 
 function parseReport(str: string): { sensor: Vector2; beacon: Vector2 } {
 	const result = str.match(/-?(\d+)/g);
@@ -12,7 +12,7 @@ function parseReport(str: string): { sensor: Vector2; beacon: Vector2 } {
 	};
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const reports = input.map(parseReport);
 	const markedSpots = new Set<number>();
 	const testRow = 2_000_000;
@@ -44,7 +44,7 @@ class Range {
 	}
 }
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const reports = input.map(parseReport);
 	// const sensors = reports.map(report => {
 	// 	const clearRange = report.sensor.clone().subtract(report.beacon).manhattanLength();
@@ -91,7 +91,7 @@ export const part2: AoCPart = input => {
 			const rangesArray = [...markedRanges];
 
 			for (let x = 0; x <= RANGE; x++) {
-				const contains = rangesArray.find(range => {
+				const contains = rangesArray.find((range) => {
 					return x >= range.start && x <= range.end;
 				});
 

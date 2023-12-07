@@ -1,4 +1,4 @@
-import { wrapRotation } from '../utils/math';
+import { wrapRotation } from '../math';
 
 export class Vector2 {
 	public constructor(public x: number, public y: number) {}

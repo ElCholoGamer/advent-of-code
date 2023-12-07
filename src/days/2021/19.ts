@@ -1,7 +1,7 @@
 import { mat4, vec3 } from 'gl-matrix';
 import { AoCPart } from '../../types';
 import { PI_OVER_2 } from '../../utils/math';
-import { Vector3 } from '../../utils/vector';
+import { Vector3 } from '../../utils/structures/vector';
 
 function parseScanners(input: string[]): Scanner[] {
 	const reports: Vector3[][] = [[]];
@@ -17,7 +17,7 @@ function parseScanners(input: string[]): Scanner[] {
 		reports[reports.length - 1].push(Vector3.fromArray(line.split(',').map(Number)));
 	}
 
-	return reports.map(report => new Scanner(report));
+	return reports.map((report) => new Scanner(report));
 }
 
 interface CoordinateWithDifferences {
@@ -40,7 +40,11 @@ class Scanner {
 					: mat4.fromYRotation(mat4.create(), PI_OVER_2 * (face === 4 ? 1 : -1));
 
 			for (let rotation = 0; rotation < 4; rotation++) {
-				const rotationMatrix = mat4.rotateX(mat4.create(), faceMatrix, rotation * PI_OVER_2);
+				const rotationMatrix = mat4.rotateX(
+					mat4.create(),
+					faceMatrix,
+					rotation * PI_OVER_2
+				);
 				const permutation: Vector3[] = [];
 
 				for (const beacon of relativeBeacons) {
@@ -51,10 +55,10 @@ class Scanner {
 				}
 
 				this.beaconPermutations.push(
-					permutation.map(coord => {
+					permutation.map((coord) => {
 						const diffs = permutation
-							.filter(other => other !== coord)
-							.map(other => other.clone().subtract(coord));
+							.filter((other) => other !== coord)
+							.map((other) => other.clone().subtract(coord));
 						diffs.sort((a, b) => a.x - b.x || a.y - b.y);
 
 						return { value: coord, diffs };
@@ -95,10 +99,12 @@ function inferScannerPositions(scanners: Scanner[], minOverlaps: number) {
 	scanners[0].finalBeaconPermutation = scanners[0].beaconPermutations[0];
 
 	while (true) {
-		const unknownScanners = scanners.filter(scanner => !scanner.position);
+		const unknownScanners = scanners.filter((scanner) => !scanner.position);
 		if (unknownScanners.length === 0) break;
 
-		const knownScanners = scanners.filter(scanner => !unknownScanners.includes(scanner));
+		const knownScanners = scanners.filter(
+			(scanner) => !unknownScanners.includes(scanner)
+		);
 
 		for (const unknownScanner of unknownScanners) {
 			main: for (const knownScanner of knownScanners) {
