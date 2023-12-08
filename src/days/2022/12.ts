@@ -13,7 +13,7 @@ interface Square {
 
 function parseMap(
 	input: string[],
-	filterNeighbor: (height: number, neighborHeight: number) => boolean
+	filterNeighbor: (height: number, neighborHeight: number) => boolean,
 ): { grid: Square[][]; start: Square; end: Square } {
 	const grid: Square[][] = [...Array(input[0].length)].map(() => []);
 	let start: Vector2 | null = null;
@@ -52,7 +52,7 @@ function parseMap(
 				grid[x][y + 1],
 			];
 			grid[x][y].neighbors = neighbors.filter(
-				(neighbor) => neighbor && filterNeighbor(height, neighbor.height)
+				(neighbor) => neighbor && filterNeighbor(height, neighbor.height),
 			);
 		}
 	}
@@ -103,7 +103,11 @@ interface TrackedSquare extends Square {
 }
 
 export const visualization: Visualization = async (input) => {
-	const { grid: baseGrid, start, end } = parseMap(input, (h, nH) => nH <= h + 1);
+	const {
+		grid: baseGrid,
+		start,
+		end,
+	} = parseMap(input, (h, nH) => nH <= h + 1);
 	const grid = baseGrid as TrackedSquare[][];
 
 	for (const column of grid) {
@@ -125,8 +129,8 @@ export const visualization: Visualization = async (input) => {
 					square === start
 						? 'S'
 						: square === end
-						? 'E'
-						: String.fromCharCode(square.height + 97);
+						  ? 'E'
+						  : String.fromCharCode(square.height + 97);
 
 				if (square === start || square === end) {
 					line += chalk.bold.blue(char);

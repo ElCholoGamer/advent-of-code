@@ -63,14 +63,14 @@ function fillMonkeyValues(monkeys: MonkeyMap) {
 	fillMonkeyValue('root');
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const monkeys = parseMonkeys(input);
 	fillMonkeyValues(monkeys);
 
 	return monkeys.root as number;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const monkeys = parseMonkeys(input);
 	monkeys.humn = null;
 	fillMonkeyValues(monkeys);
@@ -85,7 +85,9 @@ export const part2: AoCPart = input => {
 		}
 
 		const isRightANumber = typeof monkeys[operation.rightMonkey] === 'number';
-		const knownNumber = monkeys[operation[isRightANumber ? 'rightMonkey' : 'leftMonkey']] as number;
+		const knownNumber = monkeys[
+			operation[isRightANumber ? 'rightMonkey' : 'leftMonkey']
+		] as number;
 
 		let nextTarget: number;
 		switch (operation.sign) {
@@ -113,18 +115,24 @@ export const part2: AoCPart = input => {
 				throw new Error('invalid sign');
 		}
 
-		fixValue(isRightANumber ? operation.leftMonkey : operation.rightMonkey, nextTarget);
+		fixValue(
+			isRightANumber ? operation.leftMonkey : operation.rightMonkey,
+			nextTarget,
+		);
 	}
 
 	const root = monkeys.root as Operation;
 	const humnSideMonkey =
-		typeof monkeys[root.rightMonkey] === 'number' ? root.leftMonkey : root.rightMonkey;
+		typeof monkeys[root.rightMonkey] === 'number'
+			? root.leftMonkey
+			: root.rightMonkey;
 	const target = monkeys[
 		humnSideMonkey === root.leftMonkey ? root.rightMonkey : root.leftMonkey
 	] as number;
 
 	fixValue(humnSideMonkey, target);
 
-	if (typeof monkeys.humn !== 'number') throw new Error('could not find value of humn');
+	if (typeof monkeys.humn !== 'number')
+		throw new Error('could not find value of humn');
 	return monkeys.humn;
 };

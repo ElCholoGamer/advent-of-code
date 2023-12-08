@@ -9,9 +9,10 @@ const helpCommand: Command = {
 		{
 			name: 'command',
 			required: false,
-			transform: v => v.toLowerCase(),
-			validate: async value =>
-				Object.keys(await getAllCommands()).includes(value) || 'Invalid command selected',
+			transform: (v) => v.toLowerCase(),
+			validate: async (value) =>
+				Object.keys(await getAllCommands()).includes(value) ||
+				'Invalid command selected',
 		},
 	],
 	async run(args) {
@@ -20,7 +21,9 @@ const helpCommand: Command = {
 		if (args.length === 0) {
 			console.log(chalk.bold.blue('Commands:'));
 			for (const name in commands) {
-				console.log(chalk.yellow(chalk.bold(name + ': ') + commands[name].description));
+				console.log(
+					chalk.yellow(chalk.bold(name + ': ') + commands[name].description),
+				);
 			}
 		} else {
 			const selectedCommand = commands[args[0]];
@@ -28,8 +31,12 @@ const helpCommand: Command = {
 			const { description, arguments: subArgs = [] } = selectedCommand;
 			const flags = <Record<string, Flag<any>>>(selectedCommand.flags || {});
 
-			const names = subArgs.map(a => (a.required ? `[${a.name}]` : `(${a.name})`));
-			console.log(chalk.blue`${chalk.bold('Command:')} ${args[0]} ${names.join(' ')}`);
+			const names = subArgs.map((a) =>
+				a.required ? `[${a.name}]` : `(${a.name})`,
+			);
+			console.log(
+				chalk.blue`${chalk.bold('Command:')} ${args[0]} ${names.join(' ')}`,
+			);
 			console.log(chalk.yellow(description));
 
 			const flagNames = Object.keys(flags);

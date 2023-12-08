@@ -37,7 +37,11 @@ export const part1: AoCPart = ([input]) => {
 
 function hasSomeUniquePair(str: string) {
 	for (let i = 0; i < str.length - 1; i++) {
-		if (str[i] === str[i + 1] && str[i - 1] !== str[i] && str[i + 2] !== str[i]) {
+		if (
+			str[i] === str[i + 1] &&
+			str[i - 1] !== str[i] &&
+			str[i + 2] !== str[i]
+		) {
 			return true;
 		}
 	}

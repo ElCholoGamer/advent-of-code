@@ -31,7 +31,10 @@ function clamp(num: number, min: number, max: number): number {
 }
 
 class Cuboid {
-	public constructor(public from: Vector3, public to: Vector3) {}
+	public constructor(
+		public from: Vector3,
+		public to: Vector3,
+	) {}
 
 	public size(): Vector3 {
 		return this.to.clone().subtract(this.from);
@@ -120,7 +123,9 @@ function getDifferentAxis(v1: Vector3, v2: Vector3): number {
 function getCommonAxis(vectors: Vector3[]): number {
 	return vectors[0]
 		.toArray()
-		.findIndex((pos, i) => vectors.every((other) => other.toArray()[i] === pos));
+		.findIndex((pos, i) =>
+			vectors.every((other) => other.toArray()[i] === pos),
+		);
 }
 
 function makeVertexPartition(from: Vector3, to: Vector3, v: number) {
@@ -151,11 +156,11 @@ function splitIntersections(cuboids: Cuboid[], cuboid: Cuboid): Cuboid[] {
 			!(
 				equalOrGreaterThan(other.from, cuboid.from) &&
 				equalOrLessThan(other.to, cuboid.to)
-			)
+			),
 	);
 
 	const intersects = cuboids.filter(
-		(other) => cuboid !== other && cuboid.intersects(other)
+		(other) => cuboid !== other && cuboid.intersects(other),
 	);
 	cuboids = cuboids.filter((other) => !intersects.includes(other));
 
@@ -172,7 +177,7 @@ function splitIntersections(cuboids: Cuboid[], cuboid: Cuboid): Cuboid[] {
 			const partition = makeVertexPartition(
 				otherVertices[v].clone(),
 				vertices[v].clone(),
-				v
+				v,
 			);
 			if (partition.isValid()) {
 				// console.log('Adding vertex partition with volume:', partition.volume());
@@ -197,7 +202,8 @@ function splitIntersections(cuboids: Cuboid[], cuboid: Cuboid): Cuboid[] {
 			const commonAxisIndex = getCommonAxis(fromFace);
 
 			if (commonAxisIndex === -1) throw new Error('No common face axis found');
-			const commonAxis = commonAxisIndex === 0 ? 'x' : commonAxisIndex === 1 ? 'y' : 'z';
+			const commonAxis =
+				commonAxisIndex === 0 ? 'x' : commonAxisIndex === 1 ? 'y' : 'z';
 
 			if (
 				toFace.some((vertex) => {
@@ -230,7 +236,7 @@ function splitIntersections(cuboids: Cuboid[], cuboid: Cuboid): Cuboid[] {
 					vertex[axis] = clamp(
 						vertex[axis],
 						fromFace[0].toArray()[axis],
-						fromFace[3].toArray()[axis]
+						fromFace[3].toArray()[axis],
 					);
 					toFace[v] = Vector3.fromArray(vertex);
 				}
@@ -247,7 +253,10 @@ function splitIntersections(cuboids: Cuboid[], cuboid: Cuboid): Cuboid[] {
 
 			allVertices.sort((a, b) => a[commonAxis] - b[commonAxis]);
 
-			const partition = new Cuboid(allVertices[0], allVertices[allVertices.length - 1]);
+			const partition = new Cuboid(
+				allVertices[0],
+				allVertices[allVertices.length - 1],
+			);
 			partition.fixVertices();
 
 			// console.log('Adding face partition with volume:', partition.volume());
@@ -271,7 +280,9 @@ function splitIntersections(cuboids: Cuboid[], cuboid: Cuboid): Cuboid[] {
 		];
 
 		const edges = edgeIndices.map((edge) => edge.map((v) => vertices[v]));
-		const otherEdges = edgeIndices.map((edge) => edge.map((v) => otherVertices[v]));
+		const otherEdges = edgeIndices.map((edge) =>
+			edge.map((v) => otherVertices[v]),
+		);
 
 		for (let e = 0; e < edges.length; e++) {
 			const edge = edges[e].map((vec) => vec.clone());
@@ -282,21 +293,26 @@ function splitIntersections(cuboids: Cuboid[], cuboid: Cuboid): Cuboid[] {
 			if (
 				otherEdge.some((vertex) => {
 					const pos = Vector2.fromArray(
-						vertex.toArray().filter((_, i) => i !== diffAxis)
+						vertex.toArray().filter((_, i) => i !== diffAxis),
 					);
 
 					const edgesWithSameDiffAxis = edges.filter(
-						(edge) => getDifferentAxis(edge[0], edge[1]) === diffAxis
+						(edge) => getDifferentAxis(edge[0], edge[1]) === diffAxis,
 					);
 
 					if (edgesWithSameDiffAxis.length !== 4)
 						throw new Error('Edges with the same different axis must be 4');
 
 					const [from, , , to] = edgesWithSameDiffAxis.map((edge) =>
-						Vector2.fromArray(edge[0].toArray().filter((_, i) => i !== diffAxis))
+						Vector2.fromArray(
+							edge[0].toArray().filter((_, i) => i !== diffAxis),
+						),
 					);
 
-					return (pos.x >= from.x && pos.x <= to.x) || (pos.y >= from.y && pos.y <= to.y);
+					return (
+						(pos.x >= from.x && pos.x <= to.x) ||
+						(pos.y >= from.y && pos.y <= to.y)
+					);
 				})
 			)
 				continue;
@@ -310,7 +326,7 @@ function splitIntersections(cuboids: Cuboid[], cuboid: Cuboid): Cuboid[] {
 				vertex[diffAxis] = clamp(
 					vertex[diffAxis],
 					edge[0].toArray()[diffAxis],
-					edge[1].toArray()[diffAxis]
+					edge[1].toArray()[diffAxis],
 				);
 
 				otherEdge[v] = Vector3.fromArray(vertex);
@@ -325,7 +341,10 @@ function splitIntersections(cuboids: Cuboid[], cuboid: Cuboid): Cuboid[] {
 				endpointArr[axis] += diff;
 			}
 
-			const partition = new Cuboid(otherEdge[0], Vector3.fromArray(endpointArr));
+			const partition = new Cuboid(
+				otherEdge[0],
+				Vector3.fromArray(endpointArr),
+			);
 			partition.fixVertices();
 
 			// console.log('Adding edge partition with volume:', partition.volume());
@@ -342,7 +361,7 @@ function rebootReactor(instructions: Instruction[]): Cuboid[] {
 	for (const { turn, rangeX, rangeY, rangeZ } of instructions) {
 		const cuboid = new Cuboid(
 			new Vector3(rangeX.x, rangeY.x, rangeZ.x),
-			new Vector3(rangeX.y + 1, rangeY.y + 1, rangeZ.y + 1)
+			new Vector3(rangeX.y + 1, rangeY.y + 1, rangeZ.y + 1),
 		);
 
 		if (turn === 'on') {
@@ -367,8 +386,8 @@ export const part1: AoCPart = (input) => {
 		.map(parseInstruction)
 		.filter((i) =>
 			[i.rangeX, i.rangeY, i.rangeZ].every(
-				(range) => range.x < maxRange && range.y > -maxRange
-			)
+				(range) => range.x < maxRange && range.y > -maxRange,
+			),
 		);
 	const cuboids = rebootReactor(instructions);
 

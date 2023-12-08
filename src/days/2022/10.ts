@@ -4,9 +4,10 @@ import { sleep } from '../../utils';
 import { chunks } from '../../utils/arrays';
 import { HIDE_CURSOR, SHOW_CURSOR } from '../../utils/strings';
 
-const parseInstruction = (str: string) => (str === 'noop' ? null : parseInt(str.split(' ')[1]));
+const parseInstruction = (str: string) =>
+	str === 'noop' ? null : parseInt(str.split(' ')[1]);
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const instructions = input.map(parseInstruction);
 	let cycle = 0;
 	let xReg = 1;
@@ -32,7 +33,7 @@ export const part1: AoCPart = input => {
 	return signalSum;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const instructions = input.map(parseInstruction);
 	let cycle = 0;
 	let xReg = 1;
@@ -56,12 +57,12 @@ export const part2: AoCPart = input => {
 	return (
 		'\n' +
 		chunks(pixels, 40)
-			.map(lineData => lineData.map(p => (p ? '##' : '  ')).join(''))
+			.map((lineData) => lineData.map((p) => (p ? '##' : '  ')).join(''))
 			.join('\n')
 	);
 };
 
-export const visualization: Visualization = async input => {
+export const visualization: Visualization = async (input) => {
 	const instructions = input.map(parseInstruction);
 
 	let cycle = 0;
@@ -71,21 +72,33 @@ export const visualization: Visualization = async input => {
 	function render(instructionIndex: number) {
 		console.clear();
 		const lineChars = chunks(pixels, 40).map((line, y) =>
-			line.map((b, x) => chalk[y * 40 + x === cycle ? 'bgWhite' : b ? 'bgGreen' : 'bgGray']('  '))
+			line.map((b, x) =>
+				chalk[y * 40 + x === cycle ? 'bgWhite' : b ? 'bgGreen' : 'bgGray'](
+					'  ',
+				),
+			),
 		);
 
-		console.log(chalk.blue`Cycles: ${cycle.toString().padEnd(5)} X: ${xReg.toString()}`);
+		console.log(
+			chalk.blue`Cycles: ${cycle.toString().padEnd(5)} X: ${xReg.toString()}`,
+		);
 		console.log();
 		console.log(
 			[...Array(40)]
-				.map((_, index) => (Math.abs(xReg - index) <= 1 ? chalk.bgYellow('  ') : '  '))
-				.join('')
+				.map((_, index) =>
+					Math.abs(xReg - index) <= 1 ? chalk.bgYellow('  ') : '  ',
+				)
+				.join(''),
 		);
 
-		const lines = lineChars.map(row => row.join(''));
+		const lines = lineChars.map((row) => row.join(''));
 		for (let i = 0; i < lines.length; i++) {
 			const lineInstructionIndex = instructionIndex - 2 + i;
-			if (lineInstructionIndex < 0 || lineInstructionIndex >= instructions.length) continue;
+			if (
+				lineInstructionIndex < 0 ||
+				lineInstructionIndex >= instructions.length
+			)
+				continue;
 
 			const maybeAddX = instructions[lineInstructionIndex];
 			let extra = maybeAddX === null ? 'noop' : `addx ${maybeAddX}`;

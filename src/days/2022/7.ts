@@ -36,7 +36,7 @@ function buildDirectoryTree(lines: string[]) {
 			} else {
 				const targetDir = currentDir.children
 					.filter(isDirectory)
-					.find(item => item.name === targetDirName);
+					.find((item) => item.name === targetDirName);
 				if (!targetDir) throw new Error('Directory not found');
 
 				currentDir = targetDir;
@@ -70,37 +70,40 @@ function buildDirectoryTree(lines: string[]) {
 	return currentDir;
 }
 
-function calculateSize(item: FileSystemItem, onDirectorySize: (size: number) => void): number {
+function calculateSize(
+	item: FileSystemItem,
+	onDirectorySize: (size: number) => void,
+): number {
 	if (!isDirectory(item)) return item.size;
 
 	const dirSize = item.children
-		.map(child => calculateSize(child, onDirectorySize))
+		.map((child) => calculateSize(child, onDirectorySize))
 		.reduce((a, b) => a + b);
 
 	onDirectorySize(dirSize);
 	return dirSize;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const rootDir = buildDirectoryTree(input);
 
 	let sum = 0;
-	calculateSize(rootDir, dirSize => {
+	calculateSize(rootDir, (dirSize) => {
 		if (dirSize <= 100_000) sum += dirSize;
 	});
 
 	return sum;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const rootDir = buildDirectoryTree(input);
 
 	const sizes: number[] = [];
-	const usedSpace = calculateSize(rootDir, size => sizes.push(size));
+	const usedSpace = calculateSize(rootDir, (size) => sizes.push(size));
 	const missingSpace = 30_000_000 - (70_000_000 - usedSpace);
 
 	sizes.sort((a, b) => a - b);
-	const sizeToDelete = sizes.find(size => size >= missingSpace);
+	const sizeToDelete = sizes.find((size) => size >= missingSpace);
 	if (!sizeToDelete) throw new Error('No directory is big enough');
 
 	return sizeToDelete;

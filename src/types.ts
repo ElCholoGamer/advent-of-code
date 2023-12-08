@@ -2,25 +2,28 @@ export type ValidationResult = true | string;
 
 export type Awaitable<T> = T | Promise<T>;
 
-export type Command<F extends Record<string, string | number | boolean> = {}> = {
-	name: string;
-	description: string;
-	arguments?: {
+export type Command<F extends Record<string, string | number | boolean> = {}> =
+	{
 		name: string;
-		required?: boolean;
-		transform?: (value: string) => string;
-		validate?: (value: string) => ValidationResult | Promise<ValidationResult>;
-	}[];
-	flags?: {
-		[K in keyof F]: Flag<F[K]>;
+		description: string;
+		arguments?: {
+			name: string;
+			required?: boolean;
+			transform?: (value: string) => string;
+			validate?: (
+				value: string,
+			) => ValidationResult | Promise<ValidationResult>;
+		}[];
+		flags?: {
+			[K in keyof F]: Flag<F[K]>;
+		};
+		run(
+			args: string[],
+			flags: {
+				[K in keyof F]: F[K];
+			},
+		): Awaitable<void>;
 	};
-	run(
-		args: string[],
-		flags: {
-			[K in keyof F]: F[K];
-		}
-	): Awaitable<void>;
-};
 
 export type Flag<T extends string | number | boolean> = {
 	description: string;
@@ -33,7 +36,7 @@ export type Flag<T extends string | number | boolean> = {
 
 export type AoCPart<O extends {} = {}> = (
 	input: string[],
-	options: Partial<O>
+	options: Partial<O>,
 ) => Awaitable<string | number>;
 
 export type Visualization = (input: string[]) => Awaitable<void>;

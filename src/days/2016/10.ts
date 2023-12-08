@@ -15,7 +15,9 @@ interface ComparisonInstruction extends Instruction {
 	highTarget: ChipTarget;
 }
 
-function parseInstruction(line: string): ValueInstruction | ComparisonInstruction {
+function parseInstruction(
+	line: string,
+): ValueInstruction | ComparisonInstruction {
 	const words = line.split(' ');
 
 	if (words[0] === 'value') {
@@ -45,14 +47,16 @@ function parseChipTarget(label: string, index: number): ChipTarget {
 	};
 }
 
-function isValueInstruction(instruction: Instruction): instruction is ValueInstruction {
+function isValueInstruction(
+	instruction: Instruction,
+): instruction is ValueInstruction {
 	return (instruction as ValueInstruction).value !== undefined;
 }
 
 function doComparisonAndGiveChips(
 	bots: number[][],
 	outputs: number[][],
-	instruction: ComparisonInstruction
+	instruction: ComparisonInstruction,
 ) {
 	const { from, lowTarget, highTarget } = instruction;
 
@@ -78,7 +82,7 @@ function doComparisonAndGiveChips(
 	bots[from] = [];
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const bots: number[][] = [];
 	const outputs: number[][] = [];
 
@@ -93,7 +97,10 @@ export const part1: AoCPart = input => {
 				instruction.done = true;
 				continue;
 			} else if (bots[instruction.from]?.length === 2) {
-				if (bots[instruction.from].includes(61) && bots[instruction.from].includes(17)) {
+				if (
+					bots[instruction.from].includes(61) &&
+					bots[instruction.from].includes(17)
+				) {
 					return instruction.from;
 				}
 
@@ -102,13 +109,13 @@ export const part1: AoCPart = input => {
 			}
 		}
 
-		instructions = instructions.filter(i => !i.done);
+		instructions = instructions.filter((i) => !i.done);
 	}
 
 	throw new Error('Could not find result');
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const bots: number[][] = [];
 	const outputs: number[][] = [];
 
@@ -127,7 +134,7 @@ export const part2: AoCPart = input => {
 			}
 		}
 
-		instructions = instructions.filter(i => !i.done);
+		instructions = instructions.filter((i) => !i.done);
 	}
 
 	return outputs[0][0] * outputs[1][0] * outputs[2][0];

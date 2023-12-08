@@ -17,7 +17,9 @@ function hallwayToRoom(pos: number): number | null {
 
 function parseInitialState(lines: string[]): BurrowState {
 	const hallway = lines[1].replace(/#/g, '');
-	const rows = lines.slice(2, lines.length - 1).map(row => row.replace(/(\s+)|#/g, ''));
+	const rows = lines
+		.slice(2, lines.length - 1)
+		.map((row) => row.replace(/(\s+)|#/g, ''));
 
 	const rooms: BurrowState['rooms'] = [];
 
@@ -32,7 +34,9 @@ function parseInitialState(lines: string[]): BurrowState {
 	}
 
 	return {
-		hallway: hallway.split('').map(char => (char === '.' ? null : amphipods.indexOf(char))),
+		hallway: hallway
+			.split('')
+			.map((char) => (char === '.' ? null : amphipods.indexOf(char))),
 		rooms,
 	};
 }
@@ -40,13 +44,15 @@ function parseInitialState(lines: string[]): BurrowState {
 function cloneState(state: BurrowState): BurrowState {
 	return {
 		hallway: state.hallway.slice(),
-		rooms: state.rooms.map(room => room.slice()),
+		rooms: state.rooms.map((room) => room.slice()),
 	};
 }
 
 function findMinimumEnergy(initialState: BurrowState) {
-	const roomSize = Math.max(...initialState.rooms.map(room => room.length));
-	const stack: [state: BurrowState, currentEnergy: number][] = [[initialState, 0]];
+	const roomSize = Math.max(...initialState.rooms.map((room) => room.length));
+	const stack: [state: BurrowState, currentEnergy: number][] = [
+		[initialState, 0],
+	];
 
 	let minTotalEnergy = Infinity;
 
@@ -55,7 +61,8 @@ function findMinimumEnergy(initialState: BurrowState) {
 		const { hallway, rooms } = state;
 
 		const completeRooms = rooms.filter(
-			(room, index) => room.length >= roomSize && room.every(amphipod => amphipod === index)
+			(room, index) =>
+				room.length >= roomSize && room.every((amphipod) => amphipod === index),
 		);
 
 		const beforeFix = cloneState(state);
@@ -69,7 +76,7 @@ function findMinimumEnergy(initialState: BurrowState) {
 				if (amphipod === null) continue;
 
 				const destinationRoom = rooms[amphipod];
-				if (destinationRoom.some(other => other !== amphipod)) continue;
+				if (destinationRoom.some((other) => other !== amphipod)) continue;
 
 				// Destination room is valid to move into
 				const from = h;
@@ -88,7 +95,8 @@ function findMinimumEnergy(initialState: BurrowState) {
 
 				const hallwaySteps = Math.abs(to - from);
 				const roomEnterSteps = roomSize - destinationRoom.length;
-				currentEnergy += (hallwaySteps + roomEnterSteps) * energyUsage[amphipod];
+				currentEnergy +=
+					(hallwaySteps + roomEnterSteps) * energyUsage[amphipod];
 
 				state.hallway[h] = null;
 				destinationRoom.push(amphipod);
@@ -110,7 +118,7 @@ function findMinimumEnergy(initialState: BurrowState) {
 
 		for (let r = 0; r < rooms.length; r++) {
 			const room = rooms[r];
-			if (room.every(amphipod => amphipod === r)) continue;
+			if (room.every((amphipod) => amphipod === r)) continue;
 
 			const amphipod = room[room.length - 1];
 
@@ -123,7 +131,9 @@ function findMinimumEnergy(initialState: BurrowState) {
 				if (hallwayToRoom(pos) !== null) continue; // Position is above a room
 
 				const hallwaySteps = hallwayStart - pos;
-				const totalEnergy = currentEnergy + (roomLeaveSteps + hallwaySteps) * energyUsage[amphipod];
+				const totalEnergy =
+					currentEnergy +
+					(roomLeaveSteps + hallwaySteps) * energyUsage[amphipod];
 
 				const newState = cloneState(state);
 				newState.rooms[r].pop();
@@ -138,7 +148,9 @@ function findMinimumEnergy(initialState: BurrowState) {
 				if (hallwayToRoom(pos) !== null) continue; // Position is above a room
 
 				const hallwaySteps = pos - hallwayStart;
-				const totalEnergy = currentEnergy + (roomLeaveSteps + hallwaySteps) * energyUsage[amphipod];
+				const totalEnergy =
+					currentEnergy +
+					(roomLeaveSteps + hallwaySteps) * energyUsage[amphipod];
 
 				const newState = cloneState(state);
 				newState.rooms[r].pop();
@@ -152,12 +164,12 @@ function findMinimumEnergy(initialState: BurrowState) {
 	return minTotalEnergy;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const initialState = parseInitialState(input);
 	return findMinimumEnergy(initialState);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const initialState = parseInitialState(input);
 
 	initialState.rooms[0].splice(1, 0, 3, 3);

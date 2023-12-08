@@ -37,7 +37,12 @@ export const part1: AoCPart = (input) => {
 			const item = grid[x][y];
 
 			function isDepthHigher(pos: Vector2) {
-				if (pos.x < 0 || pos.x >= grid.length || pos.y < 0 || pos.y >= grid[0].length)
+				if (
+					pos.x < 0 ||
+					pos.x >= grid.length ||
+					pos.y < 0 ||
+					pos.y >= grid[0].length
+				)
 					return true;
 				return grid[pos.x][pos.y].depth > item.depth;
 			}
@@ -69,7 +74,8 @@ export const part2: AoCPart = (input) => {
 			if (!item) return 0;
 
 			const item2 = grid[x][y];
-			if (item2.depth === 9 || item2.added || item2.depth < item.depth) return 0;
+			if (item2.depth === 9 || item2.added || item2.depth < item.depth)
+				return 0;
 
 			item2.added = true;
 
@@ -95,7 +101,12 @@ export const part2: AoCPart = (input) => {
 			const item = grid[x][y];
 
 			function isDepthHigher(pos: Vector2) {
-				if (pos.x < 0 || pos.x >= grid.length || pos.y < 0 || pos.y >= grid[0].length)
+				if (
+					pos.x < 0 ||
+					pos.x >= grid.length ||
+					pos.y < 0 ||
+					pos.y >= grid[0].length
+				)
 					return true;
 				return grid[pos.x][pos.y].depth > item.depth;
 			}

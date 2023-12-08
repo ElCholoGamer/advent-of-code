@@ -41,10 +41,14 @@ function formatCucumbers(cucumbers: (Cucumber | null)[][]): string {
 	return lines.join('\n');
 }
 
-const cloneCucumbers = (cucumbers: (Cucumber | null)[][]): (Cucumber | null)[][] =>
-	cucumbers.map(col => col.map(cucumber => (cucumber ? { ...cucumber } : null)));
+const cloneCucumbers = (
+	cucumbers: (Cucumber | null)[][],
+): (Cucumber | null)[][] =>
+	cucumbers.map((col) =>
+		col.map((cucumber) => (cucumber ? { ...cucumber } : null)),
+	);
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	let cucumbers = parseCucumbers(input);
 
 	for (let step = 1; ; step++) {

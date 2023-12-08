@@ -1,7 +1,7 @@
 import { AoCPart } from '../../types';
 
 export const part1: AoCPart = ([input]) => {
-	const initialNumbers = input.split(',').map(str => Number(str));
+	const initialNumbers = input.split(',').map((str) => Number(str));
 	const turns = [...initialNumbers];
 
 	while (turns.length < 2020) {
@@ -24,7 +24,7 @@ export const part1: AoCPart = ([input]) => {
 };
 
 export const part2: AoCPart = ([input]) => {
-	const initialNumbers = input.split(',').map(str => Number(str));
+	const initialNumbers = input.split(',').map((str) => Number(str));
 	const turns = [...initialNumbers];
 
 	const target = 30000000;

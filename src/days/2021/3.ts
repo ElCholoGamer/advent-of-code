@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	let gamma = '';
 	let epsilon = '';
 
@@ -23,7 +23,7 @@ export const part1: AoCPart = input => {
 	return parseInt(gamma, 2) * parseInt(epsilon, 2);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	let inputCopy = [...input];
 
 	for (let i = 0; i < inputCopy[0].length; i++) {
@@ -42,10 +42,11 @@ export const part2: AoCPart = input => {
 
 		const digit = ones >= zeros ? '1' : '0';
 
-		inputCopy = inputCopy.filter(num => num[i] === digit);
+		inputCopy = inputCopy.filter((num) => num[i] === digit);
 	}
 
-	if (inputCopy.length !== 1) throw new Error('Invalid length left at input copy');
+	if (inputCopy.length !== 1)
+		throw new Error('Invalid length left at input copy');
 
 	const oxygen = parseInt(inputCopy[0], 2);
 
@@ -67,10 +68,11 @@ export const part2: AoCPart = input => {
 
 		const digit = zeros <= ones ? '0' : '1';
 
-		inputCopy = inputCopy.filter(num => num[i] === digit);
+		inputCopy = inputCopy.filter((num) => num[i] === digit);
 	}
 
-	if (inputCopy.length !== 1) throw new Error('Invalid length left at input copy');
+	if (inputCopy.length !== 1)
+		throw new Error('Invalid length left at input copy');
 
 	const scrubber = parseInt(inputCopy[0], 2);
 

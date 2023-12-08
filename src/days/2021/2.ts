@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	let hPos = 0;
 	let depth = 0;
 
@@ -18,7 +18,7 @@ export const part1: AoCPart = input => {
 	return hPos * depth;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	let hPos = 0;
 	let depth = 0;
 	let aim = 0;

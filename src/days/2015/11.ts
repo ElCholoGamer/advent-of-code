@@ -5,7 +5,7 @@ const letters = 'abcdefghijklmnopqrstuvwxyz';
 function incrementString(str: string) {
 	if (str === '') return '';
 
-	const indexes = str.split('').map(char => {
+	const indexes = str.split('').map((char) => {
 		const index = letters.indexOf(char);
 		if (index === -1) throw new Error(`Cannot increment character "${char}"`);
 
@@ -15,12 +15,12 @@ function incrementString(str: string) {
 	indexes[indexes.length - 1]++;
 
 	let wrapIndex: number;
-	while ((wrapIndex = indexes.findIndex(i => i >= letters.length)) !== -1) {
+	while ((wrapIndex = indexes.findIndex((i) => i >= letters.length)) !== -1) {
 		indexes[wrapIndex] -= letters.length;
 		indexes[wrapIndex - 1]++;
 	}
 
-	return indexes.map(index => letters[index]).join('');
+	return indexes.map((index) => letters[index]).join('');
 }
 
 function hasStraight(str: string): boolean {
@@ -28,9 +28,12 @@ function hasStraight(str: string): boolean {
 		const charIndexes = str
 			.substr(i, 3)
 			.split('')
-			.map(char => letters.indexOf(char));
+			.map((char) => letters.indexOf(char));
 
-		if (charIndexes[1] - 1 === charIndexes[0] && charIndexes[2] - 1 === charIndexes[1]) {
+		if (
+			charIndexes[1] - 1 === charIndexes[0] &&
+			charIndexes[2] - 1 === charIndexes[1]
+		) {
 			return true;
 		}
 	}
@@ -56,7 +59,7 @@ function hasPairs(str: string, pairCount: number): boolean {
 function matchesRules(password: string) {
 	const forbiddenChars = ['i', 'o', 'l'];
 	return (
-		forbiddenChars.every(char => !password.includes(char)) &&
+		forbiddenChars.every((char) => !password.includes(char)) &&
 		hasStraight(password) &&
 		hasPairs(password, 2)
 	);

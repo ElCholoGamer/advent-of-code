@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	let threes = 0;
 	let twos = 0;
 
@@ -30,7 +30,7 @@ export const part1: AoCPart = input => {
 	return twos * threes;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	for (let i = 0; i < input.length; i++) {
 		const id = input[i];
 
@@ -49,7 +49,9 @@ export const part2: AoCPart = input => {
 		});
 
 		if (matchingId) {
-			let chars = id.split('').filter((char, index) => matchingId[index] === char);
+			let chars = id
+				.split('')
+				.filter((char, index) => matchingId[index] === char);
 			return chars.join('');
 		}
 	}

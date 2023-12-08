@@ -16,7 +16,10 @@ interface Options {
 	expectedOutput?: number;
 }
 
-export const part2: AoCPart<Options> = ([input], { expectedOutput = 19690720 }) => {
+export const part2: AoCPart<Options> = (
+	[input],
+	{ expectedOutput = 19690720 },
+) => {
 	for (let noun = 0; noun < 100; noun++) {
 		for (let verb = 0; verb < 100; verb++) {
 			const program = new ExtendedIntcodeVM(input);

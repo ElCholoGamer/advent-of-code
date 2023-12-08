@@ -1,10 +1,10 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	return input.map(Number).reduce((a, b) => a + b);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const seenFrequencies = new Set<number>();
 	const changes = input.map(Number);
 

@@ -16,12 +16,12 @@ const parseCaloriesList = (input: string[]) => {
 	return caloriesList;
 };
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const caloriesList = parseCaloriesList(input);
 	return Math.max(...caloriesList);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const caloriesList = parseCaloriesList(input);
 	caloriesList.sort((a, b) => b - a);
 

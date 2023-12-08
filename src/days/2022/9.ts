@@ -81,7 +81,10 @@ export const part1: AoCPart = (input) => simulateRope(input.map(parseMove), 2);
 
 export const part2: AoCPart = (input) => simulateRope(input.map(parseMove), 10);
 
-function findMovementBounds(moves: Move[], ropeLength: number): [Vector2, Vector2] {
+function findMovementBounds(
+	moves: Move[],
+	ropeLength: number,
+): [Vector2, Vector2] {
 	const min = new Vector2(0, 0);
 	const max = new Vector2(0, 0);
 	const knots = [...Array(ropeLength)].map(() => new Vector2(0, 0));
@@ -126,7 +129,8 @@ export const visualization: Visualization = async (input) => {
 
 				for (let k = knots.length - 1; k >= 0; k--) {
 					if (knots[k].y === y) {
-						line[knots[k].x - min.x] = k === 0 ? chalk.bold.yellow('H') : chalk.yellow(k);
+						line[knots[k].x - min.x] =
+							k === 0 ? chalk.bold.yellow('H') : chalk.yellow(k);
 					}
 				}
 			}
@@ -155,7 +159,9 @@ export const visualization: Visualization = async (input) => {
 	render(true);
 
 	console.log();
-	console.log(chalk.green`${chalk.bold('Visited positions:')} ${visitedPositions.size}`);
+	console.log(
+		chalk.green`${chalk.bold('Visited positions:')} ${visitedPositions.size}`,
+	);
 	await sleep(3000);
 
 	console.log(SHOW_CURSOR);

@@ -83,19 +83,23 @@ export const part2: AoCPart = (input) => {
 						start: map.sourceStart,
 						length: map.length,
 					},
-					seedRange
-				)
+					seedRange,
+				),
 			);
 
 			// Remove intersecting ranges to be replaced by remnants
 			seedRanges = seedRanges.filter((range) => !intersections.includes(range));
 
 			for (const seedRange of intersections) {
-				const startOffset = clamp(map.sourceStart - seedRange.start, 0, seedRange.length);
+				const startOffset = clamp(
+					map.sourceStart - seedRange.start,
+					0,
+					seedRange.length,
+				);
 				const endOffset = clamp(
 					map.sourceStart + map.length - seedRange.start,
 					0,
-					seedRange.length
+					seedRange.length,
 				);
 
 				if (startOffset > 0) {

@@ -18,11 +18,11 @@ SESSION_COOKIE=abcdefghijklmnopqrstuvwxyz
 ```typescript
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	return '[This is the result for part 1!]';
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	return '[This is the result for part 2!]';
 };
 ```

@@ -19,9 +19,12 @@ const runCommand: Command<Flags> = {
 		{
 			name: 'day',
 			required: true,
-			validate: value => {
+			validate: (value) => {
 				const num = parseInt(value);
-				return (!isNaN(num) && num >= 1 && num <= 25) || 'Day must be an integer between 1 and 25';
+				return (
+					(!isNaN(num) && num >= 1 && num <= 25) ||
+					'Day must be an integer between 1 and 25'
+				);
 			},
 		},
 	],
@@ -29,17 +32,21 @@ const runCommand: Command<Flags> = {
 		year: {
 			type: 'Number',
 			short: 'Y',
-			description: 'The year of the solution to run. Defaults to the current year.',
-			validate: n => {
+			description:
+				'The year of the solution to run. Defaults to the current year.',
+			validate: (n) => {
 				const currentYear = new Date().getFullYear();
-				return (n >= 2015 && n <= currentYear) || `Year must be between 2015 and ${currentYear}`;
+				return (
+					(n >= 2015 && n <= currentYear) ||
+					`Year must be between 2015 and ${currentYear}`
+				);
 			},
 		},
 		part: {
 			type: 'Number',
 			short: 'P',
 			description: 'The part of the solution to execute. Defaults to both.',
-			validate: n => n === 1 || n === 2 || 'Part must be either 1 or 2',
+			validate: (n) => n === 1 || n === 2 || 'Part must be either 1 or 2',
 		},
 		input: {
 			type: 'String',
@@ -52,11 +59,16 @@ const runCommand: Command<Flags> = {
 			description: 'Show a visualization if available',
 		},
 	},
-	async run(args, { year = new Date().getFullYear(), part, input: inputPath, visualize }) {
+	async run(
+		args,
+		{ year = new Date().getFullYear(), part, input: inputPath, visualize },
+	) {
 		const day = parseInt(args[0]);
 
 		if (new Date(Date.now() - 5) < new Date(year, 11, day)) {
-			console.error(chalk.bold.red(`Error: Input for day ${day} is not available yet`));
+			console.error(
+				chalk.bold.red(`Error: Input for day ${day} is not available yet`),
+			);
 			return;
 		}
 
@@ -71,7 +83,11 @@ const runCommand: Command<Flags> = {
 			try {
 				rawInput = await readFile(inputPath, { encoding: 'utf-8' });
 			} catch (err) {
-				console.error(chalk.bold.red('Error: Could not read input file, see below for error:'));
+				console.error(
+					chalk.bold.red(
+						'Error: Could not read input file, see below for error:',
+					),
+				);
 				console.error(err);
 				return;
 			}
@@ -82,10 +98,14 @@ const runCommand: Command<Flags> = {
 			try {
 				rawInput = await readFile(inputPath, { encoding: 'utf-8' });
 			} catch {
-				await access(inputDirectory).catch(() => mkdir(inputDirectory, { recursive: true }));
+				await access(inputDirectory).catch(() =>
+					mkdir(inputDirectory, { recursive: true }),
+				);
 				const { SESSION_COOKIE } = process.env;
 				if (!SESSION_COOKIE) {
-					console.error(chalk.bold.red('Error: Could not find SESSION_COOKIE env variable'));
+					console.error(
+						chalk.bold.red('Error: Could not find SESSION_COOKIE env variable'),
+					);
 					return;
 				}
 
@@ -100,14 +120,16 @@ const runCommand: Command<Flags> = {
 									'github.com/ElCholoGamer/advent-of-code by josedanielgrayson@gmail.com',
 							},
 							responseType: 'text',
-							transformResponse: res => res,
-						}
+							transformResponse: (res) => res,
+						},
 					);
 
 					rawInput = res.data;
 					await writeFile(inputPath, rawInput);
 				} catch (err: unknown) {
-					console.error(chalk.bold.red('Error: Could not fetch input, read below:'));
+					console.error(
+						chalk.bold.red('Error: Could not fetch input, read below:'),
+					);
 
 					const axiosErr = err as AxiosError;
 					if (axiosErr.response) {
@@ -122,12 +144,18 @@ const runCommand: Command<Flags> = {
 
 		const input = rawInput.replace(/\r?\n$/, '').split(/\r?\n/);
 
-		let funcs: { part1?: AoCPart; part2?: AoCPart; visualization?: Visualization };
+		let funcs: {
+			part1?: AoCPart;
+			part2?: AoCPart;
+			visualization?: Visualization;
+		};
 
 		try {
 			funcs = await import(path.resolve(__dirname, `../days/${year}/${day}`));
 		} catch {
-			console.error(chalk.bold.red(`Error: Could not import day ${day} module`));
+			console.error(
+				chalk.bold.red(`Error: Could not import day ${day} module`),
+			);
 			return;
 		}
 
@@ -172,7 +200,9 @@ async function runPart(func: AoCPart | undefined, input: string[]) {
 
 	const elapsedMs = Math.floor(performance.now() - start);
 	const elapsedSecs = elapsedMs / 1000;
-	console.log(chalk.yellow(`${chalk.bold`Elapsed:`} ${elapsedMs}ms (${elapsedSecs}s)`));
+	console.log(
+		chalk.yellow(`${chalk.bold`Elapsed:`} ${elapsedMs}ms (${elapsedSecs}s)`),
+	);
 }
 
 export default runCommand;

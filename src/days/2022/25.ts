@@ -34,7 +34,7 @@ function toSNAFU(num: number) {
 	return reverseChars.reverse().join('');
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const numbers = input.map(parseSNAFU);
 	const sum = numbers.reduce((a, b) => a + b);
 	return toSNAFU(sum);

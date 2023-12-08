@@ -24,7 +24,9 @@ export const part1: AoCPart = ([input]) => {
 		}
 
 		// Check if coordinates were already visited
-		const already = alreadyVisited.some(([x, y]) => x === pos[0] && y === pos[1]);
+		const already = alreadyVisited.some(
+			([x, y]) => x === pos[0] && y === pos[1],
+		);
 
 		if (!already) {
 			alreadyVisited.push([...pos]);
@@ -64,7 +66,9 @@ export const part2: AoCPart = ([input]) => {
 		}
 
 		// Check if coordinates were already visited
-		const already = alreadyVisited.some(([x, y]) => x === pos[0] && y === pos[1]);
+		const already = alreadyVisited.some(
+			([x, y]) => x === pos[0] && y === pos[1],
+		);
 		if (!already) {
 			alreadyVisited.push([...pos]);
 			return acc + 1;

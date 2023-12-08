@@ -40,7 +40,8 @@ function parseSnailPair(data: string): SnailPair {
 			continue;
 		}
 
-		if (isNaN(Number(char))) throw new Error('Invalid input character: ' + char);
+		if (isNaN(Number(char)))
+			throw new Error('Invalid input character: ' + char);
 
 		let numStr = char;
 
@@ -64,7 +65,7 @@ function snailMagnitude(pair: SnailPair): number {
 }
 
 function isNumberedSnailPair(pair: SnailPair): pair is NumberedSnailPair {
-	return pair.data.every(element => typeof element === 'number');
+	return pair.data.every((element) => typeof element === 'number');
 }
 
 function findParentWithChildOnOtherSide(pair: SnailPair): SnailPair | null {
@@ -91,7 +92,11 @@ function addToSidemost(pair: SnailPair, value: number, side: 0 | 1) {
 	}
 }
 
-function addToSideIfNumberElseToOtherSidemost(pair: SnailPair, value: number, side: 0 | 1) {
+function addToSideIfNumberElseToOtherSidemost(
+	pair: SnailPair,
+	value: number,
+	side: 0 | 1,
+) {
 	if (typeof pair.data[side] === 'number') {
 		(pair.data[side] as number) += value;
 	} else {
@@ -99,7 +104,10 @@ function addToSideIfNumberElseToOtherSidemost(pair: SnailPair, value: number, si
 	}
 }
 
-function findPairToExplode(pair: SnailPair, depth: number): NumberedSnailPair | null {
+function findPairToExplode(
+	pair: SnailPair,
+	depth: number,
+): NumberedSnailPair | null {
 	if (depth >= 4) {
 		if (!isNumberedSnailPair(pair))
 			throw new Error('Cannot explode a pair with non-number elements');
@@ -144,7 +152,9 @@ function explodePair(pair: NumberedSnailPair): void {
 	pair.parent.data[indexAtParent] = 0;
 }
 
-function findPairToSplit(pair: SnailPair): { pair: SnailPair; index: number } | null {
+function findPairToSplit(
+	pair: SnailPair,
+): { pair: SnailPair; index: number } | null {
 	for (let i = 0; i < pair.data.length; i++) {
 		const element = pair.data[i];
 
@@ -162,7 +172,8 @@ function findPairToSplit(pair: SnailPair): { pair: SnailPair; index: number } | 
 
 function splitPair(pair: SnailPair, index: number) {
 	const num = pair.data[index];
-	if (typeof num !== 'number') throw new Error('Cannot split a non-number element');
+	if (typeof num !== 'number')
+		throw new Error('Cannot split a non-number element');
 	const half = num / 2;
 
 	pair.data[index] = {
@@ -199,8 +210,8 @@ function cloneSnailPair(pair: SnailPair): SnailPair {
 		}
 	}
 
-	const newData = pair.data.map(element =>
-		typeof element === 'number' ? element : cloneSnailPair(element)
+	const newData = pair.data.map((element) =>
+		typeof element === 'number' ? element : cloneSnailPair(element),
 	) as SnailPair['data'];
 
 	const clone: SnailPair = {
@@ -226,7 +237,7 @@ function addSnailPairs(pair1: SnailPair, pair2: SnailPair) {
 	return newPair;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const pairs = input.map(parseSnailPair);
 	let rootPair = pairs[0];
 
@@ -237,7 +248,7 @@ export const part1: AoCPart = input => {
 	return snailMagnitude(rootPair);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const pairs = input.map(parseSnailPair);
 
 	let max = 0;

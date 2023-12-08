@@ -1,10 +1,13 @@
 import { AoCPart } from '../../types';
 
 function getInstructions(input: string[]) {
-	return input.map<[string, number]>(line => [line[0], Number(line.substr(1, line.length - 1))]);
+	return input.map<[string, number]>((line) => [
+		line[0],
+		Number(line.substr(1, line.length - 1)),
+	]);
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const pos: [number, number] = [0, 0];
 	let direction = 1;
 
@@ -61,7 +64,7 @@ export const part1: AoCPart = input => {
 	return Math.abs(pos[0] + pos[1]);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const pos: [number, number] = [0, 0];
 	const instructions = getInstructions(input);
 

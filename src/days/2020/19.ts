@@ -2,7 +2,8 @@ import { AoCPart } from '../../types';
 
 function parseInput(input: string[]): [rules: string[], messages: string[]] {
 	const separation = input.indexOf('');
-	if (separation === -1) throw new Error('Could not separate rules from messages');
+	if (separation === -1)
+		throw new Error('Could not separate rules from messages');
 
 	const ruleStrings = input.slice(0, separation);
 	const messages = input.slice(separation + 1);
@@ -16,7 +17,7 @@ function parseInput(input: string[]): [rules: string[], messages: string[]] {
 	return [rules, messages];
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const [rules, messages] = parseInput(input);
 
 	function composeRegex(ruleIndex: number): string {
@@ -26,7 +27,7 @@ export const part1: AoCPart = input => {
 			return rule.substr(1, rule.length - 2);
 		}
 
-		const sections = rule.split(' | ').map(section => {
+		const sections = rule.split(' | ').map((section) => {
 			const subRules = section.split(/\s+/).map(Number);
 			return subRules.map(composeRegex).join('');
 		});
@@ -35,14 +36,14 @@ export const part1: AoCPart = input => {
 	}
 
 	const regex = new RegExp('^' + composeRegex(0) + '$');
-	const validMessages = messages.filter(m => regex.test(m));
+	const validMessages = messages.filter((m) => regex.test(m));
 
 	return validMessages.length;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const [rules, messages] = parseInput(input);
-	const longestLength = Math.max(...messages.map(m => m.length));
+	const longestLength = Math.max(...messages.map((m) => m.length));
 
 	rules[8] = '42 | 42 8';
 	rules[11] = '42 31 | 42 11 31';
@@ -62,7 +63,9 @@ export const part2: AoCPart = input => {
 		}
 
 		if (ruleIndex === 11) {
-			const [recursiveRule1, recursiveRule2] = options[0].split(' ').map(Number);
+			const [recursiveRule1, recursiveRule2] = options[0]
+				.split(' ')
+				.map(Number);
 			const regex1 = composeRegex(recursiveRule1);
 			const regex2 = composeRegex(recursiveRule2);
 
@@ -74,7 +77,7 @@ export const part2: AoCPart = input => {
 			return `(${bruteForce.join('|')})`;
 		}
 
-		const optionRegexes = options.map(section => {
+		const optionRegexes = options.map((section) => {
 			const subRules = section.split(/\s+/).map(Number);
 			return subRules.map(composeRegex).join('');
 		});
@@ -83,7 +86,7 @@ export const part2: AoCPart = input => {
 	}
 
 	const regex = new RegExp('^' + composeRegex(0) + '$');
-	const validMessages = messages.filter(m => regex.test(m));
+	const validMessages = messages.filter((m) => regex.test(m));
 
 	return validMessages.length;
 };

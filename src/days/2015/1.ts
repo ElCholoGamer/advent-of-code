@@ -1,7 +1,9 @@
 import { AoCPart } from '../../types';
 
 export const part1: AoCPart = ([input]) => {
-	return input.split('').reduce((acc, char) => acc + (char === '(' ? 1 : -1), 0);
+	return input
+		.split('')
+		.reduce((acc, char) => acc + (char === '(' ? 1 : -1), 0);
 };
 
 export const part2: AoCPart = ([input]) => {
@@ -17,7 +19,8 @@ export const part2: AoCPart = ([input]) => {
 		}
 	}
 
-	if (basementChar === undefined) throw new Error('Could not find basement position');
+	if (basementChar === undefined)
+		throw new Error('Could not find basement position');
 
 	return basementChar;
 };

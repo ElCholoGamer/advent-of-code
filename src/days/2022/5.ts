@@ -25,10 +25,12 @@ function parseInput(lines: string[]) {
 		}
 	}
 
-	const instructions: Instruction[] = lines.slice(separatorIndex + 1).map((line) => {
-		const [, amount, , from, , to] = line.split(/\s+/).map(Number);
-		return { amount, from: from - 1, to: to - 1 };
-	});
+	const instructions: Instruction[] = lines
+		.slice(separatorIndex + 1)
+		.map((line) => {
+			const [, amount, , from, , to] = line.split(/\s+/).map(Number);
+			return { amount, from: from - 1, to: to - 1 };
+		});
 
 	return {
 		piles,
@@ -54,7 +56,9 @@ export const part2: AoCPart = (input) => {
 	const { piles, instructions } = parseInput(input);
 
 	for (const instruction of instructions) {
-		piles[instruction.to].push(...piles[instruction.from].slice(-instruction.amount));
+		piles[instruction.to].push(
+			...piles[instruction.from].slice(-instruction.amount),
+		);
 		piles[instruction.from].length -= instruction.amount;
 	}
 
@@ -168,7 +172,7 @@ export const visualization: Visualization = (input) => {
 							logs.unshift(
 								`   move ${currentInstruction.amount} from ${
 									currentInstruction.from + 1
-								} to ${currentInstruction.to + 1}`
+								} to ${currentInstruction.to + 1}`,
 							);
 							if (logs.length > 3) logs.length = 3;
 						}
@@ -181,7 +185,9 @@ export const visualization: Visualization = (input) => {
 
 		console.clear();
 		console.log(
-			topBar.substring(0, cranePos.x + 4) + '(-)' + topBar.substring(cranePos.x + 7)
+			topBar.substring(0, cranePos.x + 4) +
+				'(-)' +
+				topBar.substring(cranePos.x + 7),
 		);
 		console.log(addCraneToLine(`| /${' '.repeat(innerWidth - 2)}\\ |`, -1));
 
@@ -192,7 +198,9 @@ export const visualization: Visualization = (input) => {
 				if (crateIndex < pile.length) {
 					const pos = 4 + pileNumber * 4;
 					line =
-						line.substring(0, pos) + `[${pile[crateIndex]}]` + line.substring(pos + 3);
+						line.substring(0, pos) +
+						`[${pile[crateIndex]}]` +
+						line.substring(pos + 3);
 				}
 			}
 			console.log(line);

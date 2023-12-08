@@ -21,7 +21,7 @@ for (const year of years) {
 	const testFiles = fs.readdirSync(path.join(casesDir, year));
 
 	if (testFiles.length > 0) {
-		allYearTests[year] = testFiles.map(file => file.replace(/\.json$/i, ''));
+		allYearTests[year] = testFiles.map((file) => file.replace(/\.json$/i, ''));
 	}
 }
 
@@ -32,7 +32,7 @@ function validateTests(tests: unknown): tests is TestCase[] {
 		({ input, result, options = {} }) =>
 			(typeof input === 'string' || Array.isArray(input)) &&
 			(typeof result === 'number' || typeof result === 'string') &&
-			typeof options === 'object'
+			typeof options === 'object',
 	);
 }
 
@@ -54,26 +54,33 @@ describe.each(Object.keys(allYearTests))('year %i', (year: string) => {
 	describe.each(allYearTests[year])('day %i', (day: string) => {
 		const modPath = path.resolve(`src/days/${year}/${day}`);
 
-		const json = fs.readFileSync(path.resolve(casesDir, year, day + '.json')).toString();
+		const json = fs
+			.readFileSync(path.resolve(casesDir, year, day + '.json'))
+			.toString();
 		const testData = JSON.parse(json);
 
 		const parts = [testData.part1, testData.part2]
-			.filter(tests => tests?.length)
+			.filter((tests) => tests?.length)
 			.map((tests, i) => ({ tests, index: i + 1 }));
 
 		for (const part of parts) {
 			if (!validateTests(part.tests)) {
-				throw new Error(`Validation fail for part ${part.index} tests (${day}-${year})`);
+				throw new Error(
+					`Validation fail for part ${part.index} tests (${day}-${year})`,
+				);
 			}
 		}
 
-		describe.each(parts)('part $index', ({ tests, index }: IndexedTestCases) => {
-			const indexedTests = tests.map((test, i) => ({ test, index: i + 1 }));
+		describe.each(parts)(
+			'part $index',
+			({ tests, index }: IndexedTestCases) => {
+				const indexedTests = tests.map((test, i) => ({ test, index: i + 1 }));
 
-			it.each(indexedTests)(`case $index`, async ({ test }) => {
-				const result = await runTestCase(test, modPath, `part${index}`);
-				expect(result).toBe(test.result);
-			});
-		});
+				it.each(indexedTests)(`case $index`, async ({ test }) => {
+					const result = await runTestCase(test, modPath, `part${index}`);
+					expect(result).toBe(test.result);
+				});
+			},
+		);
 	});
 });

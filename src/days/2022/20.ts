@@ -17,12 +17,13 @@ function mixNumbers(numbers: number[], rounds: number): number[] {
 		}
 	}
 
-	return orderedNumbers.map(n => n[1]);
+	return orderedNumbers.map((n) => n[1]);
 }
 
 function findGroveCoordinates(mixedNumbers: number[]) {
 	const indexOfZero = mixedNumbers.indexOf(0);
-	if (indexOfZero === -1) throw new Error('list of numbers does not contain a zero');
+	if (indexOfZero === -1)
+		throw new Error('list of numbers does not contain a zero');
 
 	return (
 		mixedNumbers[(indexOfZero + 1000) % mixedNumbers.length] +
@@ -31,11 +32,12 @@ function findGroveCoordinates(mixedNumbers: number[]) {
 	);
 }
 
-export const part1: AoCPart = input => findGroveCoordinates(mixNumbers(input.map(Number), 1));
-export const part2: AoCPart = input =>
+export const part1: AoCPart = (input) =>
+	findGroveCoordinates(mixNumbers(input.map(Number), 1));
+export const part2: AoCPart = (input) =>
 	findGroveCoordinates(
 		mixNumbers(
-			input.map(str => Number(str) * 811589153),
-			10
-		)
+			input.map((str) => Number(str) * 811589153),
+			10,
+		),
 	);

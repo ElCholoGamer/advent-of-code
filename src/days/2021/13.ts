@@ -24,10 +24,12 @@ function parseInput(input: string[]): [boolean[][], Fold[]] {
 		}
 	}
 
-	const maxWidth = Math.max(...dots.map(dot => dot[0])) + 1;
-	const maxHeight = Math.max(...dots.map(dot => dot[1])) + 1;
+	const maxWidth = Math.max(...dots.map((dot) => dot[0])) + 1;
+	const maxHeight = Math.max(...dots.map((dot) => dot[1])) + 1;
 
-	const paper: boolean[][] = [...Array(maxWidth)].map(() => Array(maxHeight).fill(false));
+	const paper: boolean[][] = [...Array(maxWidth)].map(() =>
+		Array(maxHeight).fill(false),
+	);
 
 	for (const [x, y] of dots) {
 		paper[x][y] = true;
@@ -70,7 +72,7 @@ function foldPaper(grid: boolean[][], fold: Fold) {
 	}
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const [paper, folds] = parseInput(input);
 
 	foldPaper(paper, folds[0]);
@@ -86,7 +88,7 @@ export const part1: AoCPart = input => {
 	return count;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const [paper, folds] = parseInput(input);
 
 	for (const fold of folds) {
@@ -103,7 +105,7 @@ export const part2: AoCPart = input => {
 
 	// Reduce paper height
 	for (let y = paper[0].length - 1; y >= 0; y--) {
-		if (paper.some(col => col[y])) {
+		if (paper.some((col) => col[y])) {
 			for (let x = 0; x < paper.length; x++) {
 				paper[x].length = y + 1;
 			}
@@ -114,7 +116,7 @@ export const part2: AoCPart = input => {
 	let result = '';
 
 	for (let y = 0; y < paper[0].length; y++) {
-		result += '\n' + paper.map(col => (col[y] ? '#' : '.')).join(' ');
+		result += '\n' + paper.map((col) => (col[y] ? '#' : '.')).join(' ');
 	}
 
 	return result;

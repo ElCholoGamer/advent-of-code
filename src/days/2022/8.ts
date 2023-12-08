@@ -7,12 +7,14 @@ interface Tree {
 }
 
 function parseTreeHeights(input: string[]): number[][] {
-	return [...Array(input[0].length)].map((_, x) => input.map(line => parseInt(line[x])));
+	return [...Array(input[0].length)].map((_, x) =>
+		input.map((line) => parseInt(line[x])),
+	);
 }
 
-export const part1: AoCPart = input => {
-	const trees: Tree[][] = parseTreeHeights(input).map(col =>
-		col.map(height => ({ height, markedVisible: false }))
+export const part1: AoCPart = (input) => {
+	const trees: Tree[][] = parseTreeHeights(input).map((col) =>
+		col.map((height) => ({ height, markedVisible: false })),
 	);
 
 	for (let x = 0; x < trees.length; x++) {
@@ -63,13 +65,21 @@ export const part1: AoCPart = input => {
 		}
 	}
 
-	return trees.reduce((sum, row) => sum + count(row, tree => tree.markedVisible), 0);
+	return trees.reduce(
+		(sum, row) => sum + count(row, (tree) => tree.markedVisible),
+		0,
+	);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const treeHeights = parseTreeHeights(input);
 
-	function viewingDistance(treeX: number, treeY: number, axis: 'x' | 'y', step: 1 | -1): number {
+	function viewingDistance(
+		treeX: number,
+		treeY: number,
+		axis: 'x' | 'y',
+		step: 1 | -1,
+	): number {
 		const baseHeight = treeHeights[treeX][treeY];
 		let viewingDistance = 0;
 
@@ -79,7 +89,11 @@ export const part2: AoCPart = input => {
 				if (treeHeights[x][treeY] >= baseHeight) break;
 			}
 		} else {
-			for (let y = treeY + step; y < treeHeights[0].length && y >= 0; y += step) {
+			for (
+				let y = treeY + step;
+				y < treeHeights[0].length && y >= 0;
+				y += step
+			) {
 				viewingDistance++;
 				if (treeHeights[treeX][y] >= baseHeight) break;
 			}

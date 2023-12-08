@@ -11,7 +11,8 @@ const SIDES = [
 	new Vector3(0, 0, -1),
 ];
 
-const parseCube = (line: string) => Vector3.fromArray(line.split(',').map(Number));
+const parseCube = (line: string) =>
+	Vector3.fromArray(line.split(',').map(Number));
 
 export const part1: AoCPart = (input) => {
 	const cubePositions = input.map(parseCube);
@@ -19,7 +20,10 @@ export const part1: AoCPart = (input) => {
 
 	return cubePositions
 		.map((cube) =>
-			count(SIDES, (side) => !cubeStrings.has(cube.clone().add(side).toString()))
+			count(
+				SIDES,
+				(side) => !cubeStrings.has(cube.clone().add(side).toString()),
+			),
 		)
 		.reduce((a, b) => a + b);
 };
@@ -57,7 +61,7 @@ export const part2: AoCPart = (input) => {
 			if (
 				limits.some(
 					({ max, min }, axis) =>
-						nextTile.axisIndex(axis) > max || nextTile.axisIndex(axis) < min
+						nextTile.axisIndex(axis) > max || nextTile.axisIndex(axis) < min,
 				) ||
 				visitedWaterTiles.has(nextTile.toString())
 			)

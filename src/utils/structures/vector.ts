@@ -1,7 +1,10 @@
 import { wrapRotation } from '../math';
 
 export class Vector2 {
-	public constructor(public x: number, public y: number) {}
+	public constructor(
+		public x: number,
+		public y: number,
+	) {}
 
 	public axisIndex(index: number): number {
 		if (index === 0) return this.x;
@@ -128,7 +131,10 @@ export class Vector2 {
 		const sine = Math.sin(angle);
 		const cosine = Math.cos(angle);
 
-		[this.x, this.y] = [this.x * cosine - this.y * sine, this.x * sine + this.y * cosine];
+		[this.x, this.y] = [
+			this.x * cosine - this.y * sine,
+			this.x * sine + this.y * cosine,
+		];
 		return this;
 	}
 
@@ -145,13 +151,18 @@ export class Vector2 {
 	}
 
 	public static fromArray(arr: number[]): Vector2 {
-		if (arr.length < 2) throw new Error('Vector2 array must have at least 2 elements');
+		if (arr.length < 2)
+			throw new Error('Vector2 array must have at least 2 elements');
 		return new Vector2(arr[0], arr[1]);
 	}
 }
 
 export class Vector3 {
-	public constructor(public x: number, public y: number, public z: number) {}
+	public constructor(
+		public x: number,
+		public y: number,
+		public z: number,
+	) {}
 
 	public axisIndex(index: number): number {
 		if (index === 0) return this.x;
@@ -292,7 +303,10 @@ export class Vector3 {
 		const sin = Math.sin(angle);
 		const cos = Math.cos(angle);
 
-		[this.y, this.z] = [this.y * cos - this.z * sin, this.y * sin + this.z * cos];
+		[this.y, this.z] = [
+			this.y * cos - this.z * sin,
+			this.y * sin + this.z * cos,
+		];
 		return this;
 	}
 
@@ -300,7 +314,10 @@ export class Vector3 {
 		const sin = Math.sin(angle);
 		const cos = Math.cos(angle);
 
-		[this.x, this.z] = [this.x * cos - this.z * sin, -this.x * sin + this.z * cos];
+		[this.x, this.z] = [
+			this.x * cos - this.z * sin,
+			-this.x * sin + this.z * cos,
+		];
 		return this;
 	}
 
@@ -308,7 +325,10 @@ export class Vector3 {
 		const sin = Math.sin(angle);
 		const cos = Math.cos(angle);
 
-		[this.x, this.y] = [this.x * cos - this.y * sin, this.x * sin + this.y * cos];
+		[this.x, this.y] = [
+			this.x * cos - this.y * sin,
+			this.x * sin + this.y * cos,
+		];
 		return this;
 	}
 
@@ -333,7 +353,8 @@ export class Vector3 {
 	}
 
 	public static fromArray(arr: number[]): Vector3 {
-		if (arr.length < 3) throw new Error('Vector3 array must have at least 3 elements');
+		if (arr.length < 3)
+			throw new Error('Vector3 array must have at least 3 elements');
 		return new Vector3(arr[0], arr[1], arr[2]);
 	}
 }

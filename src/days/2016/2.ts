@@ -1,8 +1,9 @@
 import { AoCPart } from '../../types';
 
-const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max);
+const clamp = (num: number, min: number, max: number) =>
+	Math.min(Math.max(num, min), max);
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const pos = [1, 1];
 
 	const buttons = [
@@ -12,7 +13,7 @@ export const part1: AoCPart = input => {
 	];
 
 	return input.reduce((acc, line) => {
-		line.split('').forEach(char => {
+		line.split('').forEach((char) => {
 			switch (char) {
 				case 'U':
 					pos[1]--;
@@ -38,7 +39,7 @@ export const part1: AoCPart = input => {
 	}, '');
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const newButtons = [
 		[null, null, '5', null, null],
 		[null, '2', '6', 'A', null],
@@ -50,7 +51,7 @@ export const part2: AoCPart = input => {
 	const pos = [0, 2];
 
 	return input.reduce((acc, line) => {
-		line.split('').forEach(char => {
+		line.split('').forEach((char) => {
 			const [prevX, prevY] = [...pos];
 			switch (char) {
 				case 'U':

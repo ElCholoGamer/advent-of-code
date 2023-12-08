@@ -48,7 +48,7 @@ class PriorityQueue<T> {
 	}
 
 	public findNode(
-		predicate: (value: Node<T>, index: number, obj: Node<T>[]) => boolean
+		predicate: (value: Node<T>, index: number, obj: Node<T>[]) => boolean,
 	): Node<T> | undefined {
 		return this.items.find(predicate);
 	}

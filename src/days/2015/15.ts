@@ -30,17 +30,17 @@ function getCombinationsThatSumTo(target: number, nums: number): number[][] {
 
 	for (let i = 0; i <= target; i++) {
 		const subCombinations = getCombinationsThatSumTo(target - i, nums - 1);
-		result.push(...subCombinations.map(combination => [i, ...combination]));
+		result.push(...subCombinations.map((combination) => [i, ...combination]));
 	}
 
 	return result;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const ingredients = input.map(parseIngredient);
 	const combinations = getCombinationsThatSumTo(100, ingredients.length);
 
-	const scores = combinations.map(combination => {
+	const scores = combinations.map((combination) => {
 		let capacity = 0;
 		let durability = 0;
 		let flavor = 0;
@@ -57,19 +57,22 @@ export const part1: AoCPart = input => {
 		}
 
 		return (
-			Math.max(capacity, 0) * Math.max(durability, 0) * Math.max(flavor, 0) * Math.max(texture, 0)
+			Math.max(capacity, 0) *
+			Math.max(durability, 0) *
+			Math.max(flavor, 0) *
+			Math.max(texture, 0)
 		);
 	});
 
 	return scores.reduce((a, b) => (a > b ? a : b));
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	// Same thing as part 1 but ignores recipes without 500 calories
 	const ingredients = input.map(parseIngredient);
 	const combinations = getCombinationsThatSumTo(100, ingredients.length);
 
-	const scores = combinations.map(combination => {
+	const scores = combinations.map((combination) => {
 		let capacity = 0;
 		let durability = 0;
 		let flavor = 0;
@@ -90,7 +93,10 @@ export const part2: AoCPart = input => {
 		if (calories !== 500) return -1;
 
 		return (
-			Math.max(capacity, 0) * Math.max(durability, 0) * Math.max(flavor, 0) * Math.max(texture, 0)
+			Math.max(capacity, 0) *
+			Math.max(durability, 0) *
+			Math.max(flavor, 0) *
+			Math.max(texture, 0)
 		);
 	});
 

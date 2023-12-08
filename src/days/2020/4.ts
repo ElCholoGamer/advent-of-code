@@ -11,19 +11,23 @@ function makePassports(input: string[]) {
 				const [type, value] = pair.split(':');
 				return { ...acc, [type]: value };
 			}, {});
-			return [...acc.slice(0, acc.length - 1), { ...acc[acc.length - 1], ...pairs }];
+			return [
+				...acc.slice(0, acc.length - 1),
+				{ ...acc[acc.length - 1], ...pairs },
+			];
 		}
 	}, []);
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const passports = makePassports(input);
 
-	return passports.filter(fields => required.every(field => Object.keys(fields).includes(field)))
-		.length;
+	return passports.filter((fields) =>
+		required.every((field) => Object.keys(fields).includes(field)),
+	).length;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const rules: Record<string, (value: string) => boolean> = {
 		byr(str: string) {
 			const num = Number(str);
@@ -48,18 +52,19 @@ export const part2: AoCPart = input => {
 			return ext === 'cm' ? num >= 150 && num <= 193 : num >= 59 && num <= 76;
 		},
 		hcl: (str: string) => /^#[a-f0-9]{6}$/.test(str),
-		ecl: (str: string) => ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'].includes(str),
+		ecl: (str: string) =>
+			['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'].includes(str),
 		pid: (str: string) => /^[0-9]{9}$/.test(str),
 	};
 
 	const passports = makePassports(input);
 
-	return passports.filter(fields => {
+	return passports.filter((fields) => {
 		const keys = Object.keys(fields);
 
 		return (
-			required.every(field => keys.includes(field)) &&
-			keys.every(field => {
+			required.every((field) => keys.includes(field)) &&
+			keys.every((field) => {
 				const rule = rules[field] || (() => true);
 				return rule(fields[<keyof typeof fields>field]);
 			})

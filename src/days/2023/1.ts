@@ -16,7 +16,17 @@ export const part1: AoCPart = (input) => {
 	return sum;
 };
 
-const NUMBERS = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+const NUMBERS = [
+	'one',
+	'two',
+	'three',
+	'four',
+	'five',
+	'six',
+	'seven',
+	'eight',
+	'nine',
+];
 
 function findFirstNumber(str: string): number | null {
 	for (let i = 0; i < str.length; i++) {

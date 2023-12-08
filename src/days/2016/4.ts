@@ -19,11 +19,14 @@ function getRealRooms(input: string[]) {
 			count[key],
 		]);
 
-		countArray.sort((a, b) => b[1] - a[1] || (b[0] < a[0] ? 1 : b[0] > a[0] ? -1 : 0));
+		countArray.sort(
+			(a, b) => b[1] - a[1] || (b[0] < a[0] ? 1 : b[0] > a[0] ? -1 : 0),
+		);
 
 		for (let i = 0; i < letters.length; i++) {
 			const letter = letters[i];
-			const foundIndex = countArray.findIndex((count) => count[0] === letter) || 0;
+			const foundIndex =
+				countArray.findIndex((count) => count[0] === letter) || 0;
 			if (i !== foundIndex) return acc;
 		}
 
@@ -59,5 +62,7 @@ export const part2: AoCPart = async (input) => {
 		return `${name}-${id}`;
 	});
 
-	return names.find((name) => name.startsWith('northpole object storage'))!.split('-')[1];
+	return names
+		.find((name) => name.startsWith('northpole object storage'))!
+		.split('-')[1];
 };

@@ -50,9 +50,14 @@ const rocks = [
 
 const SPACE_WIDTH = 7;
 
-async function simulateTetris(jets: string, pieceCount: number): Promise<number> {
-	const lastFloorOccurrences: Record<string, { pieces: number; towerHeight: number }> =
-		{};
+async function simulateTetris(
+	jets: string,
+	pieceCount: number,
+): Promise<number> {
+	const lastFloorOccurrences: Record<
+		string,
+		{ pieces: number; towerHeight: number }
+	> = {};
 	const grid = new ExtendableGrid(TileState.EMPTY);
 	let rockIndex = 0;
 	let jetIndex = 0;
@@ -73,7 +78,7 @@ async function simulateTetris(jets: string, pieceCount: number): Promise<number>
 					rock.tilePositions.every(
 						(tilePos) =>
 							grid.get(rockPos.x + tilePos.x - 1, rockPos.y + tilePos.y) ===
-							TileState.EMPTY
+							TileState.EMPTY,
 					)
 				)
 					rockPos.x--;
@@ -83,7 +88,7 @@ async function simulateTetris(jets: string, pieceCount: number): Promise<number>
 					rock.tilePositions.every(
 						(tilePos) =>
 							grid.get(rockPos.x + tilePos.x + 1, rockPos.y + tilePos.y) ===
-							TileState.EMPTY
+							TileState.EMPTY,
 					)
 				)
 					rockPos.x++;
@@ -91,13 +96,14 @@ async function simulateTetris(jets: string, pieceCount: number): Promise<number>
 			jetIndex = (jetIndex + 1) % jets.length;
 
 			const absTilePositions = rock.tilePositions.map((tilePos) =>
-				rockPos.clone().add(tilePos)
+				rockPos.clone().add(tilePos),
 			);
 
 			if (
 				absTilePositions.some(
 					(tilePos) =>
-						tilePos.y <= 0 || grid.get(tilePos.x, tilePos.y - 1) === TileState.OCCUPIED
+						tilePos.y <= 0 ||
+						grid.get(tilePos.x, tilePos.y - 1) === TileState.OCCUPIED,
 				)
 			) {
 				for (const { x, y } of absTilePositions) {
@@ -113,7 +119,7 @@ async function simulateTetris(jets: string, pieceCount: number): Promise<number>
 
 		if (
 			[...Array(SPACE_WIDTH)].every(
-				(_, x) => grid.get(x, towerHeight - 1) === TileState.OCCUPIED
+				(_, x) => grid.get(x, towerHeight - 1) === TileState.OCCUPIED,
 			)
 		) {
 			const key = `${rockIndex}-${jetIndex}`;
@@ -127,7 +133,8 @@ async function simulateTetris(jets: string, pieceCount: number): Promise<number>
 				const piecesPerSkip = p - startPieceCount;
 				const heightPerSkip = towerHeight - startHeight;
 
-				const skipFactor = Math.floor((pieceCount - startPieceCount) / piecesPerSkip) - 1;
+				const skipFactor =
+					Math.floor((pieceCount - startPieceCount) / piecesPerSkip) - 1;
 				skippedHeight = skipFactor * heightPerSkip;
 				p += skipFactor * piecesPerSkip;
 			}
@@ -139,4 +146,5 @@ async function simulateTetris(jets: string, pieceCount: number): Promise<number>
 
 export const part1: AoCPart = async ([input]) => simulateTetris(input, 2022);
 
-export const part2: AoCPart = async ([input]) => simulateTetris(input, 1_000_000_000_000);
+export const part2: AoCPart = async ([input]) =>
+	simulateTetris(input, 1_000_000_000_000);

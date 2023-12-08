@@ -17,7 +17,10 @@ function parseObjects(input: string[]): Record<string, SpaceObject> {
 	return objects;
 }
 
-function getAllOrbits(objects: Record<string, SpaceObject>, object: string): string[] {
+function getAllOrbits(
+	objects: Record<string, SpaceObject>,
+	object: string,
+): string[] {
 	const out: string[] = [];
 
 	let current = objects[object];
@@ -30,7 +33,7 @@ function getAllOrbits(objects: Record<string, SpaceObject>, object: string): str
 	return out;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const objects = parseObjects(input);
 
 	let orbitCount = 0;
@@ -42,13 +45,13 @@ export const part1: AoCPart = input => {
 	return orbitCount;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const objects = parseObjects(input);
 
 	const youOrbits = getAllOrbits(objects, 'YOU');
 	const santaOrbits = getAllOrbits(objects, 'SAN');
 
-	const commonOrbits = youOrbits.filter(orbit => santaOrbits.includes(orbit));
+	const commonOrbits = youOrbits.filter((orbit) => santaOrbits.includes(orbit));
 
 	return youOrbits.length + santaOrbits.length - commonOrbits.length * 2;
 };

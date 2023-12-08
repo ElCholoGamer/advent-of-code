@@ -37,21 +37,29 @@ function parseLine(line: string): Line {
 	};
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const grid: number[][] = [[]];
 
 	const lines = input
 		.map(parseLine)
-		.filter(line => line.from[0] === line.to[0] || line.from[1] === line.to[1]); // Ignore diagonals
+		.filter(
+			(line) => line.from[0] === line.to[0] || line.from[1] === line.to[1],
+		); // Ignore diagonals
 
 	markLines(grid, lines);
 
-	return grid.reduce((acc, column) => acc + column.reduce((a, p) => a + +(p >= 2), 0), 0);
+	return grid.reduce(
+		(acc, column) => acc + column.reduce((a, p) => a + +(p >= 2), 0),
+		0,
+	);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const lines = input.map(parseLine);
 	const grid = markLines([[]], lines);
 
-	return grid.reduce((acc, column) => acc + column.reduce((a, p) => a + +(p >= 2), 0), 0);
+	return grid.reduce(
+		(acc, column) => acc + column.reduce((a, p) => a + +(p >= 2), 0),
+		0,
+	);
 };

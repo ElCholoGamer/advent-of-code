@@ -40,7 +40,9 @@ function passRound(elves: Elve[], directionOrder: Direction[]): boolean {
 		main: for (let nX = -1; nX <= 1; nX++) {
 			for (let nY = -1; nY <= 1; nY++) {
 				if (nX === 0 && nY === 0) continue;
-				if (elvePositions.has(`${elve.position.x + nX},${elve.position.y + nY}`)) {
+				if (
+					elvePositions.has(`${elve.position.x + nX},${elve.position.y + nY}`)
+				) {
 					noNeighbors = false;
 					break main;
 				}
@@ -69,7 +71,8 @@ function passRound(elves: Elve[], directionOrder: Direction[]): boolean {
 			if (direction === Direction.NORTH || direction === Direction.SOUTH) {
 				if (
 					[-1, 0, 1].every(
-						(xOffset) => !elvePositions.has(`${newPos.x + xOffset},${newPos.y}`)
+						(xOffset) =>
+							!elvePositions.has(`${newPos.x + xOffset},${newPos.y}`),
 					)
 				) {
 					const key = newPos.toString();
@@ -79,7 +82,7 @@ function passRound(elves: Elve[], directionOrder: Direction[]): boolean {
 				}
 			} else if (
 				[-1, 0, 1].every(
-					(yOffset) => !elvePositions.has(`${newPos.x},${newPos.y + yOffset}`)
+					(yOffset) => !elvePositions.has(`${newPos.x},${newPos.y + yOffset}`),
 				)
 			) {
 				const key = newPos.toString();

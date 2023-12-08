@@ -13,7 +13,8 @@ interface Reindeer {
 }
 
 function parseReindeer(line: string): Reindeer {
-	const [name, , , speedStr, , , flyTimeStr, , , , , , , restTimeStr] = line.split(' ');
+	const [name, , , speedStr, , , flyTimeStr, , , , , , , restTimeStr] =
+		line.split(' ');
 	const flyTime = Number(flyTimeStr);
 
 	return {
@@ -47,7 +48,7 @@ function cycleReindeer(reindeer: Reindeer) {
 	reindeer.timer--;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const reindeers = input.map(parseReindeer);
 
 	for (let second = 0; second < TIME_LIMIT; second++) {
@@ -59,19 +60,24 @@ export const part1: AoCPart = input => {
 	return reindeers.reduce((a, b) => (a.distance > b.distance ? a : b)).distance;
 };
 
-export const part2: AoCPart = input => {
-	const reindeers = input.map(line => ({ ...parseReindeer(line), points: 0 }));
+export const part2: AoCPart = (input) => {
+	const reindeers = input.map((line) => ({
+		...parseReindeer(line),
+		points: 0,
+	}));
 
 	for (let i = 0; i < TIME_LIMIT; i++) {
 		for (const reindeer of reindeers) {
 			cycleReindeer(reindeer);
 		}
 
-		const maxDistance = reindeers.reduce((a, b) => (a.distance > b.distance ? a : b)).distance;
+		const maxDistance = reindeers.reduce((a, b) =>
+			a.distance > b.distance ? a : b,
+		).distance;
 
-		const leads = reindeers.filter(r => r.distance >= maxDistance);
+		const leads = reindeers.filter((r) => r.distance >= maxDistance);
 
-		leads.forEach(l => l.points++);
+		leads.forEach((l) => l.points++);
 	}
 
 	return reindeers.reduce((a, b) => (a.points > b.points ? a : b)).points;

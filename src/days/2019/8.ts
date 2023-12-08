@@ -12,7 +12,11 @@ function characterCount(layer: string[], character: string) {
 		.reduce((sum, char) => sum + +(char === character), 0);
 }
 
-function parselayers(input: string, imageWidth: number, imageHeight: number): string[][] {
+function parselayers(
+	input: string,
+	imageWidth: number,
+	imageHeight: number,
+): string[][] {
 	const layers: string[][] = [[]];
 
 	for (let i = 0; i < input.length; i += imageWidth) {
@@ -26,11 +30,19 @@ function parselayers(input: string, imageWidth: number, imageHeight: number): st
 	return layers;
 }
 
-export const part1: AoCPart<Options> = ([input], { imageWidth = 25, imageHeight = 6 }) => {
+export const part1: AoCPart<Options> = (
+	[input],
+	{ imageWidth = 25, imageHeight = 6 },
+) => {
 	const layers = parselayers(input, imageWidth, imageHeight);
-	const zeroCounts = layers.map((layer, index) => [index, characterCount(layer, '0')]);
+	const zeroCounts = layers.map((layer, index) => [
+		index,
+		characterCount(layer, '0'),
+	]);
 
-	const layerWithLessZeros = zeroCounts.reduce((a, b) => (a[1] < b[1] ? a : b))[0];
+	const layerWithLessZeros = zeroCounts.reduce((a, b) =>
+		a[1] < b[1] ? a : b,
+	)[0];
 
 	const ones = characterCount(layers[layerWithLessZeros], '1');
 	const twos = characterCount(layers[layerWithLessZeros], '2');
@@ -38,7 +50,10 @@ export const part1: AoCPart<Options> = ([input], { imageWidth = 25, imageHeight 
 	return ones * twos;
 };
 
-export const part2: AoCPart<Options> = ([input], { imageWidth = 25, imageHeight = 6 }) => {
+export const part2: AoCPart<Options> = (
+	[input],
+	{ imageWidth = 25, imageHeight = 6 },
+) => {
 	const layers = parselayers(input, imageWidth, imageHeight);
 
 	const finalImage: string[] = [];

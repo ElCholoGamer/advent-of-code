@@ -25,11 +25,13 @@ class Grid3 {
 	}
 
 	public getBounds(): [min: number, max: number][] {
-		const coords = Array.from(this.cubes.values()).map(coords => coords.split(',').map(Number));
+		const coords = Array.from(this.cubes.values()).map((coords) =>
+			coords.split(',').map(Number),
+		);
 
-		const xKeys = coords.map(coord => coord[0]);
-		const yKeys = coords.map(coord => coord[1]);
-		const zKeys = coords.map(coord => coord[2]);
+		const xKeys = coords.map((coord) => coord[0]);
+		const yKeys = coords.map((coord) => coord[1]);
+		const zKeys = coords.map((coord) => coord[2]);
 
 		return [
 			[Math.min(...xKeys) - 1, Math.max(...xKeys) + 1],
@@ -39,7 +41,7 @@ class Grid3 {
 	}
 }
 
-export const part1: AoCPart = async input => {
+export const part1: AoCPart = async (input) => {
 	let grid = new Grid3();
 
 	for (let y = 0; y < input.length; y++) {
@@ -112,12 +114,14 @@ class Grid4 {
 	}
 
 	public getBounds(): [min: number, max: number][] {
-		const coords = Array.from(this.cubes.values()).map(coords => coords.split(',').map(Number));
+		const coords = Array.from(this.cubes.values()).map((coords) =>
+			coords.split(',').map(Number),
+		);
 
-		const xKeys = coords.map(coord => coord[0]);
-		const yKeys = coords.map(coord => coord[1]);
-		const zKeys = coords.map(coord => coord[2]);
-		const wKeys = coords.map(coord => coord[3]);
+		const xKeys = coords.map((coord) => coord[0]);
+		const yKeys = coords.map((coord) => coord[1]);
+		const zKeys = coords.map((coord) => coord[2]);
+		const wKeys = coords.map((coord) => coord[3]);
 
 		return [
 			[Math.min(...xKeys) - 1, Math.max(...xKeys) + 1],
@@ -128,7 +132,7 @@ class Grid4 {
 	}
 }
 
-export const part2: AoCPart = async input => {
+export const part2: AoCPart = async (input) => {
 	let grid = new Grid4();
 
 	for (let y = 0; y < input.length; y++) {
@@ -154,9 +158,11 @@ export const part2: AoCPart = async input => {
 							for (let offY = -1; offY <= 1; offY++) {
 								for (let offZ = -1; offZ <= 1; offZ++) {
 									for (let offW = -1; offW <= 1; offW++) {
-										if (offX === 0 && offY === 0 && offZ === 0 && offW === 0) continue;
+										if (offX === 0 && offY === 0 && offZ === 0 && offW === 0)
+											continue;
 
-										if (grid.get(x + offX, y + offY, z + offZ, w + offW)) activeNeighbors++;
+										if (grid.get(x + offX, y + offY, z + offZ, w + offW))
+											activeNeighbors++;
 									}
 								}
 							}

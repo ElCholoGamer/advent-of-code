@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const instructions = input.map(Number);
 
 	let i = 0;
@@ -14,7 +14,7 @@ export const part1: AoCPart = input => {
 	return steps;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const instructions = input.map(Number);
 
 	let i = 0;

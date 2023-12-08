@@ -24,7 +24,9 @@ function parseInput(input: string[]) {
 	const width = Math.max(...gridLines.map((l) => l.length));
 	const height = gridLines.length;
 
-	const grid = [...Array(width)].map(() => Array<Tile | null>(height).fill(null));
+	const grid = [...Array(width)].map(() =>
+		Array<Tile | null>(height).fill(null),
+	);
 
 	for (let y = 0; y < height; y++) {
 		const line = gridLines[y];
@@ -64,7 +66,7 @@ export const part1: AoCPart = (input) => {
 	const { grid, instructions } = parseInput(input);
 	let pos = new Vector2(
 		grid.findIndex((column) => column[0] === Tile.OPEN),
-		0
+		0,
 	);
 	let facing = Direction.RIGHT;
 
@@ -82,14 +84,19 @@ export const part1: AoCPart = (input) => {
 						break;
 					case Direction.DOWN:
 						newPos.y++;
-						if (newPos.y >= grid[0].length || grid[newPos.x][newPos.y] === null) {
+						if (
+							newPos.y >= grid[0].length ||
+							grid[newPos.x][newPos.y] === null
+						) {
 							newPos.y = grid[newPos.x].findIndex((tile) => tile !== null);
 						}
 						break;
 					case Direction.LEFT:
 						newPos.x--;
 						if (newPos.x < 0 || grid[newPos.x][newPos.y] === null) {
-							newPos.x = grid.findLastIndex((column) => column[newPos.y] !== null);
+							newPos.x = grid.findLastIndex(
+								(column) => column[newPos.y] !== null,
+							);
 						}
 						break;
 					case Direction.UP:
@@ -135,7 +142,10 @@ export const part2: AoCPart<Options> = async (input, { sideLength = 50 }) => {
 
 	for (let y = 0; y < grid[0].length; y += sideLength) {
 		for (let x = 0; x < grid.length; x += sideLength) {
-			if (grid[x][y] !== null && grid[x + sideLength - 1][y + sideLength - 1] !== null) {
+			if (
+				grid[x][y] !== null &&
+				grid[x + sideLength - 1][y + sideLength - 1] !== null
+			) {
 				sides.push({
 					topLeft: new Vector2(x, y),
 					bottomRight: new Vector2(x + sideLength - 1, y + sideLength - 1),
@@ -225,7 +235,7 @@ export const part2: AoCPart<Options> = async (input, { sideLength = 50 }) => {
 						pos.x >= side.topLeft.x &&
 						pos.x <= side.bottomRight.x &&
 						pos.y >= side.topLeft.y &&
-						pos.y <= side.bottomRight.y
+						pos.y <= side.bottomRight.y,
 				);
 				if (!currentSide) throw new Error('out of bounds');
 

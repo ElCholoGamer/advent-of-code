@@ -17,7 +17,7 @@ function parseEntry(line: string): Entry {
 	};
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const entries = input.map(parseEntry);
 
 	let count = 0;
@@ -38,7 +38,7 @@ export const part1: AoCPart = input => {
 	return count;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const entries = input.map(parseEntry);
 
 	for (const entry of entries) {
@@ -64,26 +64,36 @@ export const part2: AoCPart = input => {
 
 			if (pattern.length === 6) {
 				// Might be 0, 6 or 9
-				const oneChars = patterns.find(pattern => entry.patterns[pattern] === 1)!.split('');
+				const oneChars = patterns
+					.find((pattern) => entry.patterns[pattern] === 1)!
+					.split('');
 
-				if (oneChars.some(oneChar => !chars.includes(oneChar))) {
+				if (oneChars.some((oneChar) => !chars.includes(oneChar))) {
 					entry.patterns[pattern] = 6; // Pattern is six
 				} else {
 					// Might be 0 or 9
-					const fourChars = patterns.find(pattern => entry.patterns[pattern] === 4)!.split('');
-					const isZero = fourChars.some(fourChar => !chars.includes(fourChar));
+					const fourChars = patterns
+						.find((pattern) => entry.patterns[pattern] === 4)!
+						.split('');
+					const isZero = fourChars.some(
+						(fourChar) => !chars.includes(fourChar),
+					);
 
 					entry.patterns[pattern] = isZero ? 0 : 9;
 				}
 			} else if (pattern.length === 5) {
 				// Might be 2, 3 or 5
-				const oneChars = patterns.find(pattern => entry.patterns[pattern] === 1)!.split('');
+				const oneChars = patterns
+					.find((pattern) => entry.patterns[pattern] === 1)!
+					.split('');
 
-				if (oneChars.every(oneChar => chars.includes(oneChar))) {
+				if (oneChars.every((oneChar) => chars.includes(oneChar))) {
 					entry.patterns[pattern] = 3; // Pattern is 3
 				} else {
 					// Number might be 2 or 5
-					const fourChars = patterns.find(pattern => entry.patterns[pattern] === 4)!.split('');
+					const fourChars = patterns
+						.find((pattern) => entry.patterns[pattern] === 4)!
+						.split('');
 
 					let missing = 0;
 					for (const fourChar of fourChars) {

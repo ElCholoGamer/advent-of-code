@@ -1,11 +1,14 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const groups = input.reduce<string[]>((acc, line) => {
 		if (line === '') {
 			return [...acc, ''];
 		} else {
-			return [...acc.slice(0, acc.length - 1), (acc[acc.length - 1] || '') + line];
+			return [
+				...acc.slice(0, acc.length - 1),
+				(acc[acc.length - 1] || '') + line,
+			];
 		}
 	}, []);
 
@@ -19,12 +22,15 @@ export const part1: AoCPart = input => {
 	}, 0);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const groups = input.reduce<string[][]>((acc, line) => {
 		if (line === '') {
 			return [...acc, []];
 		} else {
-			return [...acc.slice(0, acc.length - 1), [...(acc[acc.length - 1] || []), line]];
+			return [
+				...acc.slice(0, acc.length - 1),
+				[...(acc[acc.length - 1] || []), line],
+			];
 		}
 	}, []);
 
@@ -38,6 +44,8 @@ export const part2: AoCPart = input => {
 				return { ...acc, [char]: curr + 1 };
 			}, {});
 
-		return acc + Object.values(counts).filter(count => count >= length).length;
+		return (
+			acc + Object.values(counts).filter((count) => count >= length).length
+		);
 	}, 0);
 };

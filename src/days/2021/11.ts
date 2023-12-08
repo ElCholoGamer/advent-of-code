@@ -29,7 +29,11 @@ function flashOctopuses(octopuses: Octopus[][]) {
 		}
 	}
 
-	while (octopuses.some(col => col.some(octopus => octopus.light > 9 && !octopus.flashed))) {
+	while (
+		octopuses.some((col) =>
+			col.some((octopus) => octopus.light > 9 && !octopus.flashed),
+		)
+	) {
 		for (let x = 0; x < octopuses.length; x++) {
 			for (let y = 0; y < octopuses[x].length; y++) {
 				const octopus = octopuses[x][y];
@@ -60,7 +64,7 @@ function flashOctopuses(octopuses: Octopus[][]) {
 	}
 }
 
-export const part1: AoCPart = async input => {
+export const part1: AoCPart = async (input) => {
 	const octopuses = parseOctopuses(input);
 	let flashes = 0;
 
@@ -81,7 +85,7 @@ export const part1: AoCPart = async input => {
 	return flashes;
 };
 
-export const part2: AoCPart = async input => {
+export const part2: AoCPart = async (input) => {
 	const octopuses = parseOctopuses(input);
 
 	for (let step = 1; true; step++) {
@@ -96,7 +100,11 @@ export const part2: AoCPart = async input => {
 			}
 		}
 
-		if (octopuses.every(column => column.every(octopus => octopus.light === 0))) {
+		if (
+			octopuses.every((column) =>
+				column.every((octopus) => octopus.light === 0),
+			)
+		) {
 			return step;
 		}
 	}

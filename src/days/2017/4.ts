@@ -4,7 +4,7 @@ function replaceAt(str: string, index: number, replacement: string) {
 	return str.substr(0, index) + replacement + str.substr(index + 1, str.length);
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	let validPassphrases = 0;
 
 	for (const line of input) {
@@ -18,7 +18,7 @@ export const part1: AoCPart = input => {
 	return validPassphrases;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	let validPassphrases = 0;
 
 	for (const line of input) {

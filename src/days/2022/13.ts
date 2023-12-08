@@ -34,14 +34,19 @@ function parsePacketData(str: string) {
 	throw new Error('missing end bracket');
 }
 
-function parsePacketPairs(input: string[]): [PacketDataArray, PacketDataArray][] {
+function parsePacketPairs(
+	input: string[],
+): [PacketDataArray, PacketDataArray][] {
 	return chunks(input, 3).map(([first, second]) => [
 		parsePacketData(first),
 		parsePacketData(second),
 	]);
 }
 
-function compareValues(a: number | PacketDataArray, b: number | PacketDataArray): Comparison {
+function compareValues(
+	a: number | PacketDataArray,
+	b: number | PacketDataArray,
+): Comparison {
 	if (typeof a === 'number' && typeof b === 'number') {
 		return Math.sign(a - b) as Comparison;
 	}
@@ -62,14 +67,16 @@ function compareValues(a: number | PacketDataArray, b: number | PacketDataArray)
 	return Comparison.EQUAL;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const pairs = enumerate(parsePacketPairs(input));
-	const ordered = pairs.filter(([, [a, b]]) => compareValues(a, b) === Comparison.RIGHT);
+	const ordered = pairs.filter(
+		([, [a, b]]) => compareValues(a, b) === Comparison.RIGHT,
+	);
 
 	return ordered.reduce((sum, [index]) => sum + index + 1, 0);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const pairs = parsePacketPairs(input).flat();
 	const div1 = [[2]];
 	const div2 = [[6]];

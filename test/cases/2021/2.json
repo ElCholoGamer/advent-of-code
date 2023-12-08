@@ -1,13 +1,27 @@
 {
 	"part1": [
 		{
-			"input": ["forward 5", "down 5", "forward 8", "up 3", "down 8", "forward 2"],
+			"input": [
+				"forward 5",
+				"down 5",
+				"forward 8",
+				"up 3",
+				"down 8",
+				"forward 2"
+			],
 			"result": 150
 		}
 	],
 	"part2": [
 		{
-			"input": ["forward 5", "down 5", "forward 8", "up 3", "down 8", "forward 2"],
+			"input": [
+				"forward 5",
+				"down 5",
+				"forward 8",
+				"up 3",
+				"down 8",
+				"forward 2"
+			],
 			"result": 900
 		}
 	]

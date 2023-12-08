@@ -31,8 +31,9 @@ export class IntcodeVM {
 		if (Array.isArray(initialMemory)) {
 			this.memory = [...initialMemory];
 		} else {
-			this.memory = initialMemory.split(',').map(s => parseInt(s));
-			if (this.memory.some(isNaN)) throw new Error('Could not parse Intcode program body');
+			this.memory = initialMemory.split(',').map((s) => parseInt(s));
+			if (this.memory.some(isNaN))
+				throw new Error('Could not parse Intcode program body');
 		}
 	}
 
@@ -96,7 +97,9 @@ export class IntcodeVM {
 				this._halted = true;
 				break;
 			default:
-				throw new Error(`Illegal opcode instruction at address ${instructionAddress}: ${opcode}`);
+				throw new Error(
+					`Illegal opcode instruction at address ${instructionAddress}: ${opcode}`,
+				);
 		}
 	}
 

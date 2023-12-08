@@ -11,7 +11,7 @@ function parseTargetArea(input: string): TargetArea {
 	const values = input
 		.split(': ')[1]
 		.split(', ')
-		.map(coord => coord.split('=')[1].split('..').map(Number))
+		.map((coord) => coord.split('=')[1].split('..').map(Number))
 		.flat();
 
 	return {

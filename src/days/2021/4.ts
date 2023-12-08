@@ -32,13 +32,13 @@ function parseInput(input: string[]): [number[], Board[]] {
 
 	let index: number;
 	while ((index = input.indexOf('')) !== -1) {
-		const rows = input.splice(index, 6).filter(e => e !== '');
+		const rows = input.splice(index, 6).filter((e) => e !== '');
 		if (rows.length === 0) continue;
 
 		const board: Board = { data: [[]], completed: false };
 		boards.push(board);
 
-		const rowNumbers = rows.map(row => row.trim().split(/\s+/).map(Number));
+		const rowNumbers = rows.map((row) => row.trim().split(/\s+/).map(Number));
 
 		for (let x = 0; x < rowNumbers[0].length; x++) {
 			for (let y = 0; y < rowNumbers.length; y++) {
@@ -63,15 +63,17 @@ function cycleBoard(num: number, board: Board) {
 		}
 	}
 
-	const columnCheck = board.data.some(col => col.every(item => item.marked));
+	const columnCheck = board.data.some((col) =>
+		col.every((item) => item.marked),
+	);
 	const rowCheck = board.data[0].some((_, rowIndex) =>
-		board.data.every(column => column[rowIndex].marked)
+		board.data.every((column) => column[rowIndex].marked),
 	);
 
 	return columnCheck || rowCheck;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const [numbers, boards] = parseInput(input);
 
 	for (const num of numbers) {
@@ -80,8 +82,10 @@ export const part1: AoCPart = input => {
 
 			if (completed) {
 				const unmarkedSum = board.data.reduce(
-					(acc, col) => acc + col.filter(i => !i.marked).reduce((acc, i) => acc + i.value, 0),
-					0
+					(acc, col) =>
+						acc +
+						col.filter((i) => !i.marked).reduce((acc, i) => acc + i.value, 0),
+					0,
 				);
 
 				return num * unmarkedSum;
@@ -92,7 +96,7 @@ export const part1: AoCPart = input => {
 	throw new Error('Couls not find result');
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const [numbers, boards] = parseInput(input);
 
 	for (const num of numbers) {
@@ -103,10 +107,12 @@ export const part2: AoCPart = input => {
 			if (completed) {
 				board.completed = true;
 
-				if (!boards.some(board => !board.completed)) {
+				if (!boards.some((board) => !board.completed)) {
 					const unmarkedSum = board.data.reduce(
-						(acc, col) => acc + col.filter(i => !i.marked).reduce((acc, i) => acc + i.value, 0),
-						0
+						(acc, col) =>
+							acc +
+							col.filter((i) => !i.marked).reduce((acc, i) => acc + i.value, 0),
+						0,
 					);
 
 					return num * unmarkedSum;

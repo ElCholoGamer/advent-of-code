@@ -46,7 +46,9 @@ export const part2: AoCPart = ([input]) => {
 
 	paintTiles(tiles, input);
 
-	const coords = [...tiles.keys()].map((coords) => coords.split(',').map(Number));
+	const coords = [...tiles.keys()].map((coords) =>
+		coords.split(',').map(Number),
+	);
 	const xs = coords.map((c) => c[0]);
 	const ys = coords.map((c) => c[1]);
 

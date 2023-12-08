@@ -38,9 +38,10 @@ function parseOperation(line: string): WireOperation {
 function runOperations(
 	wires: Record<string, number>,
 	operations: WireOperation[],
-	overrideWires: string[] = []
+	overrideWires: string[] = [],
 ) {
-	const getValue = (val: string | number) => (typeof val === 'string' ? wires[val] : val);
+	const getValue = (val: string | number) =>
+		typeof val === 'string' ? wires[val] : val;
 
 	do {
 		const newOperations: WireOperation[] = [];
@@ -96,7 +97,7 @@ function runOperations(
 	return wires;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const operations = input.map(parseOperation);
 	const wires = runOperations({}, operations);
 

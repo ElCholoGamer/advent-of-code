@@ -7,7 +7,7 @@ const pairs: Record<string, string> = {
 	'<': '>',
 };
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	let score = 0;
 
 	for (let line of input) {
@@ -48,9 +48,9 @@ export const part1: AoCPart = input => {
 	return score;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const regex = /(\{\})|(\[\])|(<>)|(\(\))/;
-	const incompleteLines = input.filter(line => {
+	const incompleteLines = input.filter((line) => {
 		while (regex.test(line)) {
 			line = line.replace(regex, '');
 		}
@@ -97,7 +97,9 @@ export const part2: AoCPart = input => {
 					score += 4;
 					break;
 				default:
-					throw new Error(`Invalid autocomplete character: "${autoCompleteWith}"`);
+					throw new Error(
+						`Invalid autocomplete character: "${autoCompleteWith}"`,
+					);
 			}
 
 			line = line.substring(0, line.length - 1);

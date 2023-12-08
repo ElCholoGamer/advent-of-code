@@ -10,7 +10,7 @@ function parseInsertion(line: string): Insertion {
 	return { between, add: char };
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	let polymer = input[0];
 	const insertions = input.slice(2).map(parseInsertion);
 
@@ -44,7 +44,7 @@ export const part1: AoCPart = input => {
 	return maxCount - minCount;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const insertions = input.slice(2).map(parseInsertion);
 
 	let pairCounts: Record<string, number> = {};
@@ -58,7 +58,7 @@ export const part2: AoCPart = input => {
 		const newPairCounts: typeof pairCounts = {};
 
 		for (const pair in pairCounts) {
-			const match = insertions.find(insertion => insertion.between === pair);
+			const match = insertions.find((insertion) => insertion.between === pair);
 			if (!match) {
 				newPairCounts[pair] = pairCounts[pair];
 				continue;

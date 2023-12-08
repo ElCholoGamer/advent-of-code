@@ -32,7 +32,7 @@ export const part1: AoCPart = ([input]) => {
 export const part2: AoCPart = ([input]) => {
 	let marks = [...Array(256)].map((_, index) => index);
 
-	const lengths = input.split('').map(char => char.charCodeAt(0));
+	const lengths = input.split('').map((char) => char.charCodeAt(0));
 	lengths.push(17, 31, 73, 47, 23);
 
 	let skipSize = 0;
@@ -53,6 +53,6 @@ export const part2: AoCPart = ([input]) => {
 		denseHash.push(block.reduce((a, b) => a ^ b));
 	}
 
-	const hexChars = denseHash.map(num => num.toString(16).padStart(2, '0'));
+	const hexChars = denseHash.map((num) => num.toString(16).padStart(2, '0'));
 	return hexChars.join('');
 };

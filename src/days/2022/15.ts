@@ -37,7 +37,10 @@ export const part1: AoCPart = (input) => {
 };
 
 class Range {
-	public constructor(public start: number, public end: number) {}
+	public constructor(
+		public start: number,
+		public end: number,
+	) {}
 
 	public get size() {
 		return this.end - this.start + 1;
@@ -61,7 +64,10 @@ export const part2: AoCPart = (input) => {
 		const markedRanges = new Set<Range>();
 
 		for (const { sensor, beacon } of reports) {
-			const distanceToBeacon = beacon.clone().subtract(sensor).manhattanLength();
+			const distanceToBeacon = beacon
+				.clone()
+				.subtract(sensor)
+				.manhattanLength();
 			const distanceToRow = Math.abs(sensor.y - y);
 			const extension = distanceToBeacon - distanceToRow;
 			if (extension < 0) continue;
@@ -71,7 +77,10 @@ export const part2: AoCPart = (input) => {
 			if (newRange.end > RANGE) newRange.end = RANGE;
 
 			for (const range of markedRanges) {
-				if (newRange.start - 1 <= range.end && newRange.end + 1 >= range.start) {
+				if (
+					newRange.start - 1 <= range.end &&
+					newRange.end + 1 >= range.start
+				) {
 					// Merge ranges
 					markedRanges.delete(range);
 					if (range.start < newRange.start) newRange.start = range.start;

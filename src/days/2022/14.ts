@@ -19,10 +19,10 @@ const enum Tile {
 
 function buildGrid(input: string[]): { grid: Tile[][]; floor: number } {
 	const paths = input.map((line) =>
-		line.split(' -> ').map((s) => Vector2.fromArray(s.split(',').map(Number)))
+		line.split(' -> ').map((s) => Vector2.fromArray(s.split(',').map(Number))),
 	);
 	const grid = [...Array(SAND_ORIGIN.x * 2)].map(() =>
-		Array(SAND_ORIGIN.x).fill(Tile.AIR)
+		Array(SAND_ORIGIN.x).fill(Tile.AIR),
 	);
 
 	let maxRockY = 0;
@@ -56,7 +56,7 @@ export const part1: AoCPart = (input) => {
 			if (sandPos.y >= floor) return sandUnits;
 
 			const nextMove = [0, -1, 1].find(
-				(xMove) => grid[sandPos.x + xMove][sandPos.y + 1] === Tile.AIR
+				(xMove) => grid[sandPos.x + xMove][sandPos.y + 1] === Tile.AIR,
 			);
 
 			if (nextMove === undefined) {
@@ -83,7 +83,7 @@ export const part2: AoCPart = (input) => {
 			}
 
 			const nextMove = [0, -1, 1].find(
-				(xMove) => grid[sandPos.x + xMove][sandPos.y + 1] === Tile.AIR
+				(xMove) => grid[sandPos.x + xMove][sandPos.y + 1] === Tile.AIR,
 			);
 
 			if (nextMove === undefined) {
@@ -163,7 +163,7 @@ export const visualization: Visualization = async (input) => {
 			}
 
 			const nextMove = [0, -1, 1].find(
-				(xMove) => grid[sandPos.x + xMove][sandPos.y + 1] === Tile.AIR
+				(xMove) => grid[sandPos.x + xMove][sandPos.y + 1] === Tile.AIR,
 			);
 
 			if (nextMove === undefined) {

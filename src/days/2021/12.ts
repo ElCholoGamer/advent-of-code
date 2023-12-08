@@ -30,7 +30,7 @@ function parseInput(input: string[]): Record<string, CaveData> {
 	return caves;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const caves = parseInput(input);
 	let paths = 0;
 
@@ -65,7 +65,7 @@ export const part1: AoCPart = input => {
 	return paths;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const caves = parseInput(input);
 	let paths = 0;
 

@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	return input.reduce((acc, row) => {
 		const nums = row.split(/\s+/).map(Number);
 		nums.sort((a, b) => a - b);
@@ -9,13 +9,15 @@ export const part1: AoCPart = input => {
 	}, 0);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	return input.reduce((acc, row) => {
-		const nums = row.split(/\s+/).map(num => parseInt(num));
+		const nums = row.split(/\s+/).map((num) => parseInt(num));
 
 		for (const num of nums) {
 			const found = nums.find(
-				otherNum => otherNum !== num && Math.max(num, otherNum) % Math.min(num, otherNum) === 0
+				(otherNum) =>
+					otherNum !== num &&
+					Math.max(num, otherNum) % Math.min(num, otherNum) === 0,
 			);
 			if (!found) continue;
 

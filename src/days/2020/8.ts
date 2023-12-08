@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const passed: number[] = [];
 	let currentIndex = 0;
 	let acc = 0;
@@ -25,7 +25,7 @@ export const part1: AoCPart = input => {
 	return acc;
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const tests = input.map((line, index, arr) => {
 		const newInput = [...arr];
 

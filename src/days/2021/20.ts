@@ -26,8 +26,8 @@ function getBounds(grid: any[][]): Rectangle {
 	const yIndices = [
 		...new Set(
 			Object.values(grid)
-				.map(col => Object.keys(col).map(Number))
-				.flat()
+				.map((col) => Object.keys(col).map(Number))
+				.flat(),
 		),
 	];
 
@@ -56,10 +56,16 @@ function addBorder<T>(grid: T[][], value: T) {
 	}
 }
 
-function enhanceImage(base: boolean[][], algorithmString: string, iterations: number): boolean[][] {
-	const algorithm = algorithmString.split('').map(char => char === '#');
+function enhanceImage(
+	base: boolean[][],
+	algorithmString: string,
+	iterations: number,
+): boolean[][] {
+	const algorithm = algorithmString.split('').map((char) => char === '#');
 	if (algorithm.length < 512)
-		throw new Error('Enhancement algorithm must be at least 512 characters long');
+		throw new Error(
+			'Enhancement algorithm must be at least 512 characters long',
+		);
 
 	let image = base;
 	addBorder(image, false);
@@ -95,18 +101,18 @@ function enhanceImage(base: boolean[][], algorithmString: string, iterations: nu
 }
 
 function countLitPixels(grid: boolean[][]) {
-	const counts = Object.values(grid).map(column =>
-		Object.values(column).reduce((sum, pixel) => sum + +pixel, 0)
+	const counts = Object.values(grid).map((column) =>
+		Object.values(column).reduce((sum, pixel) => sum + +pixel, 0),
 	);
 	return counts.reduce((a, b) => a + b);
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const image = enhanceImage(parseGrid(input.slice(2)), input[0], 2);
 	return countLitPixels(image);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const image = enhanceImage(parseGrid(input.slice(2)), input[0], 50);
 	return countLitPixels(image);
 };

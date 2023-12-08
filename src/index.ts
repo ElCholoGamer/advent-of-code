@@ -8,7 +8,7 @@ dotenv.config();
 async function main(
 	commandName = 'help',
 	args: string[],
-	cliFlags: Record<string, string | number>
+	cliFlags: Record<string, string | number>,
 ) {
 	console.log(chalk.blue.bold('┌───────────────────────────────┐'));
 	console.log(chalk.blue.bold('│      Advent of Code CLI       │'));
@@ -30,7 +30,9 @@ async function main(
 
 		if (!args[i]) {
 			if (required) {
-				console.error(chalk.bold.red(`Validation error: Missing "${name}" argument`));
+				console.error(
+					chalk.bold.red(`Validation error: Missing "${name}" argument`),
+				);
 				return;
 			}
 		} else {
@@ -70,7 +72,9 @@ async function main(
 		} else {
 			if (typeof value !== type.toLowerCase()) {
 				console.log(
-					chalk.red.bold(`Validation error: Flag --${flagName} must be of type "${type}"`)
+					chalk.red.bold(
+						`Validation error: Flag --${flagName} must be of type "${type}"`,
+					),
 				);
 				return;
 			}

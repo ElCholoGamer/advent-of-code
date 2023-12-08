@@ -34,7 +34,11 @@ function parsePacket(data: string): { packet: AnyPacket; rest: string } {
 			if (sub[0] === '0') break;
 		}
 
-		const packet: LiteralPacket = { version, type, value: parseInt(literalBinary, 2) };
+		const packet: LiteralPacket = {
+			version,
+			type,
+			value: parseInt(literalBinary, 2),
+		};
 		return { packet, rest: chars.join('') };
 	}
 
@@ -76,7 +80,7 @@ function parsePacket(data: string): { packet: AnyPacket; rest: string } {
 function toBinary(input: string): string {
 	return input
 		.split('')
-		.map(char => parseInt(char, 16).toString(2).padStart(4, '0'))
+		.map((char) => parseInt(char, 16).toString(2).padStart(4, '0'))
 		.join('')
 		.replace(/0+$/, '');
 }
@@ -88,7 +92,10 @@ export const part1: AoCPart = ([input]) => {
 	function packetVersionSum(packet: AnyPacket): number {
 		if (isLiteralPacket(packet)) return packet.version;
 
-		return packet.version + packet.subPackets.reduce((sum, sub) => sum + packetVersionSum(sub), 0);
+		return (
+			packet.version +
+			packet.subPackets.reduce((sum, sub) => sum + packetVersionSum(sub), 0)
+		);
 	}
 
 	return packetVersionSum(rootPacket);
@@ -101,7 +108,9 @@ export const part2: AoCPart = ([input]) => {
 	function getPacketValue(packet: AnyPacket): number {
 		if (isLiteralPacket(packet)) return packet.value;
 
-		const subPacketValues = packet.subPackets.map(subPacket => getPacketValue(subPacket));
+		const subPacketValues = packet.subPackets.map((subPacket) =>
+			getPacketValue(subPacket),
+		);
 
 		switch (packet.type) {
 			case 0:

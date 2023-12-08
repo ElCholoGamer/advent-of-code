@@ -53,7 +53,9 @@ function getIntersections(wires: WireInstruction[][]): Vector2[] {
 	}
 
 	const intersections = [...grid.entries()].filter((entry) => entry[1] >= 2);
-	return intersections.map((entry) => Vector2.fromArray(entry[0].split(',').map(Number)));
+	return intersections.map((entry) =>
+		Vector2.fromArray(entry[0].split(',').map(Number)),
+	);
 }
 
 export const part1: AoCPart = (input) => {

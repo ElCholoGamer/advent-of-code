@@ -30,7 +30,7 @@ function parsePlayer(line: string): Player {
 	};
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const players = input.map(parsePlayer);
 	const die = new DeterministicDie(100);
 
@@ -50,25 +50,25 @@ export const part1: AoCPart = input => {
 };
 
 function sizedPermutations<T>(arr: T[], size: number): T[][] {
-	if (size === 1) return arr.map(e => [e]);
+	if (size === 1) return arr.map((e) => [e]);
 
 	const out = [];
 
 	for (const element of arr) {
 		const subCombinations = sizedPermutations(arr, size - 1);
-		out.push(...subCombinations.map(rest => [element, ...rest]));
+		out.push(...subCombinations.map((rest) => [element, ...rest]));
 	}
 
 	return out;
 }
 
 const serializeUniverse = (players: Player[], turn: number) =>
-	players.map(p => `${p.position},${p.score}`).join(';') + ':' + turn;
+	players.map((p) => `${p.position},${p.score}`).join(';') + ':' + turn;
 
 const deserializeUniverse = (str: string): [Player[], number] => {
 	const [rest, turnStr] = str.split(':');
 
-	const players = rest.split(';').map(str => {
+	const players = rest.split(';').map((str) => {
 		const [position, score] = str.split(',').map(Number);
 		return { position, score };
 	});
@@ -76,13 +76,17 @@ const deserializeUniverse = (str: string): [Player[], number] => {
 	return [players, Number(turnStr)];
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const players = input.map(parsePlayer);
 	const winCounts: number[] = Array(players.length).fill(0);
 
-	const possibleRolls = sizedPermutations([1, 2, 3], 3).map(roll => roll.reduce((a, b) => a + b));
+	const possibleRolls = sizedPermutations([1, 2, 3], 3).map((roll) =>
+		roll.reduce((a, b) => a + b),
+	);
 
-	let universeCounts = new Map<string, number>([[serializeUniverse(players, 0), 1]]);
+	let universeCounts = new Map<string, number>([
+		[serializeUniverse(players, 0), 1],
+	]);
 
 	while (universeCounts.size) {
 		const newUniverseCounts: typeof universeCounts = new Map();
@@ -103,7 +107,10 @@ export const part2: AoCPart = input => {
 					const newPlayers = [...players];
 					newPlayers[turn] = player;
 
-					const key = serializeUniverse(newPlayers, (turn + 1) % newPlayers.length);
+					const key = serializeUniverse(
+						newPlayers,
+						(turn + 1) % newPlayers.length,
+					);
 					newUniverseCounts.set(key, (newUniverseCounts.get(key) || 0) + count);
 				}
 			}

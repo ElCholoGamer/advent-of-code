@@ -48,10 +48,15 @@ function getTotalDistance(allDistances: Distance[], path: string[]) {
 		const step1 = path[i];
 		const step2 = path[i + 1];
 		const found = allDistances.find(
-			d => (d.from === step1 && d.to === step2) || (d.from === step2 && d.to === step1)
+			(d) =>
+				(d.from === step1 && d.to === step2) ||
+				(d.from === step2 && d.to === step1),
 		);
 
-		if (!found) throw new Error(`Could not find distance between "${step1}" and "${step2}"`);
+		if (!found)
+			throw new Error(
+				`Could not find distance between "${step1}" and "${step2}"`,
+			);
 
 		totalDistance += found.value;
 	}
@@ -59,20 +64,24 @@ function getTotalDistance(allDistances: Distance[], path: string[]) {
 	return totalDistance;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const [locations, distances] = parseInput(input);
 	const permutations = getPermutations(locations);
 
-	const totalDistances = permutations.map(path => getTotalDistance(distances, path));
+	const totalDistances = permutations.map((path) =>
+		getTotalDistance(distances, path),
+	);
 
 	return Math.min(...totalDistances);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const [locations, distances] = parseInput(input);
 	const permutations = getPermutations(locations);
 
-	const totalDistances = permutations.map(path => getTotalDistance(distances, path));
+	const totalDistances = permutations.map((path) =>
+		getTotalDistance(distances, path),
+	);
 
 	return Math.max(...totalDistances);
 };

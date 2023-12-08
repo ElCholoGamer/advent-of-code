@@ -22,7 +22,11 @@ export const part1: AoCPart = (input) => {
 
 			let isPartNumber = false;
 
-			for (let col = Math.max(i - 1, 0); col <= Math.min(end, line.length - 1); col++) {
+			for (
+				let col = Math.max(i - 1, 0);
+				col <= Math.min(end, line.length - 1);
+				col++
+			) {
 				if (
 					(l > 0 && isSymbol(input[l - 1][col])) ||
 					isSymbol(input[l][col]) ||

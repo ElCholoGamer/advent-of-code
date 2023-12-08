@@ -13,7 +13,9 @@ function parseInput(input: string[]) {
 
 	for (let i = 2; i < input.length; i++) {
 		const [from, directions] = input[i].split(' = ');
-		const [left, right] = directions.substring(1, directions.length - 1).split(', ');
+		const [left, right] = directions
+			.substring(1, directions.length - 1)
+			.split(', ');
 		mapMap.set(from, [left, right]);
 	}
 
@@ -31,10 +33,15 @@ export const part1: AoCPart = (input) => {
 	let steps = 0;
 
 	while (location !== 'ZZZ') {
-		const locationEntry = assertNonNull(mapMap.get(location), 'Invalid location');
+		const locationEntry = assertNonNull(
+			mapMap.get(location),
+			'Invalid location',
+		);
 
 		location =
-			instructions[i] === Instruction.RIGHT ? locationEntry[1] : locationEntry[0];
+			instructions[i] === Instruction.RIGHT
+				? locationEntry[1]
+				: locationEntry[0];
 		i = (i + 1) % instructions.length;
 		steps++;
 	}
@@ -54,9 +61,14 @@ export const part2: AoCPart = (input) => {
 		steps++;
 
 		for (let l = 0; l < locations.length; l++) {
-			const locationEntry = assertNonNull(mapMap.get(locations[l]), 'Invalid location');
+			const locationEntry = assertNonNull(
+				mapMap.get(locations[l]),
+				'Invalid location',
+			);
 			locations[l] =
-				instructions[i] === Instruction.RIGHT ? locationEntry[1] : locationEntry[0];
+				instructions[i] === Instruction.RIGHT
+					? locationEntry[1]
+					: locationEntry[0];
 
 			if (locations[l].endsWith('Z')) {
 				stepFactors.push(steps);

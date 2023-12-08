@@ -1,13 +1,15 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	return input.reduce((acc, string) => {
 		// Rule 1
 		const vowels = string.match(/[aeiou]/g)?.length || 0;
 		if (vowels < 3) return acc;
 
 		// Rule 2
-		const repeated = string.split('').find((letter, index, arr) => letter === arr[index + 1]);
+		const repeated = string
+			.split('')
+			.find((letter, index, arr) => letter === arr[index + 1]);
 		if (!repeated) return acc;
 
 		// Rule 3
@@ -18,7 +20,7 @@ export const part1: AoCPart = input => {
 	}, 0);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	return input.reduce((acc, string) => {
 		const chars = string.split('');
 

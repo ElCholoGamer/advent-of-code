@@ -1,13 +1,13 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const masses = input.map(Number);
-	const fuelRequirements = masses.map(mass => Math.floor(mass / 3) - 2);
+	const fuelRequirements = masses.map((mass) => Math.floor(mass / 3) - 2);
 
 	return fuelRequirements.reduce((a, b) => a + b);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const masses = input.map(Number);
 
 	let totalFuel = 0;

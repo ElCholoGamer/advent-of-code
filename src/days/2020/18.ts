@@ -4,8 +4,8 @@ function parseExpression(e: string): [number[], string[]] {
 	const numbers = e
 		.split(/\s+(\+|\*)\s+/)
 		.map(Number)
-		.filter(n => !isNaN(n));
-	const operators = e.split(/\s*[0-9]+\s*/).filter(op => !!op);
+		.filter((n) => !isNaN(n));
+	const operators = e.split(/\s*[0-9]+\s*/).filter((op) => !!op);
 
 	return [numbers, operators];
 }
@@ -29,9 +29,9 @@ function solveExpressionPart1(e: string) {
 	return result;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const regex = /\([0-9]+(\s*(\+|\*)\s*[0-9]+)+\)/; // Matches parenthesis in operation
-	const results = input.map(line => {
+	const results = input.map((line) => {
 		let matchInfo: RegExpMatchArray | null;
 
 		while ((matchInfo = line.match(regex))) {
@@ -58,7 +58,10 @@ function solveExpressionPart2(e: string) {
 	while ((matchInfo = e.match(sumRegex))) {
 		const { 0: match, index = 0 } = matchInfo;
 		const solvedExp = solveExpressionPart1(match);
-		e = e.substr(0, matchInfo.index) + solvedExp + e.substr(index + match.length, e.length);
+		e =
+			e.substr(0, matchInfo.index) +
+			solvedExp +
+			e.substr(index + match.length, e.length);
 	}
 
 	const [numbers, operators] = parseExpression(e);
@@ -78,9 +81,9 @@ function solveExpressionPart2(e: string) {
 	return result;
 }
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const regex = /\([0-9]+(\s*(\+|\*)\s*[0-9]+)+\)/; // Matches parenthesis in operation
-	const results = input.map(line => {
+	const results = input.map((line) => {
 		let matchInfo: RegExpMatchArray | null;
 
 		while ((matchInfo = line.match(regex))) {

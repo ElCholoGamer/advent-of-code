@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	return input.reduce((acc, line) => {
 		const [side1, side2, side3] = line.trim().split(/\s+/).map(Number);
 
@@ -15,7 +15,7 @@ export const part1: AoCPart = input => {
 	}, 0);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const nums = input.join(' ').split(/\s+/).map(Number);
 
 	const triangles = nums.reduce<number[][]>((acc, num, index) => {

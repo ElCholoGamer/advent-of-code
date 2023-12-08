@@ -29,7 +29,9 @@ function cycleMoons(moons: Moon[]) {
 		for (let otherM = 0; otherM < oldMoons.length; otherM++) {
 			if (m === otherM) continue;
 
-			const diff = oldMoons[otherM].position.clone().subtract(oldMoons[m].position);
+			const diff = oldMoons[otherM].position
+				.clone()
+				.subtract(oldMoons[m].position);
 			moon.velocity.add(diff.sign());
 		}
 
@@ -45,7 +47,7 @@ export const part1: AoCPart = (input) => {
 	}
 
 	const energies = moons.map(
-		(moon) => moon.position.manhattanLength() * moon.velocity.manhattanLength()
+		(moon) => moon.position.manhattanLength() * moon.velocity.manhattanLength(),
 	);
 
 	return energies.reduce((a, b) => a + b);
@@ -84,7 +86,7 @@ const moonAxis =
 
 const statesEqual = (a: MoonAxisState[], b: MoonAxisState[]) => {
 	return zip(a, b).every(
-		([a, b]) => a.position === b.position && a.velocity === b.velocity
+		([a, b]) => a.position === b.position && a.velocity === b.velocity,
 	);
 };
 

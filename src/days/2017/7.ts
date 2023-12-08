@@ -25,13 +25,16 @@ function timesInArray<T>(arr: T[], element: T) {
 	return count;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const programs = parsePrograms(input);
 
 	// Find the program that isn't owned by another program
 	const keys = Object.keys(programs);
 	const result = keys.find(
-		program => !keys.some(otherProgram => programs[otherProgram].children.includes(program))
+		(program) =>
+			!keys.some((otherProgram) =>
+				programs[otherProgram].children.includes(program),
+			),
 	);
 
 	if (!result) throw new Error('Could not find result');
@@ -47,13 +50,16 @@ export const part2: AoCPart = async (input, options) => {
 		// This function assumes that the given program has one unbalanced child
 		const program = programs[name];
 
-		if (program.children.length === 0) throw new Error('Program must have at least 1 child');
+		if (program.children.length === 0)
+			throw new Error('Program must have at least 1 child');
 
 		const childrenWeights = program.children.map(getWeight);
 
 		// Finds the most common weight among the children, which is inferred to be the correct one
 		const correctChildWeight = childrenWeights.reduce((a, b) =>
-			timesInArray(childrenWeights, b) > timesInArray(childrenWeights, a) ? b : a
+			timesInArray(childrenWeights, b) > timesInArray(childrenWeights, a)
+				? b
+				: a,
 		);
 
 		// Find the unbalanced child
@@ -67,7 +73,9 @@ export const part2: AoCPart = async (input, options) => {
 			// ----- Current child is the unbalanced one -----
 
 			if (child.children.length === 0)
-				throw new Error('Ambiguous result: Empty child inside unbalanced child');
+				throw new Error(
+					'Ambiguous result: Empty child inside unbalanced child',
+				);
 
 			const childrenOfChildWeights = child.children.map(getWeight);
 

@@ -16,7 +16,9 @@ export class ExtendableGrid<T> {
 		if (y >= this._height) {
 			const newHeight = y + 1;
 			for (let column = 0; column < this.width; column++) {
-				this.grid[column].push(...Array(newHeight - this._height).fill(this.fillValue));
+				this.grid[column].push(
+					...Array(newHeight - this._height).fill(this.fillValue),
+				);
 			}
 			this._height = newHeight;
 		}
@@ -24,7 +26,9 @@ export class ExtendableGrid<T> {
 		if (x >= this._width) {
 			const newWidth = x + 1;
 			this.grid.push(
-				...[...Array(newWidth - this._width)].map(() => Array(this._height).fill(this.fillValue))
+				...[...Array(newWidth - this._width)].map(() =>
+					Array(this._height).fill(this.fillValue),
+				),
 			);
 			this._width = newWidth;
 		}

@@ -13,10 +13,10 @@ function getLetters(input: string[]): string[][] {
 	return letters;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const letters = getLetters(input);
 
-	const repeated = letters.map(chars => {
+	const repeated = letters.map((chars) => {
 		const count = chars.reduce<Record<string, number>>((acc, char) => {
 			const { [char]: curr = 0 } = acc;
 			return { ...acc, [char]: curr + 1 };
@@ -29,10 +29,10 @@ export const part1: AoCPart = input => {
 	return repeated.join('');
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const letters = getLetters(input);
 
-	const repeated = letters.map(chars => {
+	const repeated = letters.map((chars) => {
 		const count = chars.reduce<Record<string, number>>((acc, char) => {
 			const { [char]: curr = 0 } = acc;
 			return { ...acc, [char]: curr + 1 };

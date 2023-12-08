@@ -50,7 +50,11 @@ function parseBlizzards(input: string[]) {
 	return blizzards;
 }
 
-function blizzardsAtTimeGen(initialBlizzards: Blizzard[], width: number, height: number) {
+function blizzardsAtTimeGen(
+	initialBlizzards: Blizzard[],
+	width: number,
+	height: number,
+) {
 	const blizzards = initialBlizzards.map((b) => ({
 		...b,
 		position: b.position.clone(),
@@ -88,7 +92,7 @@ function findShortestRoute(
 	width: number,
 	height: number,
 	startTime: number,
-	blizzardsFunction: (time: number) => Set<string>
+	blizzardsFunction: (time: number) => Set<string>,
 ): number {
 	const queue: [number, Vector2][] = [[startTime, start.clone()]];
 
@@ -111,7 +115,8 @@ function findShortestRoute(
 				neighbor.x < 0 ||
 				neighbor.x >= width ||
 				(neighbor.y < 0 && (neighbor.x !== 0 || neighbor.y < -1)) ||
-				(neighbor.y >= height && (neighbor.x !== width - 1 || neighbor.y > height))
+				(neighbor.y >= height &&
+					(neighbor.x !== width - 1 || neighbor.y > height))
 			)
 				continue;
 
@@ -119,7 +124,9 @@ function findShortestRoute(
 
 			if (
 				!nextBlizzards.has(neighbor.toString()) &&
-				!queue.some(([time, position]) => time === newTime && position.equals(neighbor))
+				!queue.some(
+					([time, position]) => time === newTime && position.equals(neighbor),
+				)
 			) {
 				queue.push([newTime, neighbor]);
 			}
@@ -132,14 +139,18 @@ function findShortestRoute(
 export const part1: AoCPart = (input) => {
 	const height = input.length - 2;
 	const width = input[0].length - 2;
-	const blizzardsAtTime = blizzardsAtTimeGen(parseBlizzards(input), width, height);
+	const blizzardsAtTime = blizzardsAtTimeGen(
+		parseBlizzards(input),
+		width,
+		height,
+	);
 	const shortestRoute = findShortestRoute(
 		new Vector2(0, -1),
 		new Vector2(width - 1, height),
 		width,
 		height,
 		0,
-		blizzardsAtTime
+		blizzardsAtTime,
 	);
 
 	return shortestRoute;
@@ -148,12 +159,30 @@ export const part1: AoCPart = (input) => {
 export const part2: AoCPart = async (input) => {
 	const height = input.length - 2;
 	const width = input[0].length - 2;
-	const blizzardsAtTime = blizzardsAtTimeGen(parseBlizzards(input), width, height);
+	const blizzardsAtTime = blizzardsAtTimeGen(
+		parseBlizzards(input),
+		width,
+		height,
+	);
 
 	const start = new Vector2(0, -1);
 	const end = new Vector2(width - 1, height);
 
-	const first = findShortestRoute(start, end, width, height, 0, blizzardsAtTime);
-	const second = findShortestRoute(end, start, width, height, first, blizzardsAtTime);
+	const first = findShortestRoute(
+		start,
+		end,
+		width,
+		height,
+		0,
+		blizzardsAtTime,
+	);
+	const second = findShortestRoute(
+		end,
+		start,
+		width,
+		height,
+		first,
+		blizzardsAtTime,
+	);
 	return findShortestRoute(start, end, width, height, second, blizzardsAtTime);
 };

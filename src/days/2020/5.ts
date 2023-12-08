@@ -1,7 +1,7 @@
 import { AoCPart } from '../../types';
 
 function part1WithIDs(input: string[]): [ids: number[], maxId: number] {
-	const seats = input.map(line => {
+	const seats = input.map((line) => {
 		// Find row
 		const row = [0, 127]; // Starts at min. 0 and  max. 127
 		for (let i = 0; i < 7; i++) {
@@ -25,11 +25,11 @@ function part1WithIDs(input: string[]): [ids: number[], maxId: number] {
 	return [ids, maxId];
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	return part1WithIDs(input)[1];
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const [ids, maxId] = part1WithIDs(input);
 
 	let selfId: number | null = null;
@@ -37,7 +37,7 @@ export const part2: AoCPart = input => {
 
 	// Find missing ID in list
 	for (let i = minId; i < maxId; i++) {
-		if (!ids.find(id => id === i)) selfId = i;
+		if (!ids.find((id) => id === i)) selfId = i;
 	}
 
 	if (selfId === null) throw new Error('Could not find result');

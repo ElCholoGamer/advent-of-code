@@ -41,7 +41,7 @@ function parseMonkeys(input: string[]): Monkey[] {
 function monkeyBusinessAfterRounds(
 	monkeys: Monkey[],
 	rounds: number,
-	divideByThree: boolean
+	divideByThree: boolean,
 ) {
 	const moduloDivisor = lcm(...monkeys.map((monkey) => monkey.testDivisible));
 

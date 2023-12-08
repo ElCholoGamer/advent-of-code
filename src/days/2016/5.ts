@@ -42,14 +42,16 @@ export const part2: AoCPart = async ([input]) => {
 				displayTimer = 15000;
 
 				const displayPassword = password.replace(/-/g, () =>
-					chalk.red(Math.random().toString(16)[4])
+					chalk.red(Math.random().toString(16)[4]),
 				);
 				const line = chalk.green(
-					'================================================================='
+					'=================================================================',
 				);
 				console.clear();
 				console.log(line);
-				console.log(chalk.green(`||  ${hash}  ||  Password:  ${displayPassword}  ||`));
+				console.log(
+					chalk.green(`||  ${hash}  ||  Password:  ${displayPassword}  ||`),
+				);
 				console.log(line);
 			}
 		} while (!hash.startsWith('00000'));
@@ -66,7 +68,9 @@ export const part2: AoCPart = async ([input]) => {
 	function successScreen() {
 		console.log(chalk.green('================================'));
 		console.log(chalk.green('||                            ||'));
-		console.log(chalk.green(`||    ${chalk.bold('Password decrypted')}      ||`));
+		console.log(
+			chalk.green(`||    ${chalk.bold('Password decrypted')}      ||`),
+		);
 		console.log(chalk.green('||                            ||'));
 		console.log(chalk.green('================================'));
 

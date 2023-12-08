@@ -24,7 +24,7 @@ function part1WithCoords(input: string[]): [number, string[][]] {
 	return [trees, coords];
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	return part1WithCoords(input)[0];
 };
 
@@ -36,7 +36,7 @@ export const part2: AoCPart = async (input, options) => {
 	}
 };
 
-const part2Normal: AoCPart = input => {
+const part2Normal: AoCPart = (input) => {
 	const coords = part1WithCoords(input)[1];
 	const slopes = [
 		[1, 1],
@@ -62,7 +62,7 @@ const part2Normal: AoCPart = input => {
 	}, 1);
 };
 
-const part2Animated: AoCPart = async input => {
+const part2Animated: AoCPart = async (input) => {
 	const coords = [...Array(input[0].length)].map(() => Array(input.length));
 
 	input.forEach((line, y) => {
@@ -76,7 +76,7 @@ const part2Animated: AoCPart = async input => {
 		const [extraX, extraY] = [60, 15];
 		const sliced = coords
 			.slice(Math.max(pos[0] - extraX, 0), pos[0] + extraX)
-			.map(col => col.slice(Math.max(pos[1] - extraY, 0), pos[1] + extraY));
+			.map((col) => col.slice(Math.max(pos[1] - extraY, 0), pos[1] + extraY));
 
 		const lines = [];
 		for (let y = 0; y < sliced[0].length; y++) {
@@ -93,11 +93,12 @@ const part2Animated: AoCPart = async input => {
 
 		if (lines.length > extraY) {
 			const middleLine = lines[extraY];
-			lines[extraY] = middleLine.substr(0, extraX - 1) + '▮' + middleLine.substr(extraX);
+			lines[extraY] =
+				middleLine.substr(0, extraX - 1) + '▮' + middleLine.substr(extraX);
 		}
 
 		console.clear();
-		lines.forEach(line => console.log(line));
+		lines.forEach((line) => console.log(line));
 
 		pos[0] += slope[0];
 		pos[1] += slope[1];

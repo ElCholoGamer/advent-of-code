@@ -80,7 +80,9 @@ export const part1: AoCPart = (input) => {
 	const valves = parseValves(input);
 	const distances = computeDistances(valves);
 
-	const nonZeroValves = Object.keys(valves).filter((name) => valves[name].flowRate > 0);
+	const nonZeroValves = Object.keys(valves).filter(
+		(name) => valves[name].flowRate > 0,
+	);
 
 	const stack = [] as State[];
 	stack.push({
@@ -103,7 +105,8 @@ export const part1: AoCPart = (input) => {
 		}
 
 		for (const nextValveName of state.closedValves) {
-			const newTimeLeft = state.timeLeft - distances[state.location][nextValveName] - 1;
+			const newTimeLeft =
+				state.timeLeft - distances[state.location][nextValveName] - 1;
 			if (newTimeLeft <= 0) {
 				if (state.totalPressure > maxPressure) {
 					maxPressure = state.totalPressure;
@@ -140,7 +143,9 @@ interface State2 {
 export const part2: AoCPart = (input) => {
 	const valves = parseValves(input);
 	const distances = computeDistances(valves);
-	const nonZeroValves = Object.keys(valves).filter((name) => valves[name].flowRate > 0);
+	const nonZeroValves = Object.keys(valves).filter(
+		(name) => valves[name].flowRate > 0,
+	);
 
 	const stack: State2[] = [];
 	stack.push({
@@ -164,7 +169,8 @@ export const part2: AoCPart = (input) => {
 		}
 
 		for (const nextValveName of state.closedValves) {
-			const newTimeLeft = state.timeLeft - distances[state.location][nextValveName] - 1;
+			const newTimeLeft =
+				state.timeLeft - distances[state.location][nextValveName] - 1;
 
 			if (newTimeLeft <= 0) {
 				if (!state.elephant) {
@@ -188,7 +194,8 @@ export const part2: AoCPart = (input) => {
 				location: nextValveName,
 				timeLeft: newTimeLeft,
 				closedValves: newClosedValves,
-				totalPressure: state.totalPressure + valves[nextValveName].flowRate * newTimeLeft,
+				totalPressure:
+					state.totalPressure + valves[nextValveName].flowRate * newTimeLeft,
 			});
 		}
 	}

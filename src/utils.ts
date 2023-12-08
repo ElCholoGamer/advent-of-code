@@ -10,12 +10,14 @@ export const getAllCommands = (() => {
 			const dir = path.join(__dirname, 'commands');
 			const paths = await readdir(dir);
 
-			const imports = await Promise.all(paths.map(file => import(path.resolve(dir, file))));
-			const commands = imports.map(module => module.default);
+			const imports = await Promise.all(
+				paths.map((file) => import(path.resolve(dir, file))),
+			);
+			const commands = imports.map((module) => module.default);
 
 			memo = commands.reduce<Record<string, Command>>(
 				(obj, command) => ({ ...obj, [command.name]: command }),
-				{}
+				{},
 			);
 		}
 
@@ -23,4 +25,5 @@ export const getAllCommands = (() => {
 	};
 })();
 
-export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+export const sleep = (ms: number) =>
+	new Promise((resolve) => setTimeout(resolve, ms));

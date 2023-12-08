@@ -71,7 +71,7 @@ export const part2: AoCPart = ([input]) => {
 	let maxSignal = 0;
 
 	for (const settings of settingPermutations) {
-		const programs = settings.map(v => {
+		const programs = settings.map((v) => {
 			const program = new ExtendedIntcodeVM(input);
 			program.queueInput(v);
 			return program;

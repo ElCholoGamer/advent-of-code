@@ -5,7 +5,7 @@ export const part1: AoCPart = ([input]) => {
 	let direction = 0;
 	const pos = [0, 0];
 
-	steps.forEach(step => {
+	steps.forEach((step) => {
 		const [, rotate, num] = step.match(/^([RL])([0-9]+)$/) || [];
 		const distance = parseInt(num);
 

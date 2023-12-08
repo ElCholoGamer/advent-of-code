@@ -24,7 +24,7 @@ function parseClaim(line: string): Claim {
 	};
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const claims = input.map(parseClaim);
 
 	const grid = new Map<string, number>();
@@ -38,11 +38,14 @@ export const part1: AoCPart = input => {
 		}
 	}
 
-	return Array.from(grid.values()).filter(claims => claims >= 2).length;
+	return Array.from(grid.values()).filter((claims) => claims >= 2).length;
 };
 
-export const part2: AoCPart = input => {
-	const claims = input.map(line => ({ ...parseClaim(line), overlaps: false }));
+export const part2: AoCPart = (input) => {
+	const claims = input.map((line) => ({
+		...parseClaim(line),
+		overlaps: false,
+	}));
 	const grid = new Map<string, number>();
 
 	for (const { x, y, width, height } of claims) {
@@ -64,7 +67,7 @@ export const part2: AoCPart = input => {
 		}
 	}
 
-	const validClaim = claims.find(claim => !claim.overlaps);
+	const validClaim = claims.find((claim) => !claim.overlaps);
 
 	if (!validClaim) throw new Error('Could not find a valid claim');
 

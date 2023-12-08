@@ -37,39 +37,45 @@ function getPermutations<T>(arr: T[]): T[][] {
 	return permute(arr);
 }
 
-function getArrangementHappiness(people: Record<string, PersonHappiness>, arrangement: string[]) {
+function getArrangementHappiness(
+	people: Record<string, PersonHappiness>,
+	arrangement: string[],
+) {
 	let happinessChange = 0;
 
 	for (let i = 0; i < arrangement.length; i++) {
 		const person = arrangement[i];
-		const next = i === arrangement.length - 1 ? arrangement[0] : arrangement[i + 1];
-		const prev = i === 0 ? arrangement[arrangement.length - 1] : arrangement[i - 1];
+		const next =
+			i === arrangement.length - 1 ? arrangement[0] : arrangement[i + 1];
+		const prev =
+			i === 0 ? arrangement[arrangement.length - 1] : arrangement[i - 1];
 
-		happinessChange += (people[person][next] || 0) + (people[person][prev] || 0);
+		happinessChange +=
+			(people[person][next] || 0) + (people[person][prev] || 0);
 	}
 
 	return happinessChange;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const people = parseInput(input);
 	const arrangements = getPermutations(Object.keys(people));
 
-	const happinessChanges = arrangements.map(arrangement =>
-		getArrangementHappiness(people, arrangement)
+	const happinessChanges = arrangements.map((arrangement) =>
+		getArrangementHappiness(people, arrangement),
 	);
 
 	return Math.max(...happinessChanges);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const people = parseInput(input);
 	people.me = {};
 
 	const arrangements = getPermutations(Object.keys(people));
 
-	const happinessChanges = arrangements.map(arrangement =>
-		getArrangementHappiness(people, arrangement)
+	const happinessChanges = arrangements.map((arrangement) =>
+		getArrangementHappiness(people, arrangement),
 	);
 
 	// Manually calculate max value because stack overflow error with Math.max(...)

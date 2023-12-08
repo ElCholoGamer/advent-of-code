@@ -54,13 +54,14 @@ class MonadProgram {
 	}
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const program = new MonadProgram(input);
 	const digits = Array(14).fill(9);
 
 	while (true) {
 		if (!program.nextDigit(digits[program.currentDigit])) {
-			if (program.currentDigit >= 14) throw new Error('Could not find a valid number');
+			if (program.currentDigit >= 14)
+				throw new Error('Could not find a valid number');
 
 			digits[program.currentDigit]--;
 
@@ -80,14 +81,15 @@ export const part1: AoCPart = input => {
 	}
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const program = new MonadProgram(input);
 
 	const digits = Array(14).fill(1);
 
 	while (true) {
 		if (!program.nextDigit(digits[program.currentDigit])) {
-			if (program.currentDigit >= 14) throw new Error('Could not find a valid number');
+			if (program.currentDigit >= 14)
+				throw new Error('Could not find a valid number');
 
 			digits[program.currentDigit]++;
 

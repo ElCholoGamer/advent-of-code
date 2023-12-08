@@ -4,14 +4,19 @@ interface Options {
 	preambleLength: number;
 }
 
-export const part1: AoCPart<Options> = (inputStrings, { preambleLength = 25 }) => {
+export const part1: AoCPart<Options> = (
+	inputStrings,
+	{ preambleLength = 25 },
+) => {
 	const input = inputStrings.map(Number);
 
 	for (let i = 25; i < input.length; i++) {
 		const num = input[i];
 		const prev = input.slice(i - preambleLength, i);
 
-		if (!prev.some(n => prev.some(other => other !== n && other + n === num))) {
+		if (
+			!prev.some((n) => prev.some((other) => other !== n && other + n === num))
+		) {
 			return num;
 		}
 	}

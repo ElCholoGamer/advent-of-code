@@ -1,10 +1,12 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const findPair = (str: string) =>
 		str.split('').some((char, index, arr) => {
 			const pair = arr[index + 1];
-			return char !== pair && char === arr[index + 3] && pair === arr[index + 2];
+			return (
+				char !== pair && char === arr[index + 3] && pair === arr[index + 2]
+			);
 		});
 
 	return input.reduce((acc, ip) => {
@@ -18,7 +20,7 @@ export const part1: AoCPart = input => {
 	}, 0);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	return input.reduce((acc, ip) => {
 		const clear = ip.replace(/\[[a-z]+\]/g, '--');
 		const inBrackets = ip.replace(/(\]|^)[a-z]+(\[|$)/g, '--');

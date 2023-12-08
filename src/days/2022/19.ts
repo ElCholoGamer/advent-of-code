@@ -63,7 +63,7 @@ function maxGeodes(blueprint: Blueprint, time: number): number {
 		blueprint.oreRobotCost,
 		blueprint.clayRobotCost,
 		blueprint.obsidianRobotCost.ore,
-		blueprint.geodeRobotCost.ore
+		blueprint.geodeRobotCost.ore,
 	);
 
 	const queue: State[] = [
@@ -97,11 +97,14 @@ function maxGeodes(blueprint: Blueprint, time: number): number {
 		if (state.obsidianRobots > 0) {
 			// Geode robot
 			const oreNeeded = Math.max(blueprint.geodeRobotCost.ore - state.ore, 0);
-			const obsidianNeeded = Math.max(blueprint.geodeRobotCost.obsidian - state.obsidian, 0);
+			const obsidianNeeded = Math.max(
+				blueprint.geodeRobotCost.obsidian - state.obsidian,
+				0,
+			);
 			const timeElapsed =
 				Math.max(
 					Math.ceil(oreNeeded / state.oreRobots),
-					Math.ceil(obsidianNeeded / state.obsidianRobots)
+					Math.ceil(obsidianNeeded / state.obsidianRobots),
 				) + 1;
 
 			const newState = elapseTime(state, timeElapsed);
@@ -136,11 +139,19 @@ function maxGeodes(blueprint: Blueprint, time: number): number {
 
 		if (state.clayRobots > 0) {
 			// Obsidian robot
-			const oreNeeded = Math.max(blueprint.obsidianRobotCost.ore - state.ore, 0);
-			const clayNeeded = Math.max(blueprint.obsidianRobotCost.clay - state.clay, 0);
+			const oreNeeded = Math.max(
+				blueprint.obsidianRobotCost.ore - state.ore,
+				0,
+			);
+			const clayNeeded = Math.max(
+				blueprint.obsidianRobotCost.clay - state.clay,
+				0,
+			);
 			const timeElapsed =
-				Math.max(Math.ceil(oreNeeded / state.oreRobots), Math.ceil(clayNeeded / state.clayRobots)) +
-				1;
+				Math.max(
+					Math.ceil(oreNeeded / state.oreRobots),
+					Math.ceil(clayNeeded / state.clayRobots),
+				) + 1;
 
 			const newState = elapseTime(state, timeElapsed);
 			newState.ore -= blueprint.obsidianRobotCost.ore;
@@ -153,12 +164,14 @@ function maxGeodes(blueprint: Blueprint, time: number): number {
 	return maxGeodes;
 }
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	const blueprints = input.map(parseBlueprint);
-	return blueprints.map((b, i) => maxGeodes(b, 24) * (i + 1)).reduce((a, b) => a + b);
+	return blueprints
+		.map((b, i) => maxGeodes(b, 24) * (i + 1))
+		.reduce((a, b) => a + b);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	const blueprints = input.map(parseBlueprint).slice(0, 3);
-	return blueprints.map(b => maxGeodes(b, 32)).reduce((a, b) => a * b);
+	return blueprints.map((b) => maxGeodes(b, 32)).reduce((a, b) => a * b);
 };

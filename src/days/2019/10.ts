@@ -88,7 +88,9 @@ export const part2: AoCPart<Options> = (input, { targetAsteroid = 200 }) => {
 		if (vaporized + detected.length < targetAsteroid) {
 			asteroids = asteroids.filter(
 				(asteroid) =>
-					!detected.some((detectedAsteroid) => detectedAsteroid.equals(asteroid))
+					!detected.some((detectedAsteroid) =>
+						detectedAsteroid.equals(asteroid),
+					),
 			);
 			vaporized += detected.length;
 			continue;

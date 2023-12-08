@@ -10,7 +10,9 @@ function coordsEqual(set1: string[][], set2: string[][]) {
 		return (
 			set1.length === set2.length &&
 			set1.every(
-				(col, x) => col.length === set2[x].length && col.every((char, y) => set2[x][y] === char)
+				(col, x) =>
+					col.length === set2[x].length &&
+					col.every((char, y) => set2[x][y] === char),
 			)
 		);
 	} catch {
@@ -24,7 +26,8 @@ async function animated(input: string[]) {
 		row.split('').forEach((char, x) => (seats[x][y] = char));
 	});
 
-	const copySeats = () => [...Array(seats.length)].map((e, index) => [...seats[index]]);
+	const copySeats = () =>
+		[...Array(seats.length)].map((e, index) => [...seats[index]]);
 
 	const views = [
 		[0, -1],
@@ -88,7 +91,7 @@ async function animated(input: string[]) {
 			}
 
 			console.clear();
-			lines.forEach(line => console.log(line));
+			lines.forEach((line) => console.log(line));
 
 			await sleep(100);
 		}
@@ -96,7 +99,7 @@ async function animated(input: string[]) {
 	} while (!coordsEqual(seats, prev));
 }
 
-export const part1: AoCPart = async input => {
+export const part1: AoCPart = async (input) => {
 	if (process.argv.includes('--animated')) {
 		await animated(input);
 		return '(No result)';
@@ -129,9 +132,9 @@ export const part1: AoCPart = async input => {
 				}
 
 				// Change seat depending on adjacent seats
-				if (seats[x][y] === 'L' && adjacent.every(s => s === 'L')) {
+				if (seats[x][y] === 'L' && adjacent.every((s) => s === 'L')) {
 					copy[x][y] = '#';
-				} else if (adjacent.filter(s => s === '#').length >= 4) {
+				} else if (adjacent.filter((s) => s === '#').length >= 4) {
 					copy[x][y] = 'L';
 				}
 			}
@@ -140,10 +143,13 @@ export const part1: AoCPart = async input => {
 		seats = [...Array(copy.length)].map((e, index) => [...copy[index]]);
 	} while (!coordsEqual(seats, prev));
 
-	return seats.reduce((acc, col) => acc + col.reduce((acc, seat) => acc + +(seat === '#'), 0), 0);
+	return seats.reduce(
+		(acc, col) => acc + col.reduce((acc, seat) => acc + +(seat === '#'), 0),
+		0,
+	);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	let seats: string[][] = [...Array(input[0].length)].map(() => []);
 	input.forEach((row, y) => {
 		row.split('').forEach((char, x) => (seats[x][y] = char));
@@ -197,5 +203,8 @@ export const part2: AoCPart = input => {
 		seats = [...Array(copy.length)].map((e, index) => [...copy[index]]);
 	} while (!coordsEqual(seats, prev));
 
-	return seats.reduce((acc, col) => acc + col.reduce((acc, seat) => acc + +(seat === '#'), 0), 0);
+	return seats.reduce(
+		(acc, col) => acc + col.reduce((acc, seat) => acc + +(seat === '#'), 0),
+		0,
+	);
 };

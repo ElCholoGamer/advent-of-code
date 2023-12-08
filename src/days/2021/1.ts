@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 
-export const part1: AoCPart = inputStrings => {
+export const part1: AoCPart = (inputStrings) => {
 	const input = inputStrings.map(Number);
 
 	let increments = 0;
@@ -12,7 +12,7 @@ export const part1: AoCPart = inputStrings => {
 	return increments;
 };
 
-export const part2: AoCPart = inputStrings => {
+export const part2: AoCPart = (inputStrings) => {
 	const input = inputStrings.map(Number);
 	const windows = [];
 

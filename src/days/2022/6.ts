@@ -3,8 +3,9 @@ import { windows } from '../../utils/arrays';
 
 function findMarker(str: string, markerLength: number) {
 	return (
-		windows(str.split(''), markerLength).findIndex(seq => new Set(seq).size === seq.length) +
-		markerLength
+		windows(str.split(''), markerLength).findIndex(
+			(seq) => new Set(seq).size === seq.length,
+		) + markerLength
 	);
 }
 

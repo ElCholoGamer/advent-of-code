@@ -6,11 +6,11 @@ function replaceAt(str: string, index: number, replacement: string) {
 
 const posRegex = /\[([0-9]+)\]/;
 
-export const part1: AoCPart = input => {
+export const part1: AoCPart = (input) => {
 	let mask: [string, number][] = [];
 	const memory: number[] = [];
 
-	input.forEach(line => {
+	input.forEach((line) => {
 		const [action, value] = line.split(' = ');
 
 		// Assign mask
@@ -18,7 +18,7 @@ export const part1: AoCPart = input => {
 			mask = value
 				.split('')
 				.map<[string, number]>((v, i) => [v, i])
-				.filter(e => e[0] !== 'X');
+				.filter((e) => e[0] !== 'X');
 			return;
 		}
 
@@ -36,11 +36,11 @@ export const part1: AoCPart = input => {
 	return Object.values(memory).reduce((acc, val) => acc + val);
 };
 
-export const part2: AoCPart = input => {
+export const part2: AoCPart = (input) => {
 	let mask = '0'.repeat(36);
 	const memory: number[] = [];
 
-	input.forEach(line => {
+	input.forEach((line) => {
 		const [action, value] = line.split(' = ');
 
 		// Assign a new mask
@@ -67,17 +67,17 @@ export const part2: AoCPart = input => {
 		// Get all positions of X
 		const xIndexes = maskedPos
 			.map<[string, number]>((c, i) => [c, i])
-			.filter(c => c[0] === 'X')
-			.map(c => c[1]);
+			.filter((c) => c[0] === 'X')
+			.map((c) => c[1]);
 
 		// Get all permutations for floating numbers
 		const maxNumber = parseInt('1'.repeat(xIndexes.length), 2);
 		const permutations = [...Array(maxNumber + 1)].map((e, i) =>
-			i.toString(2).padStart(xIndexes.length, '0')
+			i.toString(2).padStart(xIndexes.length, '0'),
 		);
 
 		// Apply all permutations to the string
-		permutations.forEach(perm => {
+		permutations.forEach((perm) => {
 			const copy = [...maskedPos];
 
 			// Assign X's to their value in this permutation
