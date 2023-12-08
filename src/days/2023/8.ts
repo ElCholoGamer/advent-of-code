@@ -7,16 +7,22 @@ const enum Instruction {
 	LEFT = 'L',
 }
 
+type MapMap = Map<string, Record<Instruction, string>>;
+
 function parseInput(input: string[]) {
 	const instructions: Instruction[] = input[0].split('') as Instruction[];
-	const mapMap = new Map<string, [string, string]>();
+	const mapMap: MapMap = new Map();
 
 	for (let i = 2; i < input.length; i++) {
 		const [from, directions] = input[i].split(' = ');
 		const [left, right] = directions
 			.substring(1, directions.length - 1)
 			.split(', ');
-		mapMap.set(from, [left, right]);
+
+		mapMap.set(from, {
+			[Instruction.LEFT]: left,
+			[Instruction.RIGHT]: right,
+		});
 	}
 
 	return {
@@ -25,58 +31,43 @@ function parseInput(input: string[]) {
 	};
 }
 
-export const part1: AoCPart = (input) => {
-	const { instructions, mapMap } = parseInput(input);
-
+function findStepsToTarget(
+	startingLocation: string,
+	instructions: Instruction[],
+	mapMap: MapMap,
+	targetPredicate: (loc: string) => boolean,
+): number {
 	let i = 0;
-	let location = 'AAA';
+	let location = startingLocation;
 	let steps = 0;
 
-	while (location !== 'ZZZ') {
-		const locationEntry = assertNonNull(
-			mapMap.get(location),
-			'Invalid location',
-		);
+	while (!targetPredicate(location)) {
+		const directions = assertNonNull(mapMap.get(location));
+		location = directions[instructions[i]];
 
-		location =
-			instructions[i] === Instruction.RIGHT
-				? locationEntry[1]
-				: locationEntry[0];
 		i = (i + 1) % instructions.length;
 		steps++;
 	}
 
 	return steps;
+}
+
+export const part1: AoCPart = (input) => {
+	const { instructions, mapMap } = parseInput(input);
+	return findStepsToTarget('AAA', instructions, mapMap, (loc) => loc === 'ZZZ');
 };
 
 export const part2: AoCPart = (input) => {
 	const { instructions, mapMap } = parseInput(input);
-
-	let i = 0;
-	let locations = [...mapMap.keys()].filter((loc) => loc.endsWith('A'));
 	const stepFactors: number[] = [];
-	let steps = 0;
 
-	while (locations.length !== 0) {
-		steps++;
+	for (const location of mapMap.keys()) {
+		if (!location.endsWith('A')) continue;
 
-		for (let l = 0; l < locations.length; l++) {
-			const locationEntry = assertNonNull(
-				mapMap.get(locations[l]),
-				'Invalid location',
-			);
-			locations[l] =
-				instructions[i] === Instruction.RIGHT
-					? locationEntry[1]
-					: locationEntry[0];
-
-			if (locations[l].endsWith('Z')) {
-				stepFactors.push(steps);
-			}
-		}
-
-		i = (i + 1) % instructions.length;
-		locations = locations.filter((loc) => !loc.endsWith('Z'));
+		const steps = findStepsToTarget(location, instructions, mapMap, (loc) =>
+			loc.endsWith('Z'),
+		);
+		stepFactors.push(steps);
 	}
 
 	return lcm(...stepFactors);
