@@ -6,7 +6,7 @@ export const gcd = (a: number, b: number): number => {
 	return gcd(b, a % b);
 };
 
-export const mcm = (...numbers: number[]) => {
+export const lcm = (...numbers: number[]) => {
 	let result = 1;
 	for (const num of numbers) {
 		const divisor = gcd(result, num);

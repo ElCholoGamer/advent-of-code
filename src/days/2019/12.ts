@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 import { zip } from '../../utils/arrays';
-import { mcm } from '../../utils/math';
+import { lcm } from '../../utils/math';
 import { Vector3 } from '../../utils/structures/vector';
 
 interface Moon {
@@ -105,5 +105,5 @@ export const part2: AoCPart = (input) => {
 	const repeatY = findRepetitionPoint(moons.map(moonAxis('y')));
 	const repeatZ = findRepetitionPoint(moons.map(moonAxis('z')));
 
-	return mcm(repeatX, repeatY, repeatZ);
+	return lcm(repeatX, repeatY, repeatZ);
 };

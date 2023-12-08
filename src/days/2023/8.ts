@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 import { assertNonNull } from '../../utils/assertion';
-import { mcm } from '../../utils/math';
+import { lcm } from '../../utils/math';
 
 const enum Instruction {
 	RIGHT = 'R',
@@ -67,5 +67,5 @@ export const part2: AoCPart = (input) => {
 		locations = locations.filter((loc) => !loc.endsWith('Z'));
 	}
 
-	return mcm(...stepFactors);
+	return lcm(...stepFactors);
 };

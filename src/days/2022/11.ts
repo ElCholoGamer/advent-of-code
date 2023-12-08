@@ -1,6 +1,6 @@
 import { AoCPart } from '../../types';
 import { chunks } from '../../utils/arrays';
-import { mcm } from '../../utils/math';
+import { lcm } from '../../utils/math';
 
 const enum Operand {
 	ADD,
@@ -20,7 +20,7 @@ interface Monkey {
 }
 
 function parseMonkeys(input: string[]): Monkey[] {
-	return chunks(input, 7).map(lines => {
+	return chunks(input, 7).map((lines) => {
 		const startingItems = lines[1].split(': ')[1].split(', ').map(Number);
 		const operationWords = lines[2].split(' = ')[1].split(/\s+/);
 
@@ -38,8 +38,12 @@ function parseMonkeys(input: string[]): Monkey[] {
 	});
 }
 
-function monkeyBusinessAfterRounds(monkeys: Monkey[], rounds: number, divideByThree: boolean) {
-	const moduloDivisor = mcm(...monkeys.map(monkey => monkey.testDivisible));
+function monkeyBusinessAfterRounds(
+	monkeys: Monkey[],
+	rounds: number,
+	divideByThree: boolean
+) {
+	const moduloDivisor = lcm(...monkeys.map((monkey) => monkey.testDivisible));
 
 	for (let r = 0; r < rounds; r++) {
 		for (const monkey of monkeys) {
@@ -49,14 +53,18 @@ function monkeyBusinessAfterRounds(monkeys: Monkey[], rounds: number, divideByTh
 				let worryLevel = monkey.items.shift()!;
 				const rightNum = monkey.operation.num ?? worryLevel;
 				worryLevel =
-					monkey.operation.operand === Operand.ADD ? worryLevel + rightNum : worryLevel * rightNum;
+					monkey.operation.operand === Operand.ADD
+						? worryLevel + rightNum
+						: worryLevel * rightNum;
 
 				if (divideByThree) worryLevel = Math.floor(worryLevel / 3);
 
 				worryLevel %= moduloDivisor;
 
 				monkeys[
-					worryLevel % monkey.testDivisible === 0 ? monkey.throwIfTrue : monkey.throwIfFalse
+					worryLevel % monkey.testDivisible === 0
+						? monkey.throwIfTrue
+						: monkey.throwIfFalse
 				].items.push(worryLevel);
 			}
 		}
@@ -66,6 +74,8 @@ function monkeyBusinessAfterRounds(monkeys: Monkey[], rounds: number, divideByTh
 	return monkeys[0].inspectCount * monkeys[1].inspectCount;
 }
 
-export const part1: AoCPart = input => monkeyBusinessAfterRounds(parseMonkeys(input), 20, true);
+export const part1: AoCPart = (input) =>
+	monkeyBusinessAfterRounds(parseMonkeys(input), 20, true);
 
-export const part2: AoCPart = input => monkeyBusinessAfterRounds(parseMonkeys(input), 10000, false);
+export const part2: AoCPart = (input) =>
+	monkeyBusinessAfterRounds(parseMonkeys(input), 10000, false);
